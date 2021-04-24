@@ -17,7 +17,7 @@ export default function App() {
                 headerShown: false
             }}
         >
-            <Stack.Screen name="Redefinir senha" component={changePassword}/>
+            <Stack.Screen name="Login" component={loginView}/>
             
         </Stack.Navigator>
     </NavigationContainer>
