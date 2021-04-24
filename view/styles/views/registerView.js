@@ -23,6 +23,10 @@ export default StyleSheet.create({
         marginLeft:20,
         marginBottom:50
       },
+      loginMessage:{
+        fontWeight:'bold',
+        color:colors.darkBlue
+      },
       containerInputLogin:{
         alignItems:"center",
         justifyContent:"center",

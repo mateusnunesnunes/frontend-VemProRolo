@@ -3,8 +3,7 @@ import { Text, View, TextInput, KeyboardAvoidingView, TouchableOpacity, Image  }
 import { SafeAreaView } from 'react-native-safe-area-context';
 import styles from '../styles/views/changePassword.js';
 
-export default class App extends React.Component {
-  render(){
+export default function ChangePassword(){
     return (
         <SafeAreaView style={styles.container}>
         
@@ -38,4 +37,4 @@ export default class App extends React.Component {
         </SafeAreaView>
     );
   }
-}
+

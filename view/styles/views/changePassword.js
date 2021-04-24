@@ -26,7 +26,7 @@ export default StyleSheet.create({
     containerInputLogin:{
         alignItems:"center",
         justifyContent:"center",
-        marginBottom:60
+        marginBottom:30
     },
     inputLogin: {
         backgroundColor:colors.white,
@@ -42,7 +42,7 @@ export default StyleSheet.create({
     containerBtns:{
         alignItems:"center",
         justifyContent:"center",
-        marginBottom:80
+        marginBottom:40
     },
     btnLogin:{
         width:'45%',

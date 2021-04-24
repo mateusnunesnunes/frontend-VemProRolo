@@ -4,7 +4,11 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import styles from '../styles/views/registerView';
 
 
-export default function App() {
+export default function App({navigation}) {
+
+  function login(){
+    navigation.navigate("Login");
+  }
   return(
     
     <SafeAreaView style={styles.container}>
@@ -45,6 +49,10 @@ export default function App() {
 
           <View style={styles.containerBtns}>
             
+           <TouchableOpacity onPress={login}>
+              <Text style={styles.loginMessage} >Já possui uma conta? Entre</Text>
+            </TouchableOpacity>
+
             <TouchableOpacity style={styles.btnLogin} >
               <Text style={styles.btnLoginText} >Entrar</Text>
             </TouchableOpacity>

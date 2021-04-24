@@ -27,7 +27,7 @@ export default StyleSheet.create({
   containerInputLogin:{
     alignItems:"center",
     justifyContent:"center",
-    marginBottom:60
+    marginBottom:40
   },
   inputLogin: {
     backgroundColor:colors.white,
@@ -52,8 +52,13 @@ export default StyleSheet.create({
     elevation: 2,
     shadowRadius: 1 ,
     shadowOffset : { width: 2, height: 2},
-    marginTop:20,
+    marginTop:10,
     marginBottom:30
+  },
+  forgotPasswordMessage:{
+    fontWeight:'bold',
+    color:colors.darkBlue,
+    marginTop:80
   },
   btnLoginText:{
     color:colors.white,

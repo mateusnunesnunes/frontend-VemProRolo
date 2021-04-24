@@ -3,8 +3,18 @@ import { Text, View, TextInput, KeyboardAvoidingView, TouchableOpacity, Image  }
 import { SafeAreaView } from 'react-native-safe-area-context';
 import styles from '../styles/views/loginView';
 
-export default class App extends React.Component {
-  render(){
+export default function Login({navigation})  {
+  
+
+    function registerAccount(){
+      console.log("registerAccount")
+      navigation.navigate("Register");
+    }
+    function forgotPassword(){  
+      navigation.navigate("PasswordRecovery");
+      
+    }
+
     return (
         <SafeAreaView style={styles.container}>
         
@@ -30,8 +40,13 @@ export default class App extends React.Component {
           </View>
 
           <View style={styles.containerBtns}>
-            <TouchableOpacity>
+
+            <TouchableOpacity onPress={registerAccount}>
               <Text style={styles.registerMessage} >Não possui conta? Registre-se</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity onPress={forgotPassword}>
+              <Text style={styles.forgotPasswordMessage} >Esqueci minha senha</Text>
             </TouchableOpacity>
 
             <TouchableOpacity style={styles.btnLogin} >
@@ -58,4 +73,4 @@ export default class App extends React.Component {
         </SafeAreaView>
     );
   }
-}
+
