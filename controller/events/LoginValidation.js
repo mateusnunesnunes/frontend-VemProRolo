@@ -10,7 +10,7 @@ class LoginValidation{
                 email: "admin@gmail.com",
                 password: "1Administrador"
             }
-            requests.post("users/auth",object)
+            requests.get("users/auth",object)
         }
         return false;
     }
