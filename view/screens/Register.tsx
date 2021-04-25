@@ -4,7 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import styles from '../styles/views/registerView';
 
 
-export default function App({navigation}) {
+export default function App({navigation}: {navigation: any}) {
 
   function login(){
     navigation.navigate("Login");

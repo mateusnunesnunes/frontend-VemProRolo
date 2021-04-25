@@ -1,15 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Text, View, TextInput, KeyboardAvoidingView, TouchableOpacity, Image  } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import styles from '../styles/views/loginView';
 import InputForm from '../../model/forms/InputForm';
 import inptValidations from '../../controller/events/InputValidations';
+import loginValidation from '../../controller/events/LoginValidation';
 
-export default function Login({navigation})  {
+export default function Login({navigation}: {navigation: any})  {
 
+    let [validateEmail] = useState(false);
+    let [validatePassword] = useState(false);
 
     function registerAccount(){
-      console.log("registerAccount")
       navigation.navigate("Register");
     }
     function forgotPassword(){  
@@ -17,33 +19,47 @@ export default function Login({navigation})  {
       
     }
 
+    function inputEmailCallBack(text:string){
+      validateEmail = inptValidations.validateEmail(text);
+    }
+
+    function inputPasswordCallBack(text:string){
+      validatePassword = inptValidations.validatePassword(text);
+    }
+    
+    function submitCredentials(){
+      loginValidation.btnValidation(validateEmail,validatePassword);
+    }
+
     return (
         <SafeAreaView style={styles.container}>
-        
+          
+
           <View style={styles.divMessage}>
             <Text style={styles.wellComeMessage}>Olá!</Text>
             <Text style={styles.descriptonMessage}>Entrar no sistema</Text>
           </View>
-
           <View style={styles.containerInputLogin}>
-            <TextInput
-              style={styles.inputLogin}
-              placeholder="Email"
+
+            <InputForm
+              placeholder="E-mail"
               autoCorrect={false}
-              onChangeText={()=>{}}
-            />
-            <TextInput
-              secureTextEntry={true}
+              handler={inputEmailCallBack}
               style={styles.inputLogin}
+              textContentType='emailAddress'
+              keyboardType='email-address'
+              autoCapitalize='none'
+              autoCompleteType='email'
+            />
+            
+            <InputForm
               placeholder="Senha"
               autoCorrect={false}
-              onChangeText={()=>{}}
-            />
-            <InputForm
-              name="teste"
-              handler={inptValidations.validatePassword}
+              secureTextEntry={true}
+              handler={inputPasswordCallBack}
               style={styles.inputLogin}
             />
+            
               
           </View>
 
@@ -57,7 +73,7 @@ export default function Login({navigation})  {
               <Text style={styles.forgotPasswordMessage} >Esqueci minha senha</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.btnLogin} >
+            <TouchableOpacity onPress={submitCredentials} style={styles.btnLogin} >
               <Text style={styles.btnLoginText} >Entrar</Text>
             </TouchableOpacity>
 
@@ -73,11 +89,12 @@ export default function Login({navigation})  {
               <TouchableOpacity>
                 <Image style={styles.imgSocialMedias} source={require('../../model/imgs/facebook.png')}/>
               </TouchableOpacity>
-            </View>
-          </View>
               
+            </View>
             
-          
+          </View>
+    
+            
         </SafeAreaView>
     );
   }

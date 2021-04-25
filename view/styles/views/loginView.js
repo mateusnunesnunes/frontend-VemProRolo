@@ -27,13 +27,25 @@ export default StyleSheet.create({
   containerInputLogin:{
     alignItems:"center",
     justifyContent:"center",
-    marginBottom:40
+    marginBottom:10
   },
   inputLogin: {
     backgroundColor:colors.white,
     width:300,
     marginBottom:25,
     color:colors.darkBlue,
+    fontWeight:'bold',
+    fontSize:17,
+    borderBottomColor: colors.darkBlue,
+    borderBottomWidth: 1,
+    padding:2,
+    paddingVertical:10
+  },
+  inputLoginFail: {
+    backgroundColor:'red',
+    width:300,
+    marginBottom:25,
+    color:'red',
     fontWeight:'bold',
     fontSize:17,
     borderBottomColor: colors.darkBlue,
@@ -58,7 +70,7 @@ export default StyleSheet.create({
   forgotPasswordMessage:{
     fontWeight:'bold',
     color:colors.darkBlue,
-    marginTop:80
+    marginTop:40
   },
   btnLoginText:{
     color:colors.white,
@@ -68,7 +80,7 @@ export default StyleSheet.create({
   lineSocialMedia:{
     fontWeight:'bold',
     color:colors.darkBlue,
-    marginTop:80,
+    marginTop:150,
     marginBottom:10
   },
   registerMessage:{
@@ -92,6 +104,5 @@ export default StyleSheet.create({
   containerBtns:{
     alignItems:"center",
     justifyContent:"center",
-    marginBottom:80
   }
 });
