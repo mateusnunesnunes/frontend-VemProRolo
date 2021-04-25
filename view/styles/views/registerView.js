@@ -56,7 +56,6 @@ export default StyleSheet.create({
         shadowRadius: 1 ,
         shadowOffset : { width: 2, height: 2},
         marginTop:20,
-        marginBottom:10
       },
       btnLoginText:{
         color:colors.white,

@@ -1,12 +1,13 @@
 import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
-
-
 import Login from '../view/screens/Login';
-import Register from '../view/screens/Register';
-import ChangePassword from '../view/screens/ChangePassword';
+import ChangePassword from '../view/screens/changePassword';
 import PasswordRecovery from '../view/screens/PasswordRecovery';
+import Register from '../view/screens/Register';
+import LoggedTempPage from '../view/screens/LoggedTempPage';
+
+
 const Stack = createStackNavigator();
 
 export default function App() {
@@ -39,8 +40,13 @@ export default function App() {
             options={{ 
               title:"",     
             }}
-            
-            />            
+            />    
+
+            <Stack.Screen 
+            name="LoggedTempPage" 
+            component={LoggedTempPage}
+            options={{ headerShown:false}}
+            />        
         </Stack.Navigator>
     </NavigationContainer>
   );
