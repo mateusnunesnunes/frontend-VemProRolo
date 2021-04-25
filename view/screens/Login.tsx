@@ -11,6 +11,8 @@ import {
   statusCodes,
 } from '@react-native-google-signin/google-signin';
 
+import { LoginManager } from 'react-native-fbsdk-next';
+
 export default function Login({navigation}: {navigation: any})  {
 
     let [validateEmail] = useState(false);
@@ -50,7 +52,7 @@ export default function Login({navigation}: {navigation: any})  {
       }
     }
 
-    async function signIn(){
+    async function googleSignIn(){
       try {
         await GoogleSignin.hasPlayServices();
         const userInfo = await GoogleSignin.signIn();
@@ -67,6 +69,23 @@ export default function Login({navigation}: {navigation: any})  {
           console.log('Unknow error');
         }
       }
+    }
+
+    async function facebookSignIn(){
+      LoginManager.logInWithPermissions(["public_profile", "email"]).then(
+        function (result) {
+        if (result.isCancelled) {
+        console.log("Login Cancelled " + JSON.stringify(result))
+        } else {
+          console.log("Login success with  permisssions: " + result.grantedPermissions?.toString());
+          console.log("Login Success " + result.toString());
+          logIn();
+        }
+        },
+        function (error) {
+          console.log("Login failed with error: " + error);
+        }
+        )
     }
 
     return (
@@ -117,15 +136,10 @@ export default function Login({navigation}: {navigation: any})  {
 
             <Text style={styles.lineSocialMedia}>_______________Ou_______________</Text>
             <View style={styles.containerimgSocialMedias}>
-              <GoogleSigninButton
-                size={GoogleSigninButton.Size.Icon}
-                color={GoogleSigninButton.Color.Dark}
-                onPress={signIn}
-              />
-              <TouchableOpacity>
-                <Image style={styles.imgSocialMediasApple} source={require('../../model/imgs/apple.png')}/>
+              <TouchableOpacity onPress={googleSignIn}>
+                <Image style={styles.imgSocialMedias} source={require('../../model/imgs/google.png')}/>
               </TouchableOpacity>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={facebookSignIn}>
                 <Image style={styles.imgSocialMedias} source={require('../../model/imgs/facebook.png')}/>
               </TouchableOpacity>
               

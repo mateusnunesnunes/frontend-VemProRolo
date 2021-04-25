@@ -20,8 +20,13 @@ export default function LoggedTempPage({navigation}: {navigation: any})  {
 
     async function signOut() {
       try {
-        await GoogleSignin.revokeAccess();
-        await GoogleSignin.signOut();
+        const isSignedIn = await GoogleSignin.isSignedIn();
+        console.log("TA LOGADO?",isSignedIn);
+      
+        if (isSignedIn) {
+          await GoogleSignin.revokeAccess();
+          await GoogleSignin.signOut();
+        }
         navigation.navigate("Login");
       } catch (error) {
         console.error(error);

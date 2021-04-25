@@ -7,32 +7,51 @@ import {
   GoogleSigninButton,
   statusCodes,
 } from '@react-native-google-signin/google-signin';
+import { LoginManager } from 'react-native-fbsdk-next';
 
 export default function Register({navigation}: {navigation: any}) {
 
-  function login(){
+  function loginRedirectPage(){
     navigation.navigate("Login");
   }
+  function logIn() {
+    navigation.navigate("LoggedTempPage");
+  }
 
-  async function signIn(){
+  async function googleSignIn(){
     try {
       await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
       console.log(userInfo);
+      logIn();
     } catch (error) {
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
-        // user cancelled the login flow
         console.log('Cancel');
       } else if (error.code === statusCodes.IN_PROGRESS) {
         console.log('Signin in progress');
-        // operation (f.e. sign in) is in progress already
       } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
         console.log('PLAY_SERVICES_NOT_AVAILABLE');
-        // play services not available or outdated
       } else {
         // some other error happened
       }
     }
+  }
+
+  async function facebookSignIn(){
+    LoginManager.logInWithPermissions(["public_profile", "email"]).then(
+      function (result) {
+      if (result.isCancelled) {
+      console.log("Login Cancelled " + JSON.stringify(result))
+      } else {
+        console.log("Login success with  permisssions: " + result.grantedPermissions?.toString());
+        console.log("Login Success " + result.toString());
+        logIn();
+      }
+      },
+      function (error) {
+        console.log("Login failed with error: " + error);
+      }
+      )
   }
 
   return(
@@ -75,7 +94,7 @@ export default function Register({navigation}: {navigation: any}) {
 
           <View style={styles.containerBtns}>
             
-           <TouchableOpacity onPress={login}>
+           <TouchableOpacity onPress={loginRedirectPage}>
               <Text style={styles.loginMessage} >Já possui uma conta? Entre</Text>
             </TouchableOpacity>
 
@@ -86,15 +105,10 @@ export default function Register({navigation}: {navigation: any}) {
 
             <Text style={styles.lineSocialMedia}>_______________Ou_______________</Text>
             <View style={styles.containerimgSocialMedias}>
-              <GoogleSigninButton
-                size={GoogleSigninButton.Size.Icon}
-                color={GoogleSigninButton.Color.Dark}
-                onPress={signIn}
-              />
-              <TouchableOpacity>
-                <Image style={styles.imgSocialMediasApple} source={require('../../model/imgs/apple.png')}/>
-              </TouchableOpacity>
-              <TouchableOpacity>
+            <TouchableOpacity onPress={googleSignIn}>
+                <Image style={styles.imgSocialMedias} source={require('../../model/imgs/google.png')}/>
+            </TouchableOpacity>
+              <TouchableOpacity onPress={facebookSignIn}>
                 <Image style={styles.imgSocialMedias} source={require('../../model/imgs/facebook.png')}/>
               </TouchableOpacity>
             </View>
