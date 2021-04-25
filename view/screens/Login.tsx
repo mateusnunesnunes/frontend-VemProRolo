@@ -2,9 +2,11 @@ import React from 'react';
 import { Text, View, TextInput, KeyboardAvoidingView, TouchableOpacity, Image  } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import styles from '../styles/views/loginView';
+import InputForm from '../../model/forms/InputForm';
+import inptValidations from '../../controller/events/InputValidations';
 
 export default function Login({navigation})  {
-  
+
 
     function registerAccount(){
       console.log("registerAccount")
@@ -37,6 +39,12 @@ export default function Login({navigation})  {
               autoCorrect={false}
               onChangeText={()=>{}}
             />
+            <InputForm
+              name="teste"
+              handler={inptValidations.validatePassword}
+              style={styles.inputLogin}
+            />
+              
           </View>
 
           <View style={styles.containerBtns}>
