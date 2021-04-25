@@ -64,8 +64,7 @@ export default StyleSheet.create({
     elevation: 2,
     shadowRadius: 1 ,
     shadowOffset : { width: 2, height: 2},
-    marginTop:10,
-    marginBottom:30
+    marginTop:10
   },
   forgotPasswordMessage:{
     fontWeight:'bold',
