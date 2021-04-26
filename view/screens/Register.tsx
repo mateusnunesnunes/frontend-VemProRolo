@@ -57,12 +57,6 @@ export class Register extends React.Component<Props, State>  {
               nameError: 'Preencha o email'
           }
       );
-  } else if (!inptValidations.validateEmail(name)) {
-      this.setState(
-          {
-            nameError: 'Email inválido'
-          }
-      );
   } else {
       this.setState({ nameError: undefined});
   }
@@ -197,6 +191,7 @@ export class Register extends React.Component<Props, State>  {
                 autoCapitalize='none'
                 value={this.state.name}
                 error={this.state.nameError}
+                hasVisibility={true}
               />
               <InputForm
                 placeholder="E-mail"
@@ -209,6 +204,7 @@ export class Register extends React.Component<Props, State>  {
                 autoCompleteType='email'
                 value={this.state.email}
                 error={this.state.emailError}
+                hasVisibility={true}
               />
               <InputForm
                 placeholder="Senha"

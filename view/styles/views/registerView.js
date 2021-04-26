@@ -73,7 +73,7 @@ export default StyleSheet.create({
       },
       containerimgSocialMedias:{
         flexDirection:"row",
-        height:'15%'
+        
       },
       imgSocialMedias:{
         height:40,

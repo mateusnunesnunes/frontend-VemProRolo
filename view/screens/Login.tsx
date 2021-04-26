@@ -160,6 +160,7 @@ export class Login extends React.Component<Props, State>  {
               autoCapitalize='none'
               autoCompleteType='email'
               error={this.state.emailError}
+              hasVisibility={true}
             />
             
             <InputForm
