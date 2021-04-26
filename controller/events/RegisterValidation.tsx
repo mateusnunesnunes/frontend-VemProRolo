@@ -1,31 +1,29 @@
-import {User} from '../../model/types/user';
 import requests from '../requestController';
 
-class LoginValidation{
+class RegisterValidation{
 
-    btnValidation = async (email: any,password: any) =>{
-        if(email && password){
+    btnValidation = async (name:any,email: any,password: any) =>{
+        if(name && email && password){
             let object = {
+                name: name,
                 email: email,
                 password: password
             }
             let res;
-            await requests.post("users/auth",object)
+            await requests.post("users",object)
             .then((response) => {
                 res = response.status;
             }).catch((error) => {
                 res = error.response.status;
             })
-            console.log("res ",res)
-            console.log("res == 201",res == 201)
             return res == 201
         }
         return false;
     }
 
 }
-const loginValidation = new LoginValidation;
-export default loginValidation;
+const registerValidation = new RegisterValidation;
+export default registerValidation;
 
 
   

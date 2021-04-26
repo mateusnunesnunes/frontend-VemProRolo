@@ -46,8 +46,9 @@ export default function Login({navigation}: {navigation: any})  {
       validatePassword = inptValidations.validatePassword(text);
     }
     
-    function submitCredentials(){
-      if (loginValidation.btnValidation(validateEmail,validatePassword)) {
+    async function submitCredentials(){
+      let response = await loginValidation.btnValidation(validateEmail,validatePassword)
+      if(response){
         logIn();
       }
     }

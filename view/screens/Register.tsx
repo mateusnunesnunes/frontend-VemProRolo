@@ -1,5 +1,5 @@
-import React from 'react';
-import { Text, View, TextInput, KeyboardAvoidingView, TouchableOpacity, Image  } from 'react-native';
+import React, { useState } from 'react';
+import { Text, View, TextInput, KeyboardAvoidingView, TouchableOpacity, Image, Keyboard  } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import styles from '../styles/views/registerView';
 import {
@@ -8,8 +8,42 @@ import {
   statusCodes,
 } from '@react-native-google-signin/google-signin';
 import { LoginManager } from 'react-native-fbsdk-next';
+import inptValidations from '../../controller/events/InputValidations';
+import registerValidation from '../../controller/events/RegisterValidation';
+import InputForm from '../../model/forms/InputForm';
 
 export default function Register({navigation}: {navigation: any}) {
+
+  let [validateEmail] = useState(false);
+  let [validatePassword] = useState(false);
+  let [validateRePassword] = useState(false);
+  let [name] = useState('');
+
+  function inputPasswordCallBack(text:string){
+    validatePassword = inptValidations.validatePassword(text)
+  }
+  function inputNameCallBack(text:string){
+    name = text;
+  }
+  function inputRePasswordCallBack(text:string){
+    validateRePassword = inptValidations.validatePassword(text)
+  }
+
+  function inputEmailCallBack(text:string){
+    validateEmail = inptValidations.validateEmail(text)
+  }
+
+  
+  async function submitRegister(){
+    console.log(name,validateEmail,validatePassword,validateRePassword)
+    let response = await registerValidation.btnValidation(name,validateEmail,validatePassword)
+    if(response){
+      logIn();
+    }
+  }
+
+  
+
 
   function loginRedirectPage(){
     navigation.navigate("Login");
@@ -64,31 +98,34 @@ export default function Register({navigation}: {navigation: any}) {
         <View style={styles.containerInputLogin}>
             
 
-            <TextInput
-              style={styles.inputLogin}
+            <InputForm
               placeholder="Nome"
               autoCorrect={false}
-              onChangeText={()=>{}}
-            />
-            <TextInput             
+              handler={inputNameCallBack}
               style={styles.inputLogin}
+              autoCapitalize='none'
+            />
+            <InputForm
               placeholder="E-mail"
               autoCorrect={false}
-              onChangeText={()=>{}}
-            />
-            <TextInput
-              secureTextEntry={true}
+              handler={inputEmailCallBack}
               style={styles.inputLogin}
+              textContentType='emailAddress'
+              keyboardType='email-address'
+              autoCapitalize='none'
+              autoCompleteType='email'
+            />
+            <InputForm
               placeholder="Senha"
-              autoCorrect={false}
-              onChangeText={()=>{}}
-            />
-            <TextInput
               secureTextEntry={true}
+              handler={inputPasswordCallBack}
               style={styles.inputLogin}
-              placeholder="Repita a senha"
-              autoCorrect={false}
-              onChangeText={()=>{}}
+            />
+            <InputForm
+              placeholder="Senha"
+              secureTextEntry={true}
+              handler={inputPasswordCallBack}
+              style={styles.inputLogin}
             />
           </View>
 
@@ -98,7 +135,7 @@ export default function Register({navigation}: {navigation: any}) {
               <Text style={styles.loginMessage} >Já possui uma conta? Entre</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.btnLogin} >
+            <TouchableOpacity onPress={submitRegister} style={styles.btnLogin} >
               <Text style={styles.btnLoginText} >Entrar</Text>
             </TouchableOpacity>
             

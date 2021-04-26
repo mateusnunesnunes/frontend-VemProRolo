@@ -17,8 +17,8 @@ export default function InputForm (props){
       textContentType={props.textContentType}
       keyboardType={props.keyboardType}
       autoCapitalize={props.autoCapitalize}
-      autoCorrect={false}
       autoCompleteType={props.autoCompleteType}
+      blurOnSubmit={props.blurOnSubmit}
     />
     </View>
   );

@@ -34,7 +34,7 @@ export default StyleSheet.create({
       },
       inputLogin: {
         backgroundColor:colors.white,
-        width:'70%',
+        width:300,
         marginBottom:25,
         color:colors.darkBlue,
         fontWeight:'bold',
