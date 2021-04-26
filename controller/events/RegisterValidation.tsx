@@ -2,7 +2,8 @@ import requests from '../requestController';
 
 class RegisterValidation{
 
-    btnValidation = async (name:any,email: any,password: any) =>{
+    btnValidation = async (name:any,email: any,password: any): Promise<boolean> =>{
+        console.log(name, email, password);
         if(name && email && password){
             let object = {
                 name: name,
@@ -10,12 +11,14 @@ class RegisterValidation{
                 password: password
             }
             let res;
-            await requests.post("users",object)
-            .then((response) => {
-                res = response.status;
-            }).catch((error) => {
-                res = error.response.status;
-            })
+            try{
+                console.log("try")
+                res = (await requests.post("users", object)).status
+                console.log(res)
+            } catch(error) {
+                console.error(error)
+                return false;
+            }
             return res == 201
         }
         return false;

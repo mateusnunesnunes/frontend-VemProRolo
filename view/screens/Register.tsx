@@ -10,7 +10,7 @@ import {
 import { LoginManager } from 'react-native-fbsdk-next';
 import inptValidations from '../../controller/events/InputValidations';
 import registerValidation from '../../controller/events/RegisterValidation';
-import InputForm from '../../model/forms/InputForm';
+import {InputForm} from '../../model/forms/InputForm';
 
 export default function Register({navigation}: {navigation: any}) {
 
@@ -101,14 +101,14 @@ export default function Register({navigation}: {navigation: any}) {
             <InputForm
               placeholder="Nome"
               autoCorrect={false}
-              handler={inputNameCallBack}
+              onChange={inputNameCallBack}
               style={styles.inputLogin}
               autoCapitalize='none'
             />
             <InputForm
               placeholder="E-mail"
               autoCorrect={false}
-              handler={inputEmailCallBack}
+              onChange={inputEmailCallBack}
               style={styles.inputLogin}
               textContentType='emailAddress'
               keyboardType='email-address'
@@ -117,14 +117,14 @@ export default function Register({navigation}: {navigation: any}) {
             />
             <InputForm
               placeholder="Senha"
-              secureTextEntry={true}
-              handler={inputPasswordCallBack}
+              hasVisibility={false}
+              onChange={inputPasswordCallBack}
               style={styles.inputLogin}
             />
             <InputForm
               placeholder="Senha"
-              secureTextEntry={true}
-              handler={inputPasswordCallBack}
+              hasVisibility={false}
+              onChange={inputPasswordCallBack}
               style={styles.inputLogin}
             />
           </View>

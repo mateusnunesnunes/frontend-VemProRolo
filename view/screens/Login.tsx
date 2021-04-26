@@ -2,23 +2,45 @@ import React, { useEffect, useState } from 'react';
 import { Text, View, TextInput, KeyboardAvoidingView, TouchableOpacity, Image  } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import styles from '../styles/views/loginView';
-import InputForm from '../../model/forms/InputForm';
+import {InputForm} from '../../model/forms/InputForm';
 import inptValidations from '../../controller/events/InputValidations';
 import loginValidation from '../../controller/events/LoginValidation';
 import {
   GoogleSignin,
-  GoogleSigninButton,
   statusCodes,
 } from '@react-native-google-signin/google-signin';
 
 import { LoginManager } from 'react-native-fbsdk-next';
+import { User } from '../../model/types/user';
+import { StackNavigationProp } from '@react-navigation/stack';
 
-export default function Login({navigation}: {navigation: any})  {
 
-    let [validateEmail] = useState(false);
-    let [validatePassword] = useState(false);
+interface Props {
+  navigation: StackNavigationProp<any, any>;
+}
+interface State {
+  email?: string;
+  emailError?: string;
+  password?: string;
+  passwordError?: string;
+  loginError?: boolean;
+  changeAccountError?: string;
+  isLoading?: boolean;
+  keyboardVerticalOffset?: number;
+}
 
-    useEffect(() => {
+export class Login extends React.Component<Props, State>  {
+
+    constructor(props: Props) {
+      super(props);
+
+      this.state = {
+        email: '',
+        password: '',
+      }
+    }
+
+    componentDidUpdate() {
       GoogleSignin.configure({
         scopes: ['email', 'profile'],
         webClientId:
@@ -26,39 +48,73 @@ export default function Login({navigation}: {navigation: any})  {
           iosClientId: '760992990537-7rtdspl7n33j1pbeg7nl2nvcc05prfje.apps.googleusercontent.com',
         offlineAccess: true
       });
-    }, []);
-
-    function registerAccount(){
-      navigation.navigate("Register");
-    }
-    function forgotPassword(){  
-      navigation.navigate("PasswordRecovery");
-    }
-    function logIn() {
-      navigation.navigate("LoggedTempPage");
-    }
-
-    function inputEmailCallBack(text:string){
-      validateEmail = inptValidations.validateEmail(text);
-    }
-
-    function inputPasswordCallBack(text:string){
-      validatePassword = inptValidations.validatePassword(text);
     }
     
-    async function submitCredentials(){
-      let response = await loginValidation.btnValidation(validateEmail,validatePassword)
-      if(response){
-        logIn();
+
+    private registerAccount(){
+      this.props.navigation.navigate("Register");
+    }
+    private forgotPassword(){  
+      this.props.navigation.navigate("PasswordRecovery");
+    }
+    private logIn() {
+      this.props.navigation.navigate("LoggedTempPage");
+    }
+    
+    private onEmailChange = (email?: string): void => {
+      if (email == null || email.length === 0) {
+        this.setState(
+            {
+                emailError: 'Preencha o email'
+            }
+        );
+    } else if (!inptValidations.validateEmail(email)) {
+        this.setState(
+            {
+              emailError: 'Email inválido'
+            }
+        );
+    } else {
+        this.setState({ emailError: undefined});
+    }
+      this.setState({ email });
+    };
+    private onPasswordChange = (password?: string): void => {
+      if (password == null || password.length === 0) {
+        this.setState(
+            {
+                passwordError: 'Preencha a senha'
+            }
+        );
+    } else if (!inptValidations.validatePassword(password)) {
+        this.setState(
+            {
+              passwordError: 'A senha precisa ter no mínimo 8 caracteres, contendo pelo menos uma letra maiúscula e um número'
+            }
+        );
+    } else {
+        this.setState({ passwordError: undefined});
+    }
+        this.setState({ password });
+    };
+
+    private async submitCredentials(){
+      const {email, password, emailError, passwordError} = this.state;
+      console.log(emailError, passwordError)
+      if (emailError === undefined && passwordError === undefined) {
+        let response = await loginValidation.btnValidation(email,password)
+        if(response){
+          this.logIn();
+        }
       }
     }
 
-    async function googleSignIn(){
+    private async googleSignIn(){
       try {
         await GoogleSignin.hasPlayServices();
         const userInfo = await GoogleSignin.signIn();
         console.log(userInfo);
-        logIn();
+        this.logIn();
       } catch (error) {
         if (error.code === statusCodes.SIGN_IN_CANCELLED) {
           console.log('Cancel');
@@ -72,15 +128,15 @@ export default function Login({navigation}: {navigation: any})  {
       }
     }
 
-    async function facebookSignIn(){
+    private async facebookSignIn(){
       LoginManager.logInWithPermissions(["public_profile", "email"]).then(
-        function (result) {
+         (result) => {
         if (result.isCancelled) {
         console.log("Login Cancelled " + JSON.stringify(result))
         } else {
           console.log("Login success with  permisssions: " + result.grantedPermissions?.toString());
           console.log("Login Success " + result.toString());
-          logIn();
+          this.logIn();
         }
         },
         function (error) {
@@ -89,7 +145,8 @@ export default function Login({navigation}: {navigation: any})  {
         )
     }
 
-    return (
+    render() {
+      return (
         <SafeAreaView style={styles.container}>
           
 
@@ -102,20 +159,24 @@ export default function Login({navigation}: {navigation: any})  {
             <InputForm
               placeholder="E-mail"
               autoCorrect={false}
-              handler={inputEmailCallBack}
+              onChange={this.onEmailChange}
+              value={this.state.email}
               style={styles.inputLogin}
               textContentType='emailAddress'
               keyboardType='email-address'
               autoCapitalize='none'
               autoCompleteType='email'
+              error={this.state.emailError}
             />
             
             <InputForm
               placeholder="Senha"
               autoCorrect={false}
-              secureTextEntry={true}
-              handler={inputPasswordCallBack}
+              hasVisibility={false}
+              onChange={this.onPasswordChange}
               style={styles.inputLogin}
+              value={this.state.password}
+              error={this.state.passwordError}
             />
             
               
@@ -123,24 +184,24 @@ export default function Login({navigation}: {navigation: any})  {
 
           <View style={styles.containerBtns}>
 
-            <TouchableOpacity onPress={registerAccount}>
+            <TouchableOpacity onPress={this.registerAccount.bind(this)}>
               <Text style={styles.registerMessage} >Não possui conta? Registre-se</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity onPress={forgotPassword}>
+            <TouchableOpacity onPress={this.forgotPassword.bind(this)}>
               <Text style={styles.forgotPasswordMessage} >Esqueci minha senha</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity onPress={submitCredentials} style={styles.btnLogin} >
+            <TouchableOpacity onPress={this.submitCredentials.bind(this)} style={styles.btnLogin} >
               <Text style={styles.btnLoginText} >Entrar</Text>
             </TouchableOpacity>
 
             <Text style={styles.lineSocialMedia}>_______________Ou_______________</Text>
             <View style={styles.containerimgSocialMedias}>
-              <TouchableOpacity onPress={googleSignIn}>
+              <TouchableOpacity onPress={this.googleSignIn.bind(this)}>
                 <Image style={styles.imgSocialMedias} source={require('../../model/imgs/google.png')}/>
               </TouchableOpacity>
-              <TouchableOpacity onPress={facebookSignIn}>
+              <TouchableOpacity onPress={this.facebookSignIn.bind(this)}>
                 <Image style={styles.imgSocialMedias} source={require('../../model/imgs/facebook.png')}/>
               </TouchableOpacity>
               
@@ -151,5 +212,7 @@ export default function Login({navigation}: {navigation: any})  {
             
         </SafeAreaView>
     );
+    }
+   
   }
 

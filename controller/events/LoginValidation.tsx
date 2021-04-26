@@ -4,6 +4,7 @@ import requests from '../requestController';
 class LoginValidation{
 
     btnValidation = async (email: any,password: any) =>{
+        console.log("CHEGUEI")
         if(email && password){
             let object = {
                 email: email,

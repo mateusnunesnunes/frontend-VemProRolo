@@ -13,7 +13,10 @@ export default StyleSheet.create({
         borderBottomWidth: 1,
         paddingVertical:10
       },
-    
+    errorText: {
+      color:colors.red,
+      width:300,
+    }
 });
 
 

@@ -5,7 +5,7 @@ class InputValidations{
         if(reg.test(text) === false) {
             return false;
         }
-        return text
+        return true
         
 
     }
@@ -15,7 +15,7 @@ class InputValidations{
         if (reg.test(text) === false) {
             return false;
         }
-        return text;
+        return true;
         
     }
 }
