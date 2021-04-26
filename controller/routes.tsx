@@ -2,7 +2,7 @@ import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import Login from '../view/screens/Login';
-import ChangePassword from '../view/screens/changePassword';
+import ChangePassword from '../view/screens/ChangePassword';
 import PasswordRecovery from '../view/screens/PasswordRecovery';
 import Register from '../view/screens/Register';
 import LoggedTempPage from '../view/screens/LoggedTempPage';

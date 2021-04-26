@@ -3,14 +3,16 @@ import requests from '../requestController';
 
 class LoginValidation{
 
-    btnValidation = (email,password) =>{
+    async btnValidation = (email,password) =>{
         console.log(email,password);
-        if(email && password){
+        if(true){
             let object = {
                 email: "admin@gmail.com",
                 password: "1Administrador"
             }
-            requests.get("users/auth",object)
+            let response = await requests.post("users/auth",object);
+            console.log("BUCETA ",response)
+            
         }
         return false;
     }
