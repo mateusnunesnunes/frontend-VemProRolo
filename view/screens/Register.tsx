@@ -4,60 +4,150 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import styles from '../styles/views/registerView';
 import {
   GoogleSignin,
-  GoogleSigninButton,
   statusCodes,
 } from '@react-native-google-signin/google-signin';
 import { LoginManager } from 'react-native-fbsdk-next';
 import inptValidations from '../../controller/events/InputValidations';
 import registerValidation from '../../controller/events/RegisterValidation';
 import {InputForm} from '../../model/forms/InputForm';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { ScrollView } from 'react-native-gesture-handler';
+interface Props {
+  navigation: StackNavigationProp<any, any>;
+}
+interface State {
+  name?: string;
+  nameError?: string;
+  email?: string;
+  emailError?: string;
+  password?: string;
+  passwordError?: string;
+  repeatPassword?: string;
+  repeatPasswordError?: string;
+  loginError?: boolean;
+  changeAccountError?: string;
+  isLoading?: boolean;
+  keyboardVerticalOffset?: number;
+}
 
-export default function Register({navigation}: {navigation: any}) {
+GoogleSignin.configure({
+  scopes: ['email', 'profile'],
+  webClientId:
+    '760992990537-i8bbh903gjl8dfuo6uh6inod8uicgj9q.apps.googleusercontent.com',
+    iosClientId: '760992990537-7rtdspl7n33j1pbeg7nl2nvcc05prfje.apps.googleusercontent.com',
+  offlineAccess: true
+});
+export class Register extends React.Component<Props, State>  {
 
-  let [validateEmail] = useState(false);
-  let [validatePassword] = useState(false);
-  let [validateRePassword] = useState(false);
-  let [name] = useState('');
+  constructor(props: Props) {
+    super(props);
 
-  function inputPasswordCallBack(text:string){
-    validatePassword = inptValidations.validatePassword(text)
-  }
-  function inputNameCallBack(text:string){
-    name = text;
-  }
-  function inputRePasswordCallBack(text:string){
-    validateRePassword = inptValidations.validatePassword(text)
-  }
-
-  function inputEmailCallBack(text:string){
-    validateEmail = inptValidations.validateEmail(text)
-  }
-
-  
-  async function submitRegister(){
-    console.log(name,validateEmail,validatePassword,validateRePassword)
-    let response = await registerValidation.btnValidation(name,validateEmail,validatePassword)
-    if(response){
-      logIn();
+    this.state = {
+      name: '',
+      email: '',
+      password: '',
+      repeatPassword:''
     }
   }
 
-  
-
-
-  function loginRedirectPage(){
-    navigation.navigate("Login");
+  private onNameChange = (name?: string): void => {
+    if (name == null || name.length === 0) {
+      this.setState(
+          {
+              nameError: 'Preencha o email'
+          }
+      );
+  } else if (!inptValidations.validateEmail(name)) {
+      this.setState(
+          {
+            nameError: 'Email inválido'
+          }
+      );
+  } else {
+      this.setState({ nameError: undefined});
   }
-  function logIn() {
-    navigation.navigate("LoggedTempPage");
+    this.setState({ name });
+  };
+
+  private onEmailChange = (email?: string): void => {
+    if (email == null || email.length === 0) {
+      this.setState(
+          {
+              emailError: 'Preencha o email'
+          }
+      );
+  } else if (!inptValidations.validateEmail(email)) {
+      this.setState(
+          {
+            emailError: 'Email inválido'
+          }
+      );
+  } else {
+      this.setState({ emailError: undefined});
+  }
+    this.setState({ email });
+  };
+
+  private onPasswordChange = (password?: string): void => {
+    if (password == null || password.length === 0) {
+      this.setState(
+          {
+              passwordError: 'Preencha a senha'
+          }
+      );
+  } else if (!inptValidations.validatePassword(password)) {
+      this.setState(
+          {
+            passwordError: 'A senha precisa ter no mínimo 8 caracteres, contendo pelo menos uma letra maiúscula e um número'
+          }
+      );
+  } else {
+      this.setState({ passwordError: undefined});
+  }
+      this.setState({ password });
+  };
+
+  private onRepeatPasswordChange = (repeatPassword?: string): void => {
+    const {password} = this.state;
+    if (repeatPassword == null || repeatPassword.length === 0) {
+      this.setState(
+          {
+            repeatPasswordError: 'Confirme a senha novamente'
+          }
+      );
+  } else if (repeatPassword != password) {
+      this.setState(
+          {
+            repeatPasswordError: 'As senhas não conferem'
+          }
+      );
+  } else {
+      this.setState({ repeatPasswordError: undefined});
+  }
+      this.setState({ repeatPassword });
+  };
+
+  private async submitRegister(){
+    const {name, email, password, repeatPassword} = this.state;
+    let response = await registerValidation.btnValidation(name,email,password)
+    if(response){
+      this.logIn();
+    }
   }
 
-  async function googleSignIn(){
+  private loginRedirectPage(){
+    this.props.navigation.navigate("Login");
+  }
+  private logIn() {
+    this.props.navigation.navigate("LoggedTempPage");
+  }
+
+  private async googleSignIn(){
     try {
       await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
       console.log(userInfo);
-      logIn();
+      this.logIn();
     } catch (error) {
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
         console.log('Cancel');
@@ -71,15 +161,15 @@ export default function Register({navigation}: {navigation: any}) {
     }
   }
 
-  async function facebookSignIn(){
+  private async facebookSignIn(){
     LoginManager.logInWithPermissions(["public_profile", "email"]).then(
-      function (result) {
+       (result) => {
       if (result.isCancelled) {
       console.log("Login Cancelled " + JSON.stringify(result))
       } else {
         console.log("Login success with  permisssions: " + result.grantedPermissions?.toString());
         console.log("Login Success " + result.toString());
-        logIn();
+        this.logIn();
       }
       },
       function (error) {
@@ -88,69 +178,79 @@ export default function Register({navigation}: {navigation: any}) {
       )
   }
 
-  return(
-    
-    <SafeAreaView style={styles.container}>
-        <View style={styles.divMessage}>
-            <Text style={styles.wellComeMessage}>Bem vindo!</Text>
-            <Text style={styles.descriptonMessage}>Se cadastrar no sistema</Text>
-        </View>
-        <View style={styles.containerInputLogin}>
-            
-
-            <InputForm
-              placeholder="Nome"
-              autoCorrect={false}
-              onChange={inputNameCallBack}
-              style={styles.inputLogin}
-              autoCapitalize='none'
-            />
-            <InputForm
-              placeholder="E-mail"
-              autoCorrect={false}
-              onChange={inputEmailCallBack}
-              style={styles.inputLogin}
-              textContentType='emailAddress'
-              keyboardType='email-address'
-              autoCapitalize='none'
-              autoCompleteType='email'
-            />
-            <InputForm
-              placeholder="Senha"
-              hasVisibility={false}
-              onChange={inputPasswordCallBack}
-              style={styles.inputLogin}
-            />
-            <InputForm
-              placeholder="Senha"
-              hasVisibility={false}
-              onChange={inputPasswordCallBack}
-              style={styles.inputLogin}
-            />
+  render() {
+    return(
+      <View style={styles.container}>
+        <ScrollView>
+          <View style={styles.divMessage}>
+              <Text style={styles.wellComeMessage}>Bem vindo!</Text>
+              <Text style={styles.descriptonMessage}>Se cadastrar no sistema</Text>
           </View>
-
-          <View style={styles.containerBtns}>
-            
-           <TouchableOpacity onPress={loginRedirectPage}>
-              <Text style={styles.loginMessage} >Já possui uma conta? Entre</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity onPress={submitRegister} style={styles.btnLogin} >
-              <Text style={styles.btnLoginText} >Entrar</Text>
-            </TouchableOpacity>
-            
-
-            <Text style={styles.lineSocialMedia}>_______________Ou_______________</Text>
-            <View style={styles.containerimgSocialMedias}>
-            <TouchableOpacity onPress={googleSignIn}>
-                <Image style={styles.imgSocialMedias} source={require('../../model/imgs/google.png')}/>
-            </TouchableOpacity>
-              <TouchableOpacity onPress={facebookSignIn}>
-                <Image style={styles.imgSocialMedias} source={require('../../model/imgs/facebook.png')}/>
-              </TouchableOpacity>
+          <View style={styles.containerInputLogin}>
+              
+  
+              <InputForm
+                placeholder="Nome"
+                autoCorrect={false}
+                onChange={this.onNameChange.bind(this)}
+                style={styles.inputLogin}
+                autoCapitalize='none'
+                value={this.state.name}
+                error={this.state.nameError}
+              />
+              <InputForm
+                placeholder="E-mail"
+                autoCorrect={false}
+                onChange={this.onEmailChange.bind(this)}
+                style={styles.inputLogin}
+                textContentType='emailAddress'
+                keyboardType='email-address'
+                autoCapitalize='none'
+                autoCompleteType='email'
+                value={this.state.email}
+                error={this.state.emailError}
+              />
+              <InputForm
+                placeholder="Senha"
+                hasVisibility={false}
+                onChange={this.onPasswordChange.bind(this)}
+                style={styles.inputLogin}
+                value={this.state.password}
+                error={this.state.passwordError}
+              />
+              <InputForm
+                placeholder="Repetir senha"
+                hasVisibility={false}
+                onChange={this.onRepeatPasswordChange.bind(this)}
+                style={styles.inputLogin}
+                value={this.state.repeatPassword}
+                error={this.state.repeatPasswordError}
+              />
             </View>
-          </View>
-    </SafeAreaView>
-    
-  );
+  
+            <View style={styles.containerBtns}>
+              
+             <TouchableOpacity onPress={this.loginRedirectPage.bind(this)}>
+                <Text style={styles.loginMessage} >Já possui uma conta? Entre</Text>
+              </TouchableOpacity>
+  
+              <TouchableOpacity onPress={this.submitRegister.bind(this)} style={styles.btnLogin} >
+                <Text style={styles.btnLoginText} >Entrar</Text>
+              </TouchableOpacity>
+            
+              <Text style={styles.lineSocialMedia}>_______________Ou_______________</Text>
+              <View style={styles.containerimgSocialMedias}>
+                <TouchableOpacity onPress={this.googleSignIn}>
+                    <Image style={styles.imgSocialMedias} source={require('../../model/imgs/google.png')}/>
+                </TouchableOpacity>
+                  <TouchableOpacity onPress={this.facebookSignIn.bind(this)}>
+                    <Image style={styles.imgSocialMedias} source={require('../../model/imgs/facebook.png')}/>
+                  </TouchableOpacity>
+              </View>
+            </View>
+        </ScrollView>
+      </View>
+    );
+  }
+  
 }

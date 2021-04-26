@@ -72,7 +72,7 @@ export class InputForm extends React.Component<Props, State>{
     }
   }
 
-  componentWillReceiveProps(newProps: Props) {
+  componentDidUpdate(newProps: Props) {
     this.setState({
       value: newProps.value != null ? newProps.value : this.state.value
     });

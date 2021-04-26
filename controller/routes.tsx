@@ -4,7 +4,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {Login} from '../view/screens/Login';
 import ChangePassword from '../view/screens/ChangePassword';
 import PasswordRecovery from '../view/screens/PasswordRecovery';
-import Register from '../view/screens/Register';
+import {Register} from '../view/screens/Register';
 import LoggedTempPage from '../view/screens/LoggedTempPage';
 
 
