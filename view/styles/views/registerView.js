@@ -65,7 +65,7 @@ export default StyleSheet.create({
       lineSocialMedia:{
         fontWeight:'bold',
         color:colors.darkBlue,
-        marginTop:150,
+        marginTop:30,
         marginBottom:10
       },
       registerMessage:{

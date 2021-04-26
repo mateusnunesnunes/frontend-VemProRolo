@@ -11,7 +11,6 @@ import {
 } from '@react-native-google-signin/google-signin';
 
 import { LoginManager } from 'react-native-fbsdk-next';
-import { User } from '../../model/types/user';
 import { StackNavigationProp } from '@react-navigation/stack';
 
 
@@ -28,7 +27,13 @@ interface State {
   isLoading?: boolean;
   keyboardVerticalOffset?: number;
 }
-
+GoogleSignin.configure({
+  scopes: ['email', 'profile'],
+  webClientId:
+    '760992990537-i8bbh903gjl8dfuo6uh6inod8uicgj9q.apps.googleusercontent.com',
+    iosClientId: '760992990537-7rtdspl7n33j1pbeg7nl2nvcc05prfje.apps.googleusercontent.com',
+  offlineAccess: true
+});
 export class Login extends React.Component<Props, State>  {
 
     constructor(props: Props) {
@@ -39,18 +44,6 @@ export class Login extends React.Component<Props, State>  {
         password: '',
       }
     }
-
-    componentDidUpdate() {
-      GoogleSignin.configure({
-        scopes: ['email', 'profile'],
-        webClientId:
-          '760992990537-i8bbh903gjl8dfuo6uh6inod8uicgj9q.apps.googleusercontent.com',
-          iosClientId: '760992990537-7rtdspl7n33j1pbeg7nl2nvcc05prfje.apps.googleusercontent.com',
-        offlineAccess: true
-      });
-    }
-    
-
     private registerAccount(){
       this.props.navigation.navigate("Register");
     }
@@ -167,6 +160,7 @@ export class Login extends React.Component<Props, State>  {
               autoCapitalize='none'
               autoCompleteType='email'
               error={this.state.emailError}
+              hasVisibility={true}
             />
             
             <InputForm
@@ -199,17 +193,13 @@ export class Login extends React.Component<Props, State>  {
             <Text style={styles.lineSocialMedia}>_______________Ou_______________</Text>
             <View style={styles.containerimgSocialMedias}>
               <TouchableOpacity onPress={this.googleSignIn.bind(this)}>
-                <Image style={styles.imgSocialMedias} source={require('../../model/imgs/google.png')}/>
+                  <Image style={styles.imgSocialMedias} source={require('../../model/imgs/google.png')}/>
               </TouchableOpacity>
-              <TouchableOpacity onPress={this.facebookSignIn.bind(this)}>
-                <Image style={styles.imgSocialMedias} source={require('../../model/imgs/facebook.png')}/>
-              </TouchableOpacity>
-              
+                <TouchableOpacity onPress={this.facebookSignIn.bind(this)}>
+                  <Image style={styles.imgSocialMedias} source={require('../../model/imgs/facebook.png')}/>
+                </TouchableOpacity>
             </View>
-            
           </View>
-    
-            
         </SafeAreaView>
     );
     }
