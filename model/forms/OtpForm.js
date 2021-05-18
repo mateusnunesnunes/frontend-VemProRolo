@@ -9,6 +9,8 @@ export default class OtpForm extends React.Component {
             React.createRef(),
             React.createRef(),
             React.createRef(),
+            React.createRef(),
+            React.createRef(),
             React.createRef()
         ]
     }
@@ -23,7 +25,6 @@ export default class OtpForm extends React.Component {
     render(){
      return (
        <View>
-         <Text>Enter OTP</Text>
          <View style={styles.containerInput}>
           {
             this.inputRefs.map((k, idx) => (

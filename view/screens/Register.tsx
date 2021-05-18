@@ -125,7 +125,7 @@ export class Register extends React.Component<Props, State>  {
     const {name, email, password, repeatPassword} = this.state;
     let response = await registerValidation.btnValidation(name,email,password)
     if(response){
-      this.logIn();
+      this.redirectToVerifyEmailCodePage();
     }
   }
 
@@ -134,6 +134,16 @@ export class Register extends React.Component<Props, State>  {
   }
   private logIn() {
     this.props.navigation.navigate("LoggedTempPage");
+  }
+
+  private redirectToVerifyEmailCodePage() {
+    console.log("Registro: " + this.state.email)
+    const { email } = this.state;
+    this.props.navigation.navigate("CodeVerification", {
+     
+        email
+      
+    });
   }
 
   private async googleSignIn(){
@@ -231,7 +241,7 @@ export class Register extends React.Component<Props, State>  {
               </TouchableOpacity>
   
               <TouchableOpacity onPress={this.submitRegister.bind(this)} style={styles.btnLogin} >
-                <Text style={styles.btnLoginText} >Entrar</Text>
+                <Text style={styles.btnLoginText} >Cadastrar</Text>
               </TouchableOpacity>
             
               <Text style={styles.lineSocialMedia}>_______________Ou_______________</Text>

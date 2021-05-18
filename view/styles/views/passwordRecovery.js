@@ -21,17 +21,17 @@ export default StyleSheet.create({
         flexDirection:"row",
     },
     iput:{
-        width: 60,
-        height: 60,
+        width: 50,
+        height: 50,
         lineHeight: 38,
-        fontSize: 30,
+        fontSize: 25,
         backgroundColor:colors.white,
         textAlign: 'center',
         borderColor: '#cccccc',
         borderWidth: 2,
         borderRadius: 4,
         padding: 12,
-        margin:10
+        margin:5
     },
     containerBtn:{
         marginTop:50

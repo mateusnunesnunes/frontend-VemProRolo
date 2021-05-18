@@ -95,10 +95,12 @@ export class Login extends React.Component<Props, State>  {
       const {email, password, emailError, passwordError} = this.state;
       console.log(emailError, passwordError)
       if (emailError === undefined && passwordError === undefined) {
-        let response = await loginValidation.btnValidation(email,password)
-        if(response){
-          this.logIn();
-        }
+        await loginValidation.btnValidation(email,password)
+        .then((response) => {
+          console.log(response);
+        }).catch((error) => {
+          console.log(error);
+        })
       }
     }
 

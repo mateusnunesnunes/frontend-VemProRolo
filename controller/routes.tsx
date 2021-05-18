@@ -6,9 +6,20 @@ import ChangePassword from '../view/screens/ChangePassword';
 import PasswordRecovery from '../view/screens/PasswordRecovery';
 import {Register} from '../view/screens/Register';
 import LoggedTempPage from '../view/screens/LoggedTempPage';
+import CodeVerification from '../view/screens/CodeVerification';
 
+export type ParamList = {
+  Login: undefined,
+  Register: undefined,
+  ChangePassword: undefined,
+  PasswordRecovery: undefined,
+  LoggedTempPage: undefined,
+  CodeVerification: {
+    email: string;
+  };
+};
 
-const Stack = createStackNavigator();
+const Stack = createStackNavigator<ParamList>();
 
 export default function App() {
   return( 
@@ -40,7 +51,12 @@ export default function App() {
             options={{ 
               title:"",     
             }}
-            />    
+            /> 
+
+            <Stack.Screen 
+            name="CodeVerification" 
+            component={CodeVerification}
+            />
 
             <Stack.Screen 
             name="LoggedTempPage" 
