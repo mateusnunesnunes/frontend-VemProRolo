@@ -38,7 +38,7 @@ export class CodeVerification extends React.Component<Props, State> {
 
     private resendCode() {
         const { email } = this.state;
-        requests.post("auth/resend-code", {email})
+        requests.post("auth/resend-code", { email })
         .then(response => Alert.alert("Um email foi enviado com um novo código de verificação"))
         .catch(err => Alert.alert("Algo deu errado"));
     }
