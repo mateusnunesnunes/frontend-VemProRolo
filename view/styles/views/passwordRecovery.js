@@ -24,7 +24,7 @@ export default StyleSheet.create({
         width: 50,
         height: 50,
         lineHeight: 38,
-        fontSize: 25,
+        fontSize: 22,
         backgroundColor:colors.white,
         textAlign: 'center',
         borderColor: '#cccccc',

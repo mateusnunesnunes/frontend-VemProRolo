@@ -137,12 +137,10 @@ export class Register extends React.Component<Props, State>  {
   }
 
   private redirectToVerifyEmailCodePage() {
-    console.log("Registro: " + this.state.email)
-    const { email } = this.state;
+    const { email, password } = this.state;
     this.props.navigation.navigate("CodeVerification", {
-     
-        email
-      
+        email,
+        password
     });
   }
 

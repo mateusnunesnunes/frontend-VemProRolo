@@ -16,6 +16,7 @@ export type ParamList = {
   LoggedTempPage: undefined,
   CodeVerification: {
     email: string;
+    password: string;
   };
 };
 
