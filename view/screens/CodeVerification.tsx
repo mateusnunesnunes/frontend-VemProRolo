@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, TextInput, KeyboardAvoidingView, TouchableOpacity, Image, Alert  } from 'react-native';
+import { Text, View, TouchableOpacity, Alert  } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import styles from '../styles/views/passwordRecovery';
 import OtpForm from '../../model/forms/OtpForm';
@@ -73,8 +73,7 @@ export class CodeVerification extends React.Component<Props, State> {
     
                 <OtpForm
                     onChange={this.onCodeChange.bind(this)}
-                ></OtpForm>
-                <InputForm placeholder='g' onChange={this.onCodeChange} style={{width: '90%', height: 10}} />
+                />
     
                 <TouchableOpacity style={styles.containerResend} onPress={this.resendCode.bind(this)}>
                     <Text style={styles.resendText}>Reenviar</Text>
