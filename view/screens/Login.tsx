@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Text, View, TextInput, KeyboardAvoidingView, TouchableOpacity, Image  } from 'react-native';
+import { Text, View, TextInput, KeyboardAvoidingView, TouchableOpacity, Image, Alert  } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import styles from '../styles/views/loginView';
 import {InputForm} from '../../model/forms/InputForm';
 import inptValidations from '../../controller/events/InputValidations';
 import loginValidation from '../../controller/events/LoginValidation';
+import requests from '../../controller/requestController';
 import {
   GoogleSignin,
   statusCodes,
@@ -48,8 +49,33 @@ export class Login extends React.Component<Props, State>  {
       this.props.navigation.navigate("Register");
     }
     private forgotPassword(){  
-      this.props.navigation.navigate("PasswordRecovery");
+      const { email } = this.state;
+      requests.post("auth/password-recovery", { email })
+        .then(() => this.props.navigation.navigate("PasswordRecovery", { email }))
+        .catch(error => {
+          console.log(error.response.status)
+          if ( error.response.status == 401){
+            Alert.alert(
+              "Email não verificado",
+              "Precisamos verificar seu email para prosseguir",
+              [
+                {
+                  text: "Enviar email",
+                  onPress: () => this.sendVerificationCodeEmail()
+                },
+                {
+                  text: "Cancelar",
+                  onPress: () => console.log("Cancel Pressed"),
+                  style: "cancel"
+                }
+              ]
+            );
+          } else {
+            Alert.alert("Algo deu errado","Preencha o campo de email no formulário de login para continuar. \n Verifique se ele está correto.");
+          }
+        });
     }
+
     private logIn() {
       this.props.navigation.navigate("LoggedTempPage");
     }
@@ -72,6 +98,7 @@ export class Login extends React.Component<Props, State>  {
     }
       this.setState({ email });
     };
+
     private onPasswordChange = (password?: string): void => {
       if (password == null || password.length === 0) {
         this.setState(
@@ -95,11 +122,11 @@ export class Login extends React.Component<Props, State>  {
       const {email, password, emailError, passwordError} = this.state;
       console.log(emailError, passwordError)
       if (emailError === undefined && passwordError === undefined) {
-        await loginValidation.btnValidation(email,password)
+        await  requests.post("auth/login", { email, password })
         .then((response) => {
-          console.log(response);
+          this.logIn();
         }).catch((error) => {
-          console.log(error);
+          Alert.alert("Algo deu errado", "Email e/ou senha não conferem");
         })
       }
     }
@@ -138,6 +165,19 @@ export class Login extends React.Component<Props, State>  {
           console.log("Login failed with error: " + error);
         }
         )
+    }
+
+    private sendVerificationCodeEmail() {
+      const { email } = this.state
+      requests.post("auth/resend-code", { email })
+      .then(response => this.redirectToVerifyEmailCodePage(email))
+      .catch(err => Alert.alert("Algo deu errado"))
+    }
+
+    private redirectToVerifyEmailCodePage(email?: string) {
+      this.props.navigation.navigate("CodeVerification", {
+          email
+      });
     }
 
     render() {

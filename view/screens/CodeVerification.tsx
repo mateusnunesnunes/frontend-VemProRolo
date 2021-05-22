@@ -20,7 +20,7 @@ interface State {
     password: string
 }
 
-export class CodeVerification extends React.Component<Props, State> {
+export default class CodeVerification extends React.Component<Props, State> {
 
     constructor(props: Props) {
         super(props);
@@ -50,11 +50,23 @@ export class CodeVerification extends React.Component<Props, State> {
             Alert.alert("Código inválido", "Preencha todos os 6 dígitos para continuar");
         } else {
             await requests.post("auth/verify-email", { email, code })
-            .then(async response => 
-                await requests.post("auth/login", { email, password })
-                .then(() => this.logIn())
-                .catch(err => Alert.alert("Algo deu errado"))
-                )
+            .then(async response => {
+                if (password != undefined && password != '') {
+                    await requests.post("auth/login", { email, password })
+                    .then(() => this.logIn())
+                    .catch(err => Alert.alert("Algo deu errado"))
+                } else {
+                    Alert.alert("Email verificado!", "Volte à página de login",
+                    [
+                        {
+                            text: 'Voltar',
+                            onPress: () => this.props.navigation.goBack(),
+                        }
+                    ]
+                    )
+                }
+                
+            })
             .catch(err => Alert.alert("Código inválido", "Não conseguimos verificar o código informado"));
         }
     }
@@ -89,5 +101,3 @@ export class CodeVerification extends React.Component<Props, State> {
       }
    
   }
-
-export default CodeVerification;
