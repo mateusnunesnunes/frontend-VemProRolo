@@ -59,4 +59,4 @@ buck-out/
 /ios/Pods/
 
 # Vs Code
-vscode/
+.vscode/
