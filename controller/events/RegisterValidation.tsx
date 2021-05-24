@@ -13,7 +13,7 @@ class RegisterValidation{
             let res;
             try{
                 console.log("try")
-                res = (await requests.post("users", object)).status
+                res = (await requests.post("auth/register", object)).status
                 console.log(res)
             } catch(error) {
                 console.error(error)

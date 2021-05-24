@@ -21,17 +21,17 @@ export default StyleSheet.create({
         flexDirection:"row",
     },
     iput:{
-        width: 60,
-        height: 60,
+        width: 50,
+        height: 50,
         lineHeight: 38,
-        fontSize: 30,
+        fontSize: 22,
         backgroundColor:colors.white,
         textAlign: 'center',
         borderColor: '#cccccc',
         borderWidth: 2,
         borderRadius: 4,
         padding: 12,
-        margin:10
+        margin:5
     },
     containerBtn:{
         marginTop:50
@@ -61,6 +61,18 @@ export default StyleSheet.create({
     resendText:{
         fontWeight:'bold',
         fontSize:15
-    }
+    },
+    inputPassword: {
+        height: 50,
+        lineHeight: 38,
+        fontSize: 18,
+        backgroundColor:colors.white,
+        textAlign: 'center',
+        borderColor: '#cccccc',
+        borderWidth: 2,
+        borderRadius: 4,
+        padding: 12,
+        margin:20,
+      }
 
 });

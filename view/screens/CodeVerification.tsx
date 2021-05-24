@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, TouchableOpacity, Alert, StyleSheet  } from 'react-native';
+import { Text, View, TouchableOpacity, Alert  } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import styles from '../styles/views/passwordRecovery';
 import OtpForm from '../../model/forms/OtpForm';
@@ -8,7 +8,6 @@ import { ParamList } from '../../controller/routes';
 import { StackNavigationProp } from '@react-navigation/stack';
 import requests from '../../controller/requestController';
 import { InputForm } from '../../model/forms/InputForm';
-import inptValidations from '../../controller/events/InputValidations';
 
 interface Props {
     navigation: StackNavigationProp<ParamList, 'CodeVerification'>,
@@ -18,12 +17,10 @@ interface Props {
 interface State {
     code: string,
     email: string,
-    password?: string,
-    passwordError?: string
-    btnDisabled: boolean
+    password: string
 }
 
-export default class PasswordRecovery extends React.Component<Props, State> {
+export default class CodeVerification extends React.Component<Props, State> {
 
     constructor(props: Props) {
         super(props);
@@ -31,30 +28,9 @@ export default class PasswordRecovery extends React.Component<Props, State> {
         this.state = {
           code: '',
           email: this.props.route.params.email,
-          password: '',
-          btnDisabled: true,
-          passwordError: ''
+          password: this.props.route.params.password
         }
     }
-
-    private onPasswordChange = (password?: string): void => {
-        if (password == null || password.length === 0) {
-          this.setState(
-              {
-                  passwordError: 'Preencha a senha'
-              }
-          );
-      } else if (!inptValidations.validatePassword(password)) {
-          this.setState(
-              {
-                passwordError: 'A senha precisa ter no mínimo 8 caracteres, contendo pelo menos uma letra maiúscula e um número'
-              }
-          );
-      } else {
-          this.setState({ passwordError: undefined});
-      }
-          this.setState({ password }, this.enableBtn);
-      };
 
     private logIn() {
         this.props.navigation.navigate("LoggedTempPage");
@@ -62,7 +38,7 @@ export default class PasswordRecovery extends React.Component<Props, State> {
 
     private resendCode() {
         const { email } = this.state;
-        requests.post("auth/password-recovery", { email })
+        requests.post("auth/resend-code", { email })
         .then(response => Alert.alert("Um email foi enviado com um novo código de verificação"))
         .catch(err => Alert.alert("Algo deu errado"));
     }
@@ -73,27 +49,32 @@ export default class PasswordRecovery extends React.Component<Props, State> {
         if (code == null || code.length != 6) {
             Alert.alert("Código inválido", "Preencha todos os 6 dígitos para continuar");
         } else {
-            await requests.post("auth/reset-password", { email, code, password })
-            .then(async response => 
-                await requests.post("auth/login", { email, password })
-                .then(() => this.logIn())
-                .catch(err => Alert.alert("Algo deu errado"))
-                )
+            await requests.post("auth/verify-email", { email, code })
+            .then(async response => {
+                if (password != undefined && password != '') {
+                    await requests.post("auth/login", { email, password })
+                    .then(() => this.logIn())
+                    .catch(err => Alert.alert("Algo deu errado"))
+                } else {
+                    Alert.alert("Email verificado!", "Volte à página de login",
+                    [
+                        {
+                            text: 'Voltar',
+                            onPress: () => this.props.navigation.goBack(),
+                        }
+                    ]
+                    )
+                }
+                
+            })
             .catch(err => Alert.alert("Código inválido", "Não conseguimos verificar o código informado"));
         }
     }
 
     private onCodeChange = (code: string): void => {
         console.log(code);
-        this.setState({ code }, this.enableBtn);
+        this.setState({ code });
       };
-
-    private enableBtn = (): void => {
-        const { code, passwordError } = this.state;
-        if (passwordError == undefined && code.length == 6) {
-            this.setState({btnDisabled: false});
-        }
-    }
 
       render() {
         return (
@@ -109,21 +90,9 @@ export default class PasswordRecovery extends React.Component<Props, State> {
                 <TouchableOpacity style={styles.containerResend} onPress={this.resendCode.bind(this)}>
                     <Text style={styles.resendText}>Reenviar</Text>
                 </TouchableOpacity>
-
-
-                <View style={styles.containerMessage}>
-                <InputForm 
-                        placeholder='Digite sua nova senha'    
-                        hasVisibility={false}
-                        onChange={this.onPasswordChange.bind(this)}
-                        style={styles.inputPassword}
-                        value={this.state.password}
-                        error={this.state.passwordError}
-                    />
-                </View>
     
                 <View style={styles.containerBtn} >
-                    <TouchableOpacity style={styles.btn} onPress={this.confirm.bind(this)} disabled={this.state.btnDisabled}>
+                    <TouchableOpacity style={styles.btn} onPress={this.confirm.bind(this)} >
                         <Text style={styles.btnText}>Confirmar</Text>
                     </TouchableOpacity>
                 </View>
@@ -131,4 +100,4 @@ export default class PasswordRecovery extends React.Component<Props, State> {
         );
       }
    
-}
+  }
