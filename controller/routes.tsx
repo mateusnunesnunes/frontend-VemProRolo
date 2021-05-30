@@ -42,7 +42,7 @@ const Tab = createBottomTabNavigator();
 const TabMenu = (): JSX.Element => {
   return (
     <Tab.Navigator 
-      initialRouteName={'LikePage'}
+      initialRouteName={'ProfilePage'}
       tabBarOptions={{
         showLabel: false,
       }}
@@ -161,7 +161,7 @@ const LoginStack = (): JSX.Element => {
 
 const MainStack = (): JSX.Element => {
   return (
-    <Stack.Navigator initialRouteName="VehicleRegisterPage" screenOptions={{header: () => <Header />, headerShown: true }}>
+    <Stack.Navigator initialRouteName="TabMenu" screenOptions={{header: () => <Header />, headerShown: true }}>
       <Stack.Screen
         name={'TabMenu'}
         component={TabMenu}
