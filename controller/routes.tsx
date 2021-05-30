@@ -42,7 +42,7 @@ const Tab = createBottomTabNavigator();
 const TabMenu = (): JSX.Element => {
   return (
     <Tab.Navigator 
-      initialRouteName={'ProfilePage'}
+      initialRouteName={'LikePage'}
       tabBarOptions={{
         showLabel: false,
       }}
