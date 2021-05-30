@@ -14,6 +14,7 @@ import { Image, StyleSheet } from 'react-native';
 import images from '../view/themes/Images';
 import { colors } from '../view/styles/Colors';
 import { Header } from '../components/Header';
+import { VehicleRegisterPage } from '../view/screens/VehicleRegisterPage';
 
 export type ParamList = {
   Login: undefined,
@@ -31,6 +32,7 @@ export type ParamList = {
   ProfilePage: undefined;
   MainStack: undefined;
   LoginStack: undefined;
+  VehicleRegisterPage: undefined;
 };
 
 const Stack = createStackNavigator<ParamList>();
@@ -104,7 +106,7 @@ const TabMenu = (): JSX.Element => {
 export default function App() {
   return( 
     <NavigationContainer>
-        <Stack.Navigator initialRouteName="LoginStack">
+        <Stack.Navigator initialRouteName="MainStack">
           <Stack.Screen
             name={'LoginStack'}
             component={LoginStack}
@@ -159,10 +161,14 @@ const LoginStack = (): JSX.Element => {
 
 const MainStack = (): JSX.Element => {
   return (
-    <Stack.Navigator initialRouteName="TabMenu" screenOptions={{header: () => <Header />, headerShown: true }}>
+    <Stack.Navigator initialRouteName="VehicleRegisterPage" screenOptions={{header: () => <Header />, headerShown: true }}>
       <Stack.Screen
         name={'TabMenu'}
         component={TabMenu}
+      />
+      <Stack.Screen
+        name={'VehicleRegisterPage'}
+        component={VehicleRegisterPage}
       />
     </Stack.Navigator>
   )
