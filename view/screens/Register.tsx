@@ -133,7 +133,7 @@ export class Register extends React.Component<Props, State>  {
     this.props.navigation.navigate("Login");
   }
   private logIn() {
-    this.props.navigation.navigate("LoggedTempPage");
+    this.props.navigation.navigate("MainStack");
   }
 
   private redirectToVerifyEmailCodePage() {

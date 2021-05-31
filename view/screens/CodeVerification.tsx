@@ -33,7 +33,7 @@ export default class CodeVerification extends React.Component<Props, State> {
     }
 
     private logIn() {
-        this.props.navigation.navigate("LoggedTempPage");
+        this.props.navigation.navigate("MainStack");
     }
 
     private resendCode() {

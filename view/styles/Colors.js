@@ -3,10 +3,12 @@ export const colors = {
   darkBlue: '#0A0A34',
   lightBlue: '#271EA5',
   white:'#FFFFFF',
-  lightGrey:'#F0F0F0',
+  lightGrey:'#B0B0B0',
   red:'#FF0000',
-  blue:'#add8e6',
   black:'#000000',
+  darkGrey: '#555555',
+  veryLightGrey: '#E0E0E0',
+  blue:'#add8e6',
   grey:'#4a4a4a'
 };
 
