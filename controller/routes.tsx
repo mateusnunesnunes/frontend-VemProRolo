@@ -2,7 +2,6 @@ import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {Login} from '../view/screens/Login';
-import ChangePassword from '../view/screens/ChangePassword';
 import PasswordRecovery from '../view/screens/PasswordRecovery';
 import {Register} from '../view/screens/Register';
 import CodeVerification from '../view/screens/CodeVerification';
@@ -15,11 +14,11 @@ import images from '../view/themes/Images';
 import { colors } from '../view/styles/Colors';
 import { Header } from '../components/Header';
 import { VehicleRegisterPage } from '../view/screens/VehicleRegisterPage';
+import LikeList from '../view/screens/LikeList';
 
 export type ParamList = {
   Login: undefined,
   Register: undefined,
-  ChangePassword: undefined,
   PasswordRecovery: undefined,
   LoggedTempPage: undefined,
   CodeVerification: {
@@ -67,7 +66,7 @@ const TabMenu = (): JSX.Element => {
       />
       <Tab.Screen 
         name={'LikePage'} 
-        component={LikePage} 
+        component={LikeList} 
         options={{
           tabBarLabel: '',
           tabBarIcon: ({focused}: {focused: boolean}) => (
@@ -135,14 +134,6 @@ const LoginStack = (): JSX.Element => {
         name="Register" 
         component={Register}
         options={{ headerShown:false}}
-      />
-
-      <Stack.Screen 
-        name="ChangePassword" 
-        component={ChangePassword}
-        options={{ 
-          title:"", 
-        }}
       />
       <Stack.Screen 
         name="PasswordRecovery" 

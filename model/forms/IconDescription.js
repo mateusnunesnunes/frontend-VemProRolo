@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { Image,Text, View, StyleSheet } from 'react-native';
 import styles from '../../view/styles/views/IconDescription';
-import Icon from 'react-native-vector-icons/FontAwesome';
 
 
 

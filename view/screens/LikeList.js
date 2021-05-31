@@ -50,7 +50,7 @@ export default class LikeList extends React.Component{
               viewabilityConfig={{
                 itemVisiblePercentThreshold: 50
               }}
-              scrollEnabled={true}
+              scrollEnabled={false}
               renderItem={({item,index}) => (
                 <TouchableWithoutFeedback onPress={() => this.pressElement(item,index)}>
                   <View style={{ 
