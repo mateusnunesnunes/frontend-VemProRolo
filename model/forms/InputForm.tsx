@@ -9,6 +9,8 @@ interface Props {
   onChange?: (value: string) => void;
   style?: object;
   autoCorrect?: boolean;
+  multiline?: boolean;
+  numerOfLines?: number;
   keyboardType?: KeyboardTypeOptions;
   autoCapitalize?: 'none' | 'sentences' | 'words' | 'characters';
   autoCompleteType?:
@@ -60,6 +62,8 @@ interface Props {
 interface State {
   value?: string;
   secureTextEntry?: boolean;
+  numerOfLines?: number;
+  keyboardType?: KeyboardTypeOptions;
 }
 
 export class InputForm extends React.Component<Props, State>{
@@ -68,13 +72,17 @@ export class InputForm extends React.Component<Props, State>{
 
     this.state = {
       value: props.value,
-      secureTextEntry: !props.hasVisibility
+      secureTextEntry: !props.hasVisibility,
+      numerOfLines: props.numerOfLines,
+      keyboardType: props.keyboardType
     }
   }
 
   componentWillReceiveProps(newProps: Props) {
     this.setState({
-      value: newProps.value != null ? newProps.value : this.state.value
+      value: newProps.value != null ? newProps.value : this.state.value,
+      numerOfLines: newProps.numerOfLines != null ? newProps.numerOfLines : 1,
+      keyboardType: newProps.keyboardType != null ? newProps.keyboardType : this.state.keyboardType
     });
   }
 
@@ -92,8 +100,8 @@ export class InputForm extends React.Component<Props, State>{
   }
 
   render() {
-    const {style, autoCorrect, placeholder, autoCapitalize, textContentType, keyboardType, autoCompleteType, error} = this.props;
-    const {secureTextEntry, value} = this.state;
+    const {style, autoCorrect, placeholder, autoCapitalize, textContentType, autoCompleteType, error, multiline} = this.props;
+    const {secureTextEntry, value, numerOfLines, keyboardType} = this.state;
     return (
       <>
       <View>
@@ -109,6 +117,9 @@ export class InputForm extends React.Component<Props, State>{
         autoCapitalize={autoCapitalize}
         autoCompleteType={autoCompleteType}
         blurOnSubmit={true}
+        multiline={multiline}
+        numberOfLines={numerOfLines}
+        editable
       />
       </View>
       {error != null && <Text style={[styles.errorText]}>{error}</Text>}
