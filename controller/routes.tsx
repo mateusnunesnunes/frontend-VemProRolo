@@ -2,7 +2,6 @@ import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {Login} from '../view/screens/Login';
-import ChangePassword from '../view/screens/ChangePassword';
 import PasswordRecovery from '../view/screens/PasswordRecovery';
 import {Register} from '../view/screens/Register';
 import CodeVerification from '../view/screens/CodeVerification';
@@ -19,7 +18,6 @@ import { VehicleRegisterPage } from '../view/screens/VehicleRegisterPage';
 export type ParamList = {
   Login: undefined,
   Register: undefined,
-  ChangePassword: undefined,
   PasswordRecovery: undefined,
   LoggedTempPage: undefined,
   CodeVerification: {
@@ -138,13 +136,6 @@ const LoginStack = (): JSX.Element => {
       />
 
       <Stack.Screen 
-        name="ChangePassword" 
-        component={ChangePassword}
-        options={{ 
-          title:"", 
-        }}
-      />
-      <Stack.Screen 
         name="PasswordRecovery" 
         component={PasswordRecovery}
         options={{ 
@@ -161,7 +152,7 @@ const LoginStack = (): JSX.Element => {
 
 const MainStack = (): JSX.Element => {
   return (
-    <Stack.Navigator initialRouteName="TabMenu" screenOptions={{header: () => <Header />, headerShown: true }}>
+    <Stack.Navigator initialRouteName="VehicleRegisterPage" screenOptions={{header: () => <Header />, headerShown: true }}>
       <Stack.Screen
         name={'TabMenu'}
         component={TabMenu}
