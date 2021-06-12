@@ -104,7 +104,7 @@ const TabMenu = (): JSX.Element => {
 export default function App() {
   return( 
     <NavigationContainer>
-        <Stack.Navigator initialRouteName="MainStack">
+        <Stack.Navigator initialRouteName="LoginStack">
           <Stack.Screen
             name={'LoginStack'}
             component={LoginStack}

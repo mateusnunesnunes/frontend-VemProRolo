@@ -1,7 +1,7 @@
 import { RouteProp } from "@react-navigation/core";
 import { StackNavigationProp } from "@react-navigation/stack";
 import React, { useState } from "react";
-import { Image, KeyboardTypeOptions, StyleSheet, Text, View } from "react-native";
+import { Alert, Image, KeyboardTypeOptions, StyleSheet, Text, View } from "react-native";
 import { ScrollView, TextInput, TouchableOpacity } from "react-native-gesture-handler";
 import { ParamList } from "../../controller/routes";
 import { colors } from "../styles/Colors";
@@ -9,6 +9,7 @@ import { Dimensions } from "react-native";
 import images from "../themes/Images";
 import { InputForm } from "../../model/forms/InputForm";
 import ImagePicker from "react-native-image-crop-picker";
+import { api } from "../../controller";
 
 interface Props {
     navigation: StackNavigationProp<ParamList, 'VehicleRegisterPage'>,
@@ -55,6 +56,7 @@ export interface VehicleImage {
 }
 
 export interface Vehicle {
+    id?: number,
     brand?: string,
     year?: number,
     color?: string,
@@ -63,7 +65,7 @@ export interface Vehicle {
     transmissionType?: string,
     category?: string,
     details?: string,
-    image?: VehicleImage
+    images?: VehicleImage[]
     kilometers?: number;
     doorsNumber?: number;
 }
@@ -74,7 +76,7 @@ class VehicleRegisterPage extends React.Component<Props, State> {
   
         this.state = {
             vehicle: {
-
+                images: []
             }
         }
       }
@@ -123,11 +125,20 @@ class VehicleRegisterPage extends React.Component<Props, State> {
     }
 
     onPressSaveButton = () => {
+        const { vehicle } = this.state;
+        api.post('/vehicles', vehicle)
+        .then(() => console.log("sucesso"))
+        .catch(error => Alert.alert("Algo deu errado", "Erro Interno"));
         console.log(this.state.vehicle);
+        this.redirectToVehicleList();
+    }
+
+    redirectToVehicleList = () => {
+        // TODO redirect to vehicle list
     }
 
     onPressBackButton = () => {
-        console.log("Voltar");
+        this.redirectToVehicleList();
     }
 
     openImagePicker = () => {
@@ -146,11 +157,11 @@ class VehicleRegisterPage extends React.Component<Props, State> {
                 this.setState({
                     vehicle: {
                         ...this.state.vehicle,
-                        image: {
-                            file:"data:image/jpeg;base64," + response.data,
+                        images: [{
+                            file: response.data,
                             fileContentType: 'image/jpeg',
                             fileName: response.filename || "image"
-                        }
+                        }]
                     }
                 });
             //})
@@ -158,13 +169,14 @@ class VehicleRegisterPage extends React.Component<Props, State> {
     }
     render() {
         const { vehicle } = this.state;
+        const image = vehicle?.images?.find(it => it != undefined)?.file
         return(
             <>
             <ScrollView>
                 <View style={{height: 200}}>
                     <TouchableOpacity onPress={this.openImagePicker}
                     >
-                        { vehicle?.image?.file == null ? (
+                        { image == null ? (
                             <View style={styles.imagePickerContainer}>
                                 <Image source={images.cameraIcon} style={styles.imageIcon} />
                                 <Text>Incluir fotos</Text>
@@ -172,7 +184,7 @@ class VehicleRegisterPage extends React.Component<Props, State> {
                             </View>
                         ) : (
                             <View style={styles.imagePickerContainer}>
-                                <Image source={{uri: vehicle.image.file, scale: 1}} style={styles.imageCar} />
+                                <Image source={{uri: "data:image/jpeg;base64," + image, scale: 1}} style={styles.imageCar} />
                             </View>
                         )}
                     </TouchableOpacity>
