@@ -127,6 +127,7 @@ export class Login extends React.Component<Props, State>  {
         .then((response) => {
           if (response.data?.accessToken?.jwtToken) {
             setApiToken(response.data.accessToken.jwtToken);
+            this.setState({email: '', password: ''});
             this.logIn();
           } else {
             Alert.alert("Algo deu errado", "Erro Interno");

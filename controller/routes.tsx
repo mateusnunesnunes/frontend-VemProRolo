@@ -7,13 +7,14 @@ import {Register} from '../view/screens/Register';
 import CodeVerification from '../view/screens/CodeVerification';
 import { createBottomTabNavigator  } from '@react-navigation/bottom-tabs';
 import LikePage from '../view/screens/LikePage';
-import ProfilePage from '../view/screens/ProfilePage';
+import ProfilePage, { User } from '../view/screens/ProfilePage';
 import CommercialPage from '../view/screens/CommercialPage';
 import { Image, StyleSheet } from 'react-native';
 import images from '../view/themes/Images';
 import { colors } from '../view/styles/Colors';
 import { Header } from '../components/Header';
 import { VehicleRegisterPage } from '../view/screens/VehicleRegisterPage';
+import UserAccountPage from '../view/screens/UserAccountPage';
 
 export type ParamList = {
   Login: undefined,
@@ -27,10 +28,13 @@ export type ParamList = {
   TabMenu: undefined;
   CommercialPage: undefined;
   LikePage: undefined;
-  ProfilePage: undefined;
+  ProfilePage: {
+    user: User
+  };
   MainStack: undefined;
   LoginStack: undefined;
   VehicleRegisterPage: undefined;
+  UserAccountPage: undefined;
 };
 
 const Stack = createStackNavigator<ParamList>();
@@ -160,6 +164,11 @@ const MainStack = (): JSX.Element => {
       <Stack.Screen
         name={'VehicleRegisterPage'}
         component={VehicleRegisterPage}
+      />
+
+      <Stack.Screen
+        name={'UserAccountPage'}
+        component={UserAccountPage}
       />
     </Stack.Navigator>
   )

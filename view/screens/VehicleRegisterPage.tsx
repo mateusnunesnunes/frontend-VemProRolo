@@ -127,10 +127,8 @@ class VehicleRegisterPage extends React.Component<Props, State> {
     onPressSaveButton = () => {
         const { vehicle } = this.state;
         api.post('/vehicles', vehicle)
-        .then(() => console.log("sucesso"))
+        .then(() => this.redirectToVehicleList())
         .catch(error => Alert.alert("Algo deu errado", "Erro Interno"));
-        console.log(this.state.vehicle);
-        this.redirectToVehicleList();
     }
 
     redirectToVehicleList = () => {
@@ -179,7 +177,7 @@ class VehicleRegisterPage extends React.Component<Props, State> {
                         { image == null ? (
                             <View style={styles.imagePickerContainer}>
                                 <Image source={images.cameraIcon} style={styles.imageIcon} />
-                                <Text>Incluir fotos</Text>
+                                <Text>Incluir foto</Text>
                                 <Text>0 de 1 selecionada</Text>
                             </View>
                         ) : (

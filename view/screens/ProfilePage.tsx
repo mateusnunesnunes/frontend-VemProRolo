@@ -3,14 +3,15 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import React from "react";
 import { Alert, Image, StyleSheet, Text, View } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { api } from "../../controller";
+import { api, removeApiToken } from "../../controller";
 import { ParamList } from "../../controller/routes";
 import { colors } from "../styles/Colors";
 import images from "../themes/Images";
 
 interface Props {
     navigation: StackNavigationProp<ParamList, 'ProfilePage'>,
-    route: RouteProp<ParamList, 'ProfilePage'>
+    route: RouteProp<ParamList, 'ProfilePage'>,
+    user: User
 }
 
 interface State {
@@ -21,27 +22,29 @@ export interface User {
     
     id?: number;
 
-    name?: string;
+    name: string;
     
-    email?: string;
+    email: string;
     
-    phone?: string;
+    phone: string;
 }
 
 export default class ProfilePage extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
-  
+  console.log("USER  ", this.props.user)
         this.state = {
-            user: {
-
-            }
+            user: this.props.user
         }
       }
 
-    componentWillMount(){
+    componentDidMount() {
         this.fetchUser();
-    }
+      
+        this.props.navigation.addListener('focus', () => {
+          this.fetchUser();
+        });
+      }
 
     fetchUser = () => {
         api.get('/users/current')
@@ -51,8 +54,17 @@ export default class ProfilePage extends React.Component<Props, State> {
         })
         .catch(error => Alert.alert("Algo deu errado", "Erro Interno"));
     }
+
+    redirectToAccountPage = () => {
+        this.props.navigation.navigate('UserAccountPage');
+    }
+
+    logout = () => {
+        removeApiToken();
+        this.props.navigation.navigate('Login');
+    }
+
     render() {
-        const { email, name } = this.state.user;
         return(
             <View style={{flex: 1, backgroundColor: colors.white}}>
                 <View style={{backgroundColor: colors.darkBlue, flex: 1}}>
@@ -65,23 +77,16 @@ export default class ProfilePage extends React.Component<Props, State> {
                                 <Image source={images.addPhotoIcon} />
                             </TouchableOpacity>
                             
-                            {name == null ?
-                            (
                             <View style={{width: 220, justifyContent: 'center'}}>
-                                <Text style={{fontSize: 20, fontWeight: 'bold'}}>--</Text>
-                                <Text> -- </Text>
+                                <Text style={{fontSize: 20, fontWeight: 'bold'}}>{this.state.user?.name}</Text>
+                                <Text>{this.state.user?.email}</Text>
                             </View>
-                            ) : (
-                            <View style={{width: 220, justifyContent: 'center'}}>
-                                <Text style={{fontSize: 20, fontWeight: 'bold'}}>{name}</Text>
-                                <Text>{email}</Text>
-                            </View>
-                            )}
+                          
                         </View>                 
                     </View>
                     <View style={styles.divisor} />
                     <View style={styles.menuContainer}>
-                        <TouchableOpacity style={styles.menuItemContainer}>
+                        <TouchableOpacity style={styles.menuItemContainer} onPress={this.redirectToAccountPage}>
                             <View style={styles.menuItemDetail} />
                             <Image source={images.myInfoIcon} style={styles.icon} />
                             <Text style={styles.menuItemText}>Minha conta</Text>
@@ -91,7 +96,7 @@ export default class ProfilePage extends React.Component<Props, State> {
                             <Image source={images.carIcon} style={styles.icon} />
                             <Text style={styles.menuItemText}>Meus veículos</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.menuItemContainer}>
+                        <TouchableOpacity style={styles.menuItemContainer} onPress={this.logout}>
                             <View style={styles.menuItemDetail} />
                             <Image source={images.logoutIcon} style={styles.icon} />
                             <Text style={styles.menuItemText}>Sair</Text>
