@@ -152,7 +152,7 @@ const LoginStack = (): JSX.Element => {
 
 const MainStack = (): JSX.Element => {
   return (
-    <Stack.Navigator initialRouteName="VehicleRegisterPage" screenOptions={{header: () => <Header />, headerShown: true }}>
+    <Stack.Navigator initialRouteName="TabMenu" screenOptions={{header: () => <Header />, headerShown: true }}>
       <Stack.Screen
         name={'TabMenu'}
         component={TabMenu}

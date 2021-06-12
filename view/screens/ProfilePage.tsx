@@ -1,8 +1,9 @@
 import { RouteProp } from "@react-navigation/core";
 import { StackNavigationProp } from "@react-navigation/stack";
 import React from "react";
-import { Image, StyleSheet, Text, View } from "react-native";
+import { Alert, Image, StyleSheet, Text, View } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { api } from "../../controller";
 import { ParamList } from "../../controller/routes";
 import { colors } from "../styles/Colors";
 import images from "../themes/Images";
@@ -13,6 +14,18 @@ interface Props {
 }
 
 interface State {
+    user: User;
+}
+
+export interface User {
+    
+    id?: number;
+
+    name?: string;
+    
+    email?: string;
+    
+    phone?: string;
 }
 
 export default class ProfilePage extends React.Component<Props, State> {
@@ -20,9 +33,26 @@ export default class ProfilePage extends React.Component<Props, State> {
         super(props);
   
         this.state = {
+            user: {
+
+            }
         }
       }
+
+    componentWillMount(){
+        this.fetchUser();
+    }
+
+    fetchUser = () => {
+        api.get('/users/current')
+        .then(response => {
+            console.log(response.data)
+            this.setState({user: response.data as User})
+        })
+        .catch(error => Alert.alert("Algo deu errado", "Erro Interno"));
+    }
     render() {
+        const { email, name } = this.state.user;
         return(
             <View style={{flex: 1, backgroundColor: colors.white}}>
                 <View style={{backgroundColor: colors.darkBlue, flex: 1}}>
@@ -34,10 +64,19 @@ export default class ProfilePage extends React.Component<Props, State> {
                             <TouchableOpacity style={styles.userProfileFoto}>
                                 <Image source={images.addPhotoIcon} />
                             </TouchableOpacity>
+                            
+                            {name == null ?
+                            (
                             <View style={{width: 220, justifyContent: 'center'}}>
-                                <Text style={{fontSize: 20, fontWeight: 'bold'}}>Gabriel Fortunato</Text>
-                                <Text>gfjgabriel@gmail.com</Text>
+                                <Text style={{fontSize: 20, fontWeight: 'bold'}}>--</Text>
+                                <Text> -- </Text>
                             </View>
+                            ) : (
+                            <View style={{width: 220, justifyContent: 'center'}}>
+                                <Text style={{fontSize: 20, fontWeight: 'bold'}}>{name}</Text>
+                                <Text>{email}</Text>
+                            </View>
+                            )}
                         </View>                 
                     </View>
                     <View style={styles.divisor} />
@@ -51,6 +90,11 @@ export default class ProfilePage extends React.Component<Props, State> {
                             <View style={styles.menuItemDetail} />
                             <Image source={images.carIcon} style={styles.icon} />
                             <Text style={styles.menuItemText}>Meus veículos</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.menuItemContainer}>
+                            <View style={styles.menuItemDetail} />
+                            <Image source={images.logoutIcon} style={styles.icon} />
+                            <Text style={styles.menuItemText}>Sair</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -114,6 +158,7 @@ const styles = StyleSheet.create({
     },
     icon: {
         height: 30,
+        width: 30,
         marginLeft: 10,
         tintColor: colors.darkGrey
     },
