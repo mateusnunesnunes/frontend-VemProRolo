@@ -7,6 +7,7 @@ const images = {
     addPhotoIcon: require('./images/icons/add_a_photo.png'),
     myInfoIcon: require('./images/icons/person_outline.png'),
     carIcon: require('./images/icons/car.png'),
+    logoutIcon: require('./images/icons/logout.png'),
 };
 
 export default images;

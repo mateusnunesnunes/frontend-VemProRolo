@@ -13,6 +13,7 @@ import {
 
 import { LoginManager } from 'react-native-fbsdk-next';
 import { StackNavigationProp } from '@react-navigation/stack';
+import { setApiToken } from '../../controller';
 
 
 interface Props {
@@ -124,7 +125,13 @@ export class Login extends React.Component<Props, State>  {
       if (emailError === undefined && passwordError === undefined) {
         await  requests.post("auth/login", { email, password })
         .then((response) => {
-          this.logIn();
+          if (response.data?.accessToken?.jwtToken) {
+            setApiToken(response.data.accessToken.jwtToken);
+            this.setState({email: '', password: ''});
+            this.logIn();
+          } else {
+            Alert.alert("Algo deu errado", "Erro Interno");
+          }
         }).catch((error) => {
           Alert.alert("Algo deu errado", "Email e/ou senha não conferem");
         })
