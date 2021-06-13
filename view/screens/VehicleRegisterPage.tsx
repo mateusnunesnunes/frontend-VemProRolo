@@ -133,6 +133,7 @@ class VehicleRegisterPage extends React.Component<Props, State> {
 
     redirectToVehicleList = () => {
         // TODO redirect to vehicle list
+        this.props.navigation.navigate('VehiclesUser');
     }
 
     onPressBackButton = () => {

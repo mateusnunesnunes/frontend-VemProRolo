@@ -15,10 +15,19 @@ export default StyleSheet.create({
     alignItems: 'center'
   },
   likeButton: {
-    margin:10
+    margin:2
   },
   dislikeButton: {
-    margin:10
+    margin:2
+  },
+  imageLike:{
+    height:70,
+    width:70
+  },
+  imageDislike:{
+    height:70,
+    width:70
   }
+
   
 });

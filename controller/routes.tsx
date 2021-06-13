@@ -14,7 +14,10 @@ import images from '../view/themes/Images';
 import { colors } from '../view/styles/Colors';
 import { Header } from '../components/Header';
 import { VehicleRegisterPage } from '../view/screens/VehicleRegisterPage';
+import LikeList from '../view/screens/LikeList';
 import UserAccountPage from '../view/screens/UserAccountPage';
+import VehiclesUser from '../view/screens/VehiclesUser';
+
 
 export type ParamList = {
   Login: undefined,
@@ -35,6 +38,7 @@ export type ParamList = {
   LoginStack: undefined;
   VehicleRegisterPage: undefined;
   UserAccountPage: undefined;
+  VehiclesUser: undefined;
 };
 
 const Stack = createStackNavigator<ParamList>();
@@ -69,7 +73,7 @@ const TabMenu = (): JSX.Element => {
       />
       <Tab.Screen 
         name={'LikePage'} 
-        component={LikePage} 
+        component={LikeList} 
         options={{
           tabBarLabel: '',
           tabBarIcon: ({focused}: {focused: boolean}) => (
@@ -138,7 +142,6 @@ const LoginStack = (): JSX.Element => {
         component={Register}
         options={{ headerShown:false}}
       />
-
       <Stack.Screen 
         name="PasswordRecovery" 
         component={PasswordRecovery}
@@ -165,10 +168,14 @@ const MainStack = (): JSX.Element => {
         name={'VehicleRegisterPage'}
         component={VehicleRegisterPage}
       />
-
+  
       <Stack.Screen
         name={'UserAccountPage'}
         component={UserAccountPage}
+      />
+      <Stack.Screen
+        name={'VehiclesUser'}
+        component={VehiclesUser}
       />
     </Stack.Navigator>
   )

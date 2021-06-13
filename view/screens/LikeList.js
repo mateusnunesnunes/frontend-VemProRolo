@@ -7,7 +7,8 @@ import Card from '../../model/forms/Card';
 import  data from './data';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { Button } from 'react-native';
- 
+import { api } from "../../controller";
+
 
 export default class LikeList extends React.Component{
 
@@ -23,10 +24,13 @@ export default class LikeList extends React.Component{
   }
 
   scrollToItem = () => {
-    if(this.state.index == 2){
-      this.state.index = -1;
+    try {
+      this.flatListRef.scrollToIndex({animated: true, index: "" + (this.state.index + 1)});
     }
-    this.flatListRef.scrollToIndex({animated: true, index: "" + (this.state.index + 1)});
+    catch (e) {
+      console.log(e);
+    }
+    
   }
 
   onViewableItemsChanged = ({changed }) => {
@@ -34,8 +38,19 @@ export default class LikeList extends React.Component{
     console.log("State = ", changed[0].index);
   }
 
-  componentDidMount = async () => {
-    //console.log(data.feed)
+  componentDidMount() {
+    this.fetchVehicles();
+    this.props.navigation.addListener('focus', () => {
+      this.fetchVehicles();
+  });
+  }
+
+  fetchVehicles = () =>{
+    api.get('/vehicles/to-like')
+        .then(response => {
+            this.setState({vehicleList: response.data})
+        })
+    .catch(error => console.log("Algo deu errado", "Erro Interno"));
   }
 
   render() {
@@ -44,17 +59,18 @@ export default class LikeList extends React.Component{
          <View style={styles.container}>
           <FlatList
               initialScrollIndex={0}
-              ref={(ref) => { this.flatListRef = ref; }}
-              data={data.feed}
+              ref={(ref) => { this.state.vehicleList = ref; }}
+              data={this.state.vehicleList}
               onViewableItemsChanged={this.onViewableItemsChanged }
               viewabilityConfig={{
                 itemVisiblePercentThreshold: 50
               }}
+              showsVerticalScrollIndicator={false}
               scrollEnabled={true}
               renderItem={({item,index}) => (
                 <TouchableWithoutFeedback onPress={() => this.pressElement(item,index)}>
                   <View style={{ 
-                    height:950,
+                    height:800,
                     width:'100%',
                     flex:1
                     }}>
@@ -69,10 +85,10 @@ export default class LikeList extends React.Component{
          </View>
          <View style={styles.containerButton}>
             <TouchableOpacity style={styles.likeButton} onPress={this.likeEvent.bind(this)}>
-                <Image source={require('./../../view/assets/likeIcon.png')}/>
+                <Image style={styles.imageLike} source={require('./../../view/assets/likeIcon.png')}/>
             </TouchableOpacity>
             <TouchableOpacity style={styles.likeButton} onPress={this.likeEvent.bind(this)}>
-                <Image source={require('./../../view/assets/deslikeIcon.png')}/>
+                <Image style={styles.imageDislike} source={require('./../../view/assets/deslikeIcon.png')}/>
             </TouchableOpacity>
          </View>
         </SafeAreaView>

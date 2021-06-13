@@ -6,7 +6,6 @@ import { color } from 'react-native-reanimated';
 export default StyleSheet.create({
   container: {
     alignItems: 'center',
-    backgroundColor:colors.lightGrey,
     marginTop:40
     
   },
@@ -21,13 +20,13 @@ export default StyleSheet.create({
     },
     shadowOpacity: 0.27,
     shadowRadius: 4.65,
-    backgroundColor:colors.lightGrey,
+    backgroundColor:colors.white,
     elevation: 6,
     borderRadius:10,
   },
   logo: {
     resizeMode: "cover",
-    height: 240,
+    height: 180,
     width: '100%'
   },
   containerDescription: {
