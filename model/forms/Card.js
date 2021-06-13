@@ -7,7 +7,7 @@ import IconDescription from './IconDescription';
 export default class Card extends React.Component {
     constructor(props) {
         super(props);
-        console.log(props.image)
+
     }
     
     render(){
@@ -18,7 +18,8 @@ export default class Card extends React.Component {
                         <Image
                         resizeMode="cover"
                         style={styles.logo}
-                        source={{uri : 'data:image/png;base64, ' + this.props.item.images[0].file}}
+                        
+                        source={require('./../../model/imgs/palioTest.jpeg')}
                         ></Image>
                         <View style={{ flex: 1, position: 'absolute', bottom: 0, left: 0, right: 0 }}>  
                             <Faded color='#000000' direction="up" height={50}>

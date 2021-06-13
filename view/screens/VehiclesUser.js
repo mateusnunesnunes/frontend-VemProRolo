@@ -46,7 +46,7 @@ export default class VehiclesUser extends React.Component{
                         <View style={styles.card}>
                             <View style={styles.viewRow}>
                                 <View style={styles.viewColumn}>
-                                    <Image source={require('./../../model/imgs/palioTest.jpeg')} style={styles.imageCar} />
+                                    <Image source={require('./../../model/imgs/palioTest.jpeg')}  style={styles.imageCar} />
                                 </View>
                                 <View style={styles.viewColumn}>
                                     <Text  style={styles.name}>{item.model}</Text>

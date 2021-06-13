@@ -12,11 +12,15 @@ import { api } from "../../controller";
 
 export default class LikeList extends React.Component{
 
-  state = {
-    index: 0,
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+        currentIndex: 0
+    }
+  }
+
   pressElement(item,index){
-      console.log(index); 
+      console.log(currentIndex); 
   }
   likeEvent(){
     console.log("like"); 
@@ -24,17 +28,15 @@ export default class LikeList extends React.Component{
   }
 
   scrollToItem = () => {
-    try {
-      this.flatListRef.scrollToIndex({animated: true, index: "" + (this.state.index + 1)});
+    let len = this.state.vehicleList.length
+    let curIndex = this.state.currentIndex 
+    if(curIndex != len - 1){
+      this.setState({ currentIndex : this.state.currentIndex + 1}) 
+      this.flatListRef.scrollToIndex({animated: true, index: "" + (this.state.currentIndex + 1)});
     }
-    catch (e) {
-      console.log(e);
-    }
-    
   }
 
   onViewableItemsChanged = ({changed }) => {
-    this.state.index = changed[0].index;
     console.log("State = ", changed[0].index);
   }
 
@@ -59,7 +61,7 @@ export default class LikeList extends React.Component{
          <View style={styles.container}>
           <FlatList
               initialScrollIndex={0}
-              ref={(ref) => { this.state.vehicleList = ref; }}
+              ref={(ref) => { this.flatListRef = ref; }}
               data={this.state.vehicleList}
               onViewableItemsChanged={this.onViewableItemsChanged }
               viewabilityConfig={{
