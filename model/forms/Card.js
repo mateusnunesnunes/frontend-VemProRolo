@@ -9,6 +9,7 @@ export default class Card extends React.Component {
         super(props);
         console.log(props.image)
     }
+    
     render(){
         return (
             <View style={styles.container}>
@@ -17,12 +18,12 @@ export default class Card extends React.Component {
                         <Image
                         resizeMode="cover"
                         style={styles.logo}
-                        source={require("./../imgs/palioTest.jpeg")}
+                        source={{uri : 'data:image/png;base64, ' + this.props.item.images[0].file}}
                         ></Image>
                         <View style={{ flex: 1, position: 'absolute', bottom: 0, left: 0, right: 0 }}>  
                             <Faded color='#000000' direction="up" height={50}>
                                 <View style={{ padding: 10, flexDirection: 'row', justifyContent: 'space-between' }}>
-                                <Text style={{ color: 'white',fontSize:25,fontWeight:'bold'}}>{this.props.item.name}</Text>
+                                <Text style={{ color: 'white',fontSize:25,fontWeight:'bold'}}>{this.props.item.model}</Text>
                                 </View>
                             </Faded>    
                         </View>
@@ -31,7 +32,7 @@ export default class Card extends React.Component {
         
                         <View style={styles.containerDescriptionTexts}>
                             <Text style={styles.descriptionTitle}>Descrição</Text>
-                            <Text numberOfLines={3} ellipsizeMode="tail" style={styles.description}>{this.props.item.description}</Text>
+                            <Text numberOfLines={3} ellipsizeMode="tail" style={styles.description}>{this.props.item.details}</Text>
                         </View>
         
                         <View style={styles.containerDetails}>
@@ -40,13 +41,13 @@ export default class Card extends React.Component {
                                 <View style={styles.viewRow}>
                                     <View style={styles.viewColumn}>
                                         <IconDescription title={"Ano"} value={this.props.item.year} icon={require("./../../view/assets/calendarIcon.png")}></IconDescription>
-                                        <IconDescription title={"Km"} value={this.props.item.km} icon={require("./../../view/assets/speedIcon.png")}></IconDescription>
-                                        <IconDescription title={"Câmbio"} value={this.props.item.engine} icon={require("./../../view/assets/engineIcon.png")}></IconDescription>
+                                        <IconDescription title={"Km"} value={this.props.item.kilometers} icon={require("./../../view/assets/speedIcon.png")}></IconDescription>
+                                        <IconDescription title={"Câmbio"} value={this.props.item.transmissionType} icon={require("./../../view/assets/engineIcon.png")}></IconDescription>
                                     </View>
                                     <View style={styles.viewColumn}>
-                                        <IconDescription title={"Combustível"} value={this.props.item.fuel} icon={require("./../../view/assets/fuelIcon.png")}></IconDescription>
+                                        <IconDescription title={"Combustível"} value={this.props.item.fuelType} icon={require("./../../view/assets/fuelIcon.png")}></IconDescription>
                                         <IconDescription title={"Categoria"} value={this.props.item.category} icon={require("./../../view/assets/categoryIcon.png")}></IconDescription>
-                                        <IconDescription title={"Portas"} value={this.props.item.doors} icon={require("./../../view/assets/doorIcon.png")}></IconDescription>
+                                        <IconDescription title={"Portas"} value={this.props.item.doorsNumber} icon={require("./../../view/assets/doorIcon.png")}></IconDescription>
                                     </View>
                                 </View>
                             </View>

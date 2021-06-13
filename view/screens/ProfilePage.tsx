@@ -32,7 +32,7 @@ export interface User {
 export default class ProfilePage extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
-  console.log("USER  ", this.props.user)
+        console.log("USER  ", this.props.user)
         this.state = {
             user: this.props.user
         }
@@ -64,6 +64,10 @@ export default class ProfilePage extends React.Component<Props, State> {
         this.props.navigation.navigate('Login');
     }
 
+    redirectToVehiclesUser = () => {
+        this.props.navigation.navigate('VehiclesUser');
+    }
+
     render() {
         return(
             <View style={{flex: 1, backgroundColor: colors.white}}>
@@ -91,7 +95,9 @@ export default class ProfilePage extends React.Component<Props, State> {
                             <Image source={images.myInfoIcon} style={styles.icon} />
                             <Text style={styles.menuItemText}>Minha conta</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.menuItemContainer}>
+                        <TouchableOpacity 
+                        onPress={this.redirectToVehiclesUser}
+                        style={styles.menuItemContainer}>
                             <View style={styles.menuItemDetail} />
                             <Image source={images.carIcon} style={styles.icon} />
                             <Text style={styles.menuItemText}>Meus veículos</Text>
