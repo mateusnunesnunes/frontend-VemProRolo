@@ -13,7 +13,7 @@ import { Image, StyleSheet } from 'react-native';
 import images from '../view/themes/Images';
 import { colors } from '../view/styles/Colors';
 import { Header } from '../components/Header';
-import { VehicleRegisterPage } from '../view/screens/VehicleRegisterPage';
+import { Vehicle, VehicleRegisterPage } from '../view/screens/VehicleRegisterPage';
 import LikeList from '../view/screens/LikeList';
 import UserAccountPage from '../view/screens/UserAccountPage';
 import VehiclesUser from '../view/screens/VehiclesUser';
@@ -36,7 +36,9 @@ export type ParamList = {
   };
   MainStack: undefined;
   LoginStack: undefined;
-  VehicleRegisterPage: undefined;
+  VehicleRegisterPage: {
+    vehicleToUpdate?: Vehicle
+  };
   UserAccountPage: undefined;
   VehiclesUser: undefined;
 };
