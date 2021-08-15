@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View,TextInput, KeyboardAvoidingView, TouchableOpacity, Image, FlatList  } from 'react-native';
+import { Text, View,TextInput, KeyboardAvoidingView, TouchableOpacity, Image, FlatList, Alert  } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context'; 
 import styles from '../styles/views/LikeList';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -15,35 +15,74 @@ export default class LikeList extends React.Component{
   constructor(props) {
     super(props);
     this.state = {
-        currentIndex: 0
+        currentIndex: 0,
+        currentId: 0,
+        vehicleList: []
     }
   }
 
   pressElement(item,index){
-      
   }
+
+  sendLikeRequest(likeType) {
+    let id = this.state.vehicleList[this.state.currentIndex].id;
+    let like = {
+      type: likeType,
+      vehicle: {
+        id: id
+      }
+    }
+    api.post('/likes', like)
+      .then(response => {
+          console.log(response);
+        if (response.data.matched === true) {
+          Alert.alert(
+            "Match", 
+            "O dono do veículo que você gostou também gostou de um veículo seu!",
+            [
+              {
+                text: "Continuar vendo veículos",
+                onPress: () => this.scrollToItem(),
+                style: "cancel"
+              },
+              { text: "Ver match", onPress: () => {this.scrollToItem()}
+              }
+            ]);
+        } else {
+            this.scrollToItem();
+        }
+      })
+      .catch(error => Alert.alert("Algo deu errado", "Erro Interno"));
+  }
+
   likeEvent(){
-    this.scrollToItem();
+    this.sendLikeRequest("INTERESTED");
+  }
+
+  dislikeEvent(){
+    this.sendLikeRequest("NOT_INTERESTED");
   }
 
   scrollToItem = () => {
     let len = this.state.vehicleList.length
     let curIndex = this.state.currentIndex 
     if(curIndex != len - 1){
-      this.setState({ currentIndex : this.state.currentIndex + 1}) 
+      this.setState({ currentIndex : this.state.currentIndex + 1});
       this.flatListRef.scrollToIndex({animated: true, index: "" + (this.state.currentIndex + 1)});
     }
   }
 
-  onViewableItemsChanged = ({changed }) => {
-    
+  onViewableItemsChanged = ({ viewableItems, changed }) => {
+    //console.log("Visible items are", viewableItems);
+    //console.log("Changed in this iteration", changed);
+    //console.log("O Anterior foi: " + this.state.vehicleList[this.state.currentIndex].id);
   }
 
   componentDidMount() {
     this.fetchVehicles();
     this.props.navigation.addListener('focus', () => {
       this.fetchVehicles();
-  });
+    });
   }
 
   fetchVehicles = () =>{
@@ -70,7 +109,7 @@ export default class LikeList extends React.Component{
               scrollEnabled={false}
               renderItem={({item,index}) => (
                 <TouchableWithoutFeedback onPress={() => this.pressElement(item,index)}>
-                  <View style={{ 
+                  <View style={{
                     height:800,
                     width:'100%',
                     flex:1
@@ -80,15 +119,15 @@ export default class LikeList extends React.Component{
                     >
                     </Card>
                   </View>
-                </TouchableWithoutFeedback>  
+                </TouchableWithoutFeedback>
               )}
-            /> 
+            />
          </View>
          <View style={styles.containerButton}>
             <TouchableOpacity style={styles.likeButton} onPress={this.likeEvent.bind(this)}>
                 <Image style={styles.imageLike} source={require('./../../view/assets/likeIcon.png')}/>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.likeButton} onPress={this.likeEvent.bind(this)}>
+            <TouchableOpacity style={styles.likeButton} onPress={this.dislikeEvent.bind(this)}>
                 <Image style={styles.imageDislike} source={require('./../../view/assets/deslikeIcon.png')}/>
             </TouchableOpacity>
          </View>
