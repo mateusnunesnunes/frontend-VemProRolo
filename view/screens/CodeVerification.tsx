@@ -8,6 +8,7 @@ import { ParamList } from '../../controller/routes';
 import { StackNavigationProp } from '@react-navigation/stack';
 import requests from '../../controller/requestController';
 import { InputForm } from '../../model/forms/InputForm';
+import { setApiToken } from '../../controller';
 
 interface Props {
     navigation: StackNavigationProp<ParamList, 'CodeVerification'>,
@@ -53,7 +54,13 @@ export default class CodeVerification extends React.Component<Props, State> {
             .then(async response => {
                 if (password != undefined && password != '') {
                     await requests.post("auth/login", { email, password })
-                    .then(() => this.logIn())
+                    .then(responseLogin => {
+                        if (responseLogin.data?.accessToken?.jwtToken) {
+                            setApiToken(responseLogin.data.accessToken.jwtToken);
+                            this.logIn();
+                        }
+                    }
+                   )
                     .catch(err => Alert.alert("Algo deu errado"))
                 } else {
                     Alert.alert("Email verificado!", "Volte à página de login",

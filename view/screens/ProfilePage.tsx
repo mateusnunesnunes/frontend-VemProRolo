@@ -40,16 +40,14 @@ export default class ProfilePage extends React.Component<Props, State> {
 
     componentDidMount() {
         this.fetchUser();
-      
         this.props.navigation.addListener('focus', () => {
-          this.fetchUser();
+            this.fetchUser();
         });
       }
 
     fetchUser = () => {
         api.get('/users/current')
         .then(response => {
-            console.log(response.data)
             this.setState({user: response.data as User})
         })
         .catch(error => Alert.alert("Algo deu errado", "Erro Interno"));
@@ -81,7 +79,7 @@ export default class ProfilePage extends React.Component<Props, State> {
                                 <Image source={images.addPhotoIcon} />
                             </TouchableOpacity>
                             
-                            <View style={{width: 220, justifyContent: 'center'}}>
+                            <View style={{width: 240, justifyContent: 'center'}}>
                                 <Text style={{fontSize: 20, fontWeight: 'bold'}}>{this.state.user?.name}</Text>
                                 <Text>{this.state.user?.email}</Text>
                             </View>
