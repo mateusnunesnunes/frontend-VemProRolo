@@ -13,11 +13,12 @@ import { api } from "../../controller";
 
 interface Props {
     navigation: StackNavigationProp<ParamList, 'VehicleRegisterPage'>,
-    route: RouteProp<ParamList, 'VehicleRegisterPage'>
+    route: RouteProp<ParamList, 'VehicleRegisterPage'>,
 }
 
 interface State {
     vehicle: Vehicle;
+    vehicleToUpdate?: Vehicle;
 }
 
 interface InputContainerProps {
@@ -28,11 +29,12 @@ interface InputContainerProps {
     numberOfLines?: number;
     keyboardType?: KeyboardTypeOptions;
     onChange?: (value: string) => void;
+    value: string | undefined;
 }
 
 const InputContainer = (props: InputContainerProps): JSX.Element => {
 
-    const { placeholder, title, inputWidth, numberOfLines, multiline, keyboardType, onChange } = props;
+    const { placeholder, title, inputWidth, numberOfLines, multiline, keyboardType, onChange, value } = props;
     return (
         <View style={styles.inputContainer}>
             <Text style={styles.title}>{title}</Text>
@@ -44,6 +46,7 @@ const InputContainer = (props: InputContainerProps): JSX.Element => {
                 multiline={multiline}
                 keyboardType={keyboardType}
                 onChange={onChange}
+                value={value}
             />
         </View>
     )
@@ -57,17 +60,17 @@ export interface VehicleImage {
 
 export interface Vehicle {
     id?: number,
-    brand?: string,
-    year?: number,
-    color?: string,
-    model?: string,
-    fuelType?: string,
-    transmissionType?: string,
-    category?: string,
-    details?: string,
-    images?: VehicleImage[]
-    kilometers?: number;
-    doorsNumber?: number;
+    brand: string,
+    year: number | undefined,
+    color: string,
+    model: string,
+    fuelType: string,
+    transmissionType: string,
+    category: string,
+    details: string,
+    images: VehicleImage[]
+    kilometers: number | undefined;
+    doorsNumber: number | undefined;
 }
 
 class VehicleRegisterPage extends React.Component<Props, State> {
@@ -76,17 +79,45 @@ class VehicleRegisterPage extends React.Component<Props, State> {
   
         this.state = {
             vehicle: {
+                brand: '',
+                year: undefined,
+                color: '',
+                model: '',
+                fuelType: '',
+                transmissionType: '',
+                category: '',
+                details: '',
+                kilometers: 0,
+                doorsNumber: undefined,
                 images: []
-            }
+            },
+            vehicleToUpdate: this.props.route.params.vehicleToUpdate
         }
-      }
+    }
+
+    fetchVehicle = (id: number) => {
+        api.get('/vehicles/'+ id)
+        .then(response => {
+            this.setState({vehicle: response.data as Vehicle})
+        })
+        .catch(error => Alert.alert(error));
+    }
+
+    componentDidMount = () => {
+        if (this.state.vehicleToUpdate !== undefined && this.state.vehicleToUpdate !== null) {
+            this.setState({vehicle: this.state.vehicleToUpdate});
+        }
+    }
 
     onChangeBrand = (text: string) => {
         this.setState({vehicle: { ...this.state.vehicle, brand: text }});
     }
 
     onChangeYear = (text: string) => {
-        var number = parseInt(text , 10 ) + 1;
+        if (text == ''){
+            text = '0'
+        }
+        var number = parseInt(text , 10 );
         this.setState({vehicle: { ...this.state.vehicle, year: number }});
     }
 
@@ -107,7 +138,10 @@ class VehicleRegisterPage extends React.Component<Props, State> {
     }
 
     onChangeKilometers = (text: string) => {
-        var number = parseInt(text , 10 ) + 1;
+        if (text == ''){
+            text = '0'
+        }
+        var number = parseInt(text , 10 );
         this.setState({vehicle: { ...this.state.vehicle, kilometers: number }});
     }
 
@@ -120,19 +154,31 @@ class VehicleRegisterPage extends React.Component<Props, State> {
     }
 
     onChangeDoorsNumber = (text: string) => {
-        var number = parseInt(text , 10 ) + 1;
+        if (text == ''){
+            text = '0'
+        }
+        var number = parseInt(text , 10 );
         this.setState({vehicle: { ...this.state.vehicle, doorsNumber: number }});
     }
 
     onPressSaveButton = () => {
         const { vehicle } = this.state;
-        api.post('/vehicles', vehicle)
-        .then(() => this.redirectToVehicleList())
-        .catch(error => Alert.alert("Algo deu errado", "Erro Interno"));
+
+        if (this.state.vehicle.id) {
+            api.put('/vehicles', vehicle)
+            .then(() => this.redirectToVehicleList())
+            .catch(error => Alert.alert("Algo deu errado", "Erro Interno"));
+        } else {
+            api.post('/vehicles', vehicle)
+            .then(() => this.redirectToVehicleList())
+            .catch(error => Alert.alert("Algo deu errado", "Erro Interno"));
+        }
+        
+
+
     }
 
     redirectToVehicleList = () => {
-        // TODO redirect to vehicle list
         this.props.navigation.navigate('VehiclesUser');
     }
 
@@ -195,6 +241,7 @@ class VehicleRegisterPage extends React.Component<Props, State> {
                             placeholder='Ex. Ford'
                             inputWidth={100}
                             onChange={this.onChangeBrand.bind(this)}
+                            value={this.state.vehicle.brand}
                         />
                         <InputContainer
                             title='Ano'
@@ -202,12 +249,18 @@ class VehicleRegisterPage extends React.Component<Props, State> {
                             inputWidth={100}
                             keyboardType={'numeric'}
                             onChange={this.onChangeYear.bind(this)}
+                            value={
+                                this.state.vehicle.year == null || this.state.vehicle.year == undefined || this.state.vehicle.year == 0
+                                ? '0' 
+                                : ''+this.state.vehicle.year
+                            }
                         />
                         <InputContainer
                             title='Cor'
                             placeholder='Ex. Vermelho'
                             inputWidth={130}
                             onChange={this.onChangeColor.bind(this)}
+                            value={this.state.vehicle.color}
                         />
                     </View>
                     <View>
@@ -216,6 +269,7 @@ class VehicleRegisterPage extends React.Component<Props, State> {
                             placeholder='Ex. Fiat Uno'
                             inputWidth={Dimensions.get('window').width - 20}
                             onChange={this.onChangeModel.bind(this)}
+                            value={this.state.vehicle.model}
                         />
                     </View>
                     <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
@@ -224,12 +278,14 @@ class VehicleRegisterPage extends React.Component<Props, State> {
                             placeholder='Ex. Gasolina'
                             inputWidth={180}
                             onChange={this.onChangeFuelType.bind(this)}
+                            value={this.state.vehicle.fuelType}
                         />
                         <InputContainer
                             title='Câmbio'
                             placeholder='Ex. Automático'
                             inputWidth={180}
                             onChange={this.onChangeTransmissionType.bind(this)}
+                            value={this.state.vehicle.transmissionType}
                         />
                     </View>
                     <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
@@ -239,12 +295,18 @@ class VehicleRegisterPage extends React.Component<Props, State> {
                             inputWidth={180}
                             keyboardType={'numeric'}
                             onChange={this.onChangeKilometers.bind(this)}
+                            value={
+                                this.state.vehicle.kilometers == null || this.state.vehicle.kilometers == undefined || this.state.vehicle.kilometers == 0 || this.state.vehicle.kilometers == NaN
+                                ? '0' 
+                                : this.state.vehicle.kilometers.toString()
+                            }
                         />
                         <InputContainer
                             title='Categoria'
                             placeholder='Ex. Sedan'
                             inputWidth={180}
                             onChange={this.onChangeCategory.bind(this)}
+                            value={this.state.vehicle.category}
                         />
                     </View>
                     <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
@@ -255,6 +317,7 @@ class VehicleRegisterPage extends React.Component<Props, State> {
                             numberOfLines={5}
                             multiline={true}
                             onChange={this.onChangeDetails.bind(this)}
+                            value={this.state.vehicle.details}
                         />
                         <InputContainer
                             title='Portas'
@@ -262,6 +325,11 @@ class VehicleRegisterPage extends React.Component<Props, State> {
                             inputWidth={100}
                             keyboardType={'numeric'}
                             onChange={this.onChangeDoorsNumber.bind(this)}
+                            value={
+                                this.state.vehicle.doorsNumber == null || this.state.vehicle.doorsNumber == undefined || this.state.vehicle.doorsNumber == 0
+                                ? '0' 
+                                : ''+this.state.vehicle.doorsNumber
+                            }
                         />
                     </View>
                 </View>

@@ -1,10 +1,12 @@
 import React from "react";
 import { Alert, Image, StyleSheet, Text, View, FlatList } from "react-native";
-import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
+import { ScrollView } from "react-native-gesture-handler";
+import { TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
 import { SafeAreaView } from "react-native-safe-area-context";
 import { api, removeApiToken } from "../../controller";
 import { ParamList } from "../../controller/routes";
 import { colors } from "../styles/Colors";
+import images from "../themes/Images";
 import {CardMyVehicle} from "./../../model/forms/CardMyVehicle";
 
 export default class VehiclesUser extends React.Component{
@@ -25,40 +27,72 @@ export default class VehiclesUser extends React.Component{
     }
 
     redirectToRegisterPage = () => {
-        this.props.navigation.navigate('VehicleRegisterPage');
+        this.props.navigation.navigate('VehicleRegisterPage', {vehicleToUpdate: undefined} );
     }
     fetchVehicles = () => {
         api.get('/vehicles/current-user')
         .then(response => {
             this.setState({vehicleList: response.data})
-            console.log(response.data)
         })
         .catch(error => Alert.alert(error));
     }
+
+    handleEditCarPress = (item) => {
+        this.props.navigation.navigate("VehicleRegisterPage", { vehicleToUpdate: item } );
+    }
+
+    deleteVehicle = (item) => {
+        api.delete('/vehicles/' + item.id)
+        .then(() => {
+            this.fetchVehicles();
+        })
+        .catch(error => Alert.alert(error));
+    }
+
     render() {
         return(
             <SafeAreaView >
-                <FlatList
-                initialScrollIndex={0}
-                data={this.state.vehicleList}
-                renderItem={({item,index}) => (
-                    <View style={styles.container}>
-                        <View style={styles.card}>
-                            <View style={styles.viewRow}>
-                                <View style={styles.viewColumn}>
-                                    <Image source={require('./../../model/imgs/palioTest.jpeg')} style={styles.imageCar} />
-                                </View>
-                                <View style={styles.viewColumn}>
-                                    <Text  style={styles.name}>{item.model}</Text>
-                                    <Text  style={styles.description}>{item.brand}</Text>
-                                    <Text  style={styles.year} >{item.year}</Text>
+                <View style={styles.containerContent}>
+                    <FlatList
+                    initialScrollIndex={0}
+                    data={this.state.vehicleList}
+                    renderItem={({item,index}) => (
+                        
+                        <TouchableWithoutFeedback
+                        style={styles.container}
+                        onPress={() => this.handleEditCarPress(item)}
+                        
+                        >
+                            <View style={styles.card}>
+                                <View style={styles.viewRow}>
+                                    <View style={{...styles.viewColumn, flex: 2}}>
+                                    { item.images?.find(it => it != undefined)?.file == null ? (
+                                        <Image source={images.carSilhouet} style={styles.imageCar} />
+                                        
+                                    ) : (
+                                        <Image source={{uri: "data:image/jpeg;base64," + item.images[0].file}} style={styles.imageCar} />
+                                    )}
+                                        
+                                    </View>
+                                    <View style={{...styles.viewColumn, alignItems:'flex-start', flex:2}}>
+                                        <Text  style={styles.name}>{item.model}</Text>
+                                        <Text  style={styles.description}>{item.brand}</Text>
+                                        <Text  style={styles.year} >{item.year}</Text>
+                                    </View>
+                                    <View style={{...styles.viewColumn, justifyContent: 'center', alignItems: 'flex-end', flex: 3}}>
+                                        <TouchableOpacity onPress={() => this.deleteVehicle(item)}>
+                                            <Image source={require('../assets/deslikeIcon.png')} style={{height: 40, width: 40}} />
+                                        </TouchableOpacity>
+                                    </View>
                                 </View>
                             </View>
-                        </View>
-                    </View>
-                )}
-                /> 
-                <View style={styles.container}>
+                        </TouchableWithoutFeedback>
+                    )}
+                    /> 
+                </View>
+                
+                
+                <View style={styles.containerButton}>
                     <TouchableOpacity onPress={this.redirectToRegisterPage}>
                         <Image source={require('./../../view/assets/addCardIcon.png')}/>                  
                     </TouchableOpacity>
@@ -71,6 +105,18 @@ export default class VehiclesUser extends React.Component{
 const styles = StyleSheet.create({
     container: {
         alignItems: 'center',
+        
+    },
+    containerButton: {
+        backgroundColor:'transparent',
+        marginTop:2,
+        marginHorizontal:20,
+        flexDirection: "row",
+        justifyContent: 'center',
+        alignItems: 'center'
+      },
+    containerContent:{
+        height: '85%'
     },
     card:{
         padding:10,
@@ -109,7 +155,7 @@ const styles = StyleSheet.create({
     },
     viewColumn: {
         flexDirection: "column",
-        marginLeft:20
+        marginLeft:10,
     }
 
 });

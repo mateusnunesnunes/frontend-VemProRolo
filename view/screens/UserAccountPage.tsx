@@ -36,7 +36,7 @@ const InputContainer = (props: InputContainerProps): JSX.Element => {
     return (
         <View style={styles.inputContainer}>
             <Text style={styles.title}>{title}</Text>
-            <InputForm 
+            <InputForm
                 placeholder={placeholder}
                 style={{...styles.input, width: inputWidth}} 
                 hasVisibility={true}
@@ -70,7 +70,6 @@ export default class UserAccountPage extends React.Component<Props, State> {
     fetchUser = () => {
         api.get('/users/current')
         .then(response => {
-            console.log(response.data)
             this.setState({user: response.data as User})
         })
         .catch(error => Alert.alert("Algo deu errado", "Erro Interno"));
@@ -89,7 +88,6 @@ export default class UserAccountPage extends React.Component<Props, State> {
         api.put('/users', user)
         .then(() => console.log("sucesso"))
         .catch(error => Alert.alert("Algo deu errado", "Erro Interno"));
-        console.log(this.state.user);
         this.redirectToProfilePage();
     }
 
@@ -102,7 +100,6 @@ export default class UserAccountPage extends React.Component<Props, State> {
     }
 
     render() {
-        const { email, name } = this.state.user;
         return(
             <View style={{flex: 1, backgroundColor: colors.white}}>
                 

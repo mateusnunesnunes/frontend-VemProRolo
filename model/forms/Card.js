@@ -7,7 +7,6 @@ import IconDescription from './IconDescription';
 export default class Card extends React.Component {
     constructor(props) {
         super(props);
-        console.log(props.image)
     }
     
     render(){

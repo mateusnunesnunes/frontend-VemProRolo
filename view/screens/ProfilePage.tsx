@@ -40,16 +40,14 @@ export default class ProfilePage extends React.Component<Props, State> {
 
     componentDidMount() {
         this.fetchUser();
-      
         this.props.navigation.addListener('focus', () => {
-          this.fetchUser();
+            this.fetchUser();
         });
       }
 
     fetchUser = () => {
         api.get('/users/current')
         .then(response => {
-            console.log(response.data)
             this.setState({user: response.data as User})
         })
         .catch(error => Alert.alert("Algo deu errado", "Erro Interno"));
@@ -75,16 +73,16 @@ export default class ProfilePage extends React.Component<Props, State> {
                 <View style={styles.divisor} />
 
                 <View style={styles.userDataContainer}>
-                    
+
                     <View style={styles.menuItemContainer}>
                         <Image source={images.myInfoIcon} style={styles.mainIcon} />
-                        
+
                         <View style={{width: 220, justifyContent: 'center', marginLeft: 30}}>
                             <Text style={{fontSize: 20, fontWeight: 'bold'}}>{this.state.user?.name}</Text>
                             <Text>{this.state.user?.email}</Text>
                         </View>
-                        
-                    </View>                 
+
+                    </View>
                 </View>
 
                 <View style={styles.profileContainer}>
@@ -99,7 +97,7 @@ export default class ProfilePage extends React.Component<Props, State> {
                             <Text style={styles.menuItemText}>Minha conta</Text>
                         </TouchableOpacity>
 
-                        <TouchableOpacity 
+                        <TouchableOpacity
                         onPress={this.redirectToVehiclesUser}
                         style={styles.menuItemContainer}>
                             {/* <View style={styles.menuItemDetail} /> */}
