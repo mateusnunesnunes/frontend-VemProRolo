@@ -92,23 +92,27 @@ export default class ProfilePage extends React.Component<Props, State> {
                     <View style={styles.menuContainer}>
 
                         <TouchableOpacity style={styles.menuItemContainer} onPress={this.redirectToAccountPage}>
-                            {/* <View style={styles.menuItemDetail} /> */}
-                            <Image source={images.myInfoIcon} style={styles.icon} />
+                            <Image source={images.editIcon} style={styles.icon} />
                             <Text style={styles.menuItemText}>Minha conta</Text>
+                            <View style={styles.arrowIconView}>
+                                <Image source={images.arowRight} style={{...styles.icon, marginRight: 15}} />
+                            </View>
                         </TouchableOpacity>
 
-                        <TouchableOpacity
-                        onPress={this.redirectToVehiclesUser}
-                        style={styles.menuItemContainer}>
-                            {/* <View style={styles.menuItemDetail} /> */}
+                        <TouchableOpacity onPress={this.redirectToVehiclesUser} style={styles.menuItemContainer}>
                             <Image source={images.carIcon} style={styles.icon} />
                             <Text style={styles.menuItemText}>Meus veículos</Text>
+                            <View style={styles.arrowIconView}>
+                                <Image source={images.arowRight} style={{...styles.icon, marginRight: 15}} />
+                            </View>
                         </TouchableOpacity>
 
                         <TouchableOpacity style={styles.menuItemContainer} onPress={this.logout}>
-                            {/* <View style={styles.menuItemDetail} /> */}
                             <Image source={images.logoutIcon} style={styles.icon} />
                             <Text style={styles.menuItemText}>Sair</Text>
+                            <View style={styles.arrowIconView}>
+                                <Image source={images.arowRight} style={{...styles.icon, marginRight: 15}} />
+                            </View>
                         </TouchableOpacity>
 
                     </View>
@@ -159,8 +163,8 @@ const styles = StyleSheet.create({
     menuContainer: {
         height: '60%',
         width: '100%',
-        justifyContent: 'center'
-        ,alignItems: 'center'
+        alignItems: 'center',
+        padding: 30
     },
     menuItemDetail: {
         width: 20, 
@@ -186,5 +190,11 @@ const styles = StyleSheet.create({
         fontSize: 20,
         color: colors.darkGrey,
         fontWeight: 'bold'
+    },
+    arrowIconView: {
+        flexDirection: "column", 
+        justifyContent: 'center', 
+        alignItems: 'flex-end', 
+        flex: 3
     }
 });
