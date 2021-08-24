@@ -103,14 +103,6 @@ export default class UserAccountPage extends React.Component<Props, State> {
         return(
             <View style={{flex: 1, backgroundColor: colors.white}}>
                 
-                <View style={styles.imageContainer}>
-                    <View style={styles.alignItensContainer}>
-                        <TouchableOpacity style={styles.userProfileFoto}>
-                            <Image source={images.addPhotoIcon} />
-                        </TouchableOpacity>
-
-                    </View>                 
-                </View>
                 <View style={styles.profileContainer}>
                     
                     <View style={styles.inputContainerStyle}>
@@ -159,8 +151,6 @@ export default class UserAccountPage extends React.Component<Props, State> {
 
 const styles = StyleSheet.create({
     profileContainer: {
-        borderTopLeftRadius: 25,
-        borderTopRightRadius: 25,
         backgroundColor: colors.veryLightGrey,
         flex: 3,
         alignItems: 'center',
@@ -250,9 +240,10 @@ const styles = StyleSheet.create({
         borderWidth: 2, 
         borderRadius: 5,
         marginTop: 10,
-        fontSize: 16
+        fontSize: 16,
+        padding: 10
     },
     inputContainerStyle: {
-        marginTop: 20
+        marginTop: 10
     },
 });

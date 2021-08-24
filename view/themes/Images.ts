@@ -9,6 +9,8 @@ const images = {
     carIcon: require('./images/icons/car.png'),
     logoutIcon: require('./images/icons/logout.png'),
     carSilhouet: require('./images/car-silhouet.jpg'),
+    arowRight: require('./images/icons/arrow_right.png'),
+    editIcon: require('./images/icons/edit.png'),
 };
 
 export default images;

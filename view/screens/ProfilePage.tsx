@@ -69,42 +69,52 @@ export default class ProfilePage extends React.Component<Props, State> {
     render() {
         return(
             <View style={{flex: 1, backgroundColor: colors.white}}>
-                <View style={{backgroundColor: colors.darkBlue, flex: 1}}>
-                   
-                </View>
-                <View style={styles.profileContainer}>
-                    <View style={styles.userDataContainer}>
-                        <View style={styles.alignItensContainer}>
-                            <TouchableOpacity style={styles.userProfileFoto}>
-                                <Image source={images.addPhotoIcon} />
-                            </TouchableOpacity>
-                            
-                            <View style={{width: 240, justifyContent: 'center'}}>
-                                <Text style={{fontSize: 20, fontWeight: 'bold'}}>{this.state.user?.name}</Text>
-                                <Text>{this.state.user?.email}</Text>
-                            </View>
-                          
-                        </View>                 
+
+                <View style={styles.divisor} />
+
+                <View style={styles.userDataContainer}>
+
+                    <View style={styles.menuItemContainer}>
+                        <Image source={images.myInfoIcon} style={styles.mainIcon} />
+
+                        <View style={{width: 220, justifyContent: 'center', marginLeft: 30}}>
+                            <Text style={{fontSize: 20, fontWeight: 'bold'}}>{this.state.user?.name}</Text>
+                            <Text>{this.state.user?.email}</Text>
+                        </View>
+
                     </View>
+                </View>
+
+                <View style={styles.profileContainer}>
+
                     <View style={styles.divisor} />
+
                     <View style={styles.menuContainer}>
+
                         <TouchableOpacity style={styles.menuItemContainer} onPress={this.redirectToAccountPage}>
-                            <View style={styles.menuItemDetail} />
-                            <Image source={images.myInfoIcon} style={styles.icon} />
+                            <Image source={images.editIcon} style={styles.icon} />
                             <Text style={styles.menuItemText}>Minha conta</Text>
+                            <View style={styles.arrowIconView}>
+                                <Image source={images.arowRight} style={{...styles.icon, marginRight: 15}} />
+                            </View>
                         </TouchableOpacity>
-                        <TouchableOpacity 
-                        onPress={this.redirectToVehiclesUser}
-                        style={styles.menuItemContainer}>
-                            <View style={styles.menuItemDetail} />
+
+                        <TouchableOpacity onPress={this.redirectToVehiclesUser} style={styles.menuItemContainer}>
                             <Image source={images.carIcon} style={styles.icon} />
                             <Text style={styles.menuItemText}>Meus veículos</Text>
+                            <View style={styles.arrowIconView}>
+                                <Image source={images.arowRight} style={{...styles.icon, marginRight: 15}} />
+                            </View>
                         </TouchableOpacity>
+
                         <TouchableOpacity style={styles.menuItemContainer} onPress={this.logout}>
-                            <View style={styles.menuItemDetail} />
                             <Image source={images.logoutIcon} style={styles.icon} />
                             <Text style={styles.menuItemText}>Sair</Text>
+                            <View style={styles.arrowIconView}>
+                                <Image source={images.arowRight} style={{...styles.icon, marginRight: 15}} />
+                            </View>
                         </TouchableOpacity>
+
                     </View>
                 </View>
             </View>
@@ -114,15 +124,12 @@ export default class ProfilePage extends React.Component<Props, State> {
 
 const styles = StyleSheet.create({
     profileContainer: {
-        borderTopLeftRadius: 25,
-        borderTopRightRadius: 25,
         backgroundColor: colors.veryLightGrey,
         flex: 3,
         alignItems: 'center'
     },
     userDataContainer: {
-        height: 120,
-        alignItems: 'center',
+        height: 70,
         justifyContent: 'center',
     },
     userProfileFoto: {
@@ -140,14 +147,15 @@ const styles = StyleSheet.create({
     },
     divisor: {
         height: 1,
-        width: '80%',
+        marginBottom:5,
+        width: '100%',
         backgroundColor: colors.darkGrey
     },
     menuItemContainer:{
-        height: 40,
+        height: 60,
         width: 350,
         backgroundColor: colors.white,
-        borderRadius: 30,
+        borderRadius: 10,
         margin: 10,
         flexDirection: 'row',
         alignItems: 'center'
@@ -155,8 +163,8 @@ const styles = StyleSheet.create({
     menuContainer: {
         height: '60%',
         width: '100%',
-        justifyContent: 'center'
-        ,alignItems: 'center'
+        alignItems: 'center',
+        padding: 30
     },
     menuItemDetail: {
         width: 20, 
@@ -165,10 +173,16 @@ const styles = StyleSheet.create({
         borderTopLeftRadius: 30,
         borderBottomLeftRadius: 30,
     },
+    mainIcon: {
+        height: 40,
+        width: 40,
+        marginLeft: 20,
+        tintColor: colors.black
+    },
     icon: {
         height: 30,
         width: 30,
-        marginLeft: 10,
+        marginLeft: 20,
         tintColor: colors.darkGrey
     },
     menuItemText: {
@@ -176,5 +190,11 @@ const styles = StyleSheet.create({
         fontSize: 20,
         color: colors.darkGrey,
         fontWeight: 'bold'
+    },
+    arrowIconView: {
+        flexDirection: "column", 
+        justifyContent: 'center', 
+        alignItems: 'flex-end', 
+        flex: 3
     }
 });
