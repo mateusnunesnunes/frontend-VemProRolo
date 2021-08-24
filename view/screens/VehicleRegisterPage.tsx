@@ -5,7 +5,7 @@ import { Alert, Image, KeyboardTypeOptions, StyleSheet, Text, View } from "react
 import { ScrollView, TextInput, TouchableOpacity } from "react-native-gesture-handler";
 import { ParamList } from "../../controller/routes";
 import { colors } from "../styles/Colors";
-import { Dimensions } from "react-native";
+import { Dimensions, FlatList } from "react-native";
 import images from "../themes/Images";
 import { InputForm } from "../../model/forms/InputForm";
 import ImagePicker from "react-native-image-crop-picker";
@@ -173,8 +173,6 @@ class VehicleRegisterPage extends React.Component<Props, State> {
             .then(() => this.redirectToVehicleList())
             .catch(error => Alert.alert("Algo deu errado", "Erro Interno"));
         }
-        
-
 
     }
 
@@ -188,30 +186,63 @@ class VehicleRegisterPage extends React.Component<Props, State> {
 
     openImagePicker = () => {
         ImagePicker.openPicker({
-            multiple: false,
+            multiple: true,
             waitAnimationEnd: false,
             includeExif: true,
             forceJpg: true,
-            compressImageQuality: 0.8,
-            maxFiles: 1,
+            compressImageQuality: 0.7,
+            maxFiles: 10,
             mediaType: 'photo',
             includeBase64: true
         })
         .then(response => {
-            //response.map(image => {
-                this.setState({
+            response.map(image => {
+                this.setState(prevState => ({
                     vehicle: {
                         ...this.state.vehicle,
-                        images: [{
-                            file: response.data,
+                        images: [...prevState.vehicle.images, {
+                            file: image.data,
                             fileContentType: 'image/jpeg',
-                            fileName: response.filename || "image"
+                            fileName: image.filename || "image"
                         }]
                     }
-                });
-            //})
+                }));
+            })
         })
     }
+
+    renderEmptyImageComponent() {
+        return (
+            <TouchableOpacity style={{width: Dimensions.get('window').width}} onPress={this.openImagePicker}>
+                <View style={styles.imagePickerContainer}>
+                    <Image source={images.cameraIcon} style={styles.imageIcon} />
+                    <Text>Incluir foto</Text>
+                    <Text>0 de 10 selecionadas</Text>
+                </View>
+            </TouchableOpacity>
+        )
+    }
+
+    renderImageComponent(image: VehicleImage) {
+        console.log("image: ", image);
+        let imagesLength = this.state.vehicle.images.length;
+        return (
+            <TouchableOpacity style={{width: Dimensions.get('window').width - 100}} onPress={this.openImagePicker}>
+                { imagesLength === 0 ? (
+                    <View style={styles.imagePickerContainer}>
+                        <Image source={images.cameraIcon} style={styles.imageIcon} />
+                        <Text>Incluir foto</Text>
+                        <Text>0 de 10 selecionada</Text>
+                    </View>
+                ) : (
+                    <View style={styles.imagePickerContainer}>
+                        <Image source={{uri: "data:image/jpeg;base64," + image.file, scale: 1}} style={styles.imageCar} />
+                    </View>
+                )}
+            </TouchableOpacity>
+        )
+    }
+
     render() {
         const { vehicle } = this.state;
         const image = vehicle?.images?.find(it => it != undefined)?.file
@@ -219,20 +250,15 @@ class VehicleRegisterPage extends React.Component<Props, State> {
             <>
             <ScrollView>
                 <View style={{height: 200}}>
-                    <TouchableOpacity onPress={this.openImagePicker}
-                    >
-                        { image == null ? (
-                            <View style={styles.imagePickerContainer}>
-                                <Image source={images.cameraIcon} style={styles.imageIcon} />
-                                <Text>Incluir foto</Text>
-                                <Text>0 de 1 selecionada</Text>
-                            </View>
-                        ) : (
-                            <View style={styles.imagePickerContainer}>
-                                <Image source={{uri: "data:image/jpeg;base64," + image, scale: 1}} style={styles.imageCar} />
-                            </View>
-                        )}
-                    </TouchableOpacity>
+                    <FlatList
+                        horizontal
+                        style={{width: '100%', flex: 1}}
+                        renderItem={({item}) => this.renderImageComponent(item)} 
+                        ListEmptyComponent={this.renderEmptyImageComponent()}
+                        data={this.state.vehicle.images}
+                        keyExtractor={(item, index) => index.toString()}
+                        maxToRenderPerBatch={10}
+                    />
                 </View>
                 <View style={{backgroundColor: colors.white}}>
                     <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
