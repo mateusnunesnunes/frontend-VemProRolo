@@ -17,7 +17,7 @@ import { Vehicle, VehicleRegisterPage } from '../view/screens/VehicleRegisterPag
 import LikeList from '../view/screens/LikeList';
 import UserAccountPage from '../view/screens/UserAccountPage';
 import VehiclesUser from '../view/screens/VehiclesUser';
-
+import FilterScreen from '../view/screens/FilterScreen'
 
 export type ParamList = {
   Login: undefined,
@@ -41,6 +41,10 @@ export type ParamList = {
   };
   UserAccountPage: undefined;
   VehiclesUser: undefined;
+  FilterScreen: {
+    onGoBack: (brandId: number, modelId: number) => void
+  };
+  
 };
 
 const Stack = createStackNavigator<ParamList>();
@@ -178,6 +182,10 @@ const MainStack = (): JSX.Element => {
       <Stack.Screen
         name={'VehiclesUser'}
         component={VehiclesUser}
+      />
+      <Stack.Screen
+        name={'FilterScreen'}
+        component={FilterScreen}
       />
     </Stack.Navigator>
   )
