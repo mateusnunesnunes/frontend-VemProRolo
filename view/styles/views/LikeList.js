@@ -14,6 +14,9 @@ export default StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center'
   },
+  filterButton: {
+    marginRight:120
+  },
   likeButton: {
     margin:2
   },
@@ -27,6 +30,10 @@ export default StyleSheet.create({
   imageDislike:{
     height:70,
     width:70
+  },
+  imageFilter:{
+    height:50,
+    width:50
   }
 
   

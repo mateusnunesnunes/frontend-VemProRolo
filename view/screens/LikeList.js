@@ -43,10 +43,17 @@ export default class LikeList extends React.Component{
     super(props);
     this.state = {
         currentIndex: 0,
+        brand: null,
+        model: null,
         currentId: 0,
         vehicleList: [],
         noVehiclesFound: false
     }
+    this.returnFunction = this.returnFunction.bind(this);
+  }
+
+  filterCallback = (params) => {
+      console.log("filterCallback")
   }
 
   pressElement(item,index){
@@ -69,7 +76,7 @@ export default class LikeList extends React.Component{
       .then(response => {
         if (response.data.matched === true) {
           Alert.alert(
-            "Match", 
+            "Match",
             "O dono do veículo que você gostou também gostou de um veículo seu!",
             [
               {
@@ -100,6 +107,23 @@ export default class LikeList extends React.Component{
 
   dislikeEvent(){
     this.sendLikeRequest("NOT_INTERESTED");
+  }
+
+  returnFunction(brandId,modelId) {
+    if(brandId == 0) {
+      brandId = null
+    }
+    if(modelId == 0) {
+      modelId = null
+    }
+    console.log(brandId + " dps " + modelId)
+
+  }
+
+  filterEvent(){
+    this.props.navigation.navigate('FilterScreen', {
+      onGoBack: this.returnFunction,
+    });
   }
 
   scrollToItem = () => {
@@ -138,6 +162,7 @@ export default class LikeList extends React.Component{
   }
 
   render() {
+
     return (
         <SafeAreaView>
          <View style={styles.container}>
@@ -169,6 +194,9 @@ export default class LikeList extends React.Component{
             />
          </View>
          <View style={styles.containerButton}>
+            <TouchableOpacity style={styles.filterButton} onPress={this.filterEvent.bind(this)}>
+                <Image style={styles.imageFilter} source={require('./../../view/assets/filter.png')}/>
+            </TouchableOpacity>
             <TouchableOpacity style={styles.likeButton} onPress={this.likeEvent.bind(this)}>
                 <Image style={styles.imageLike} source={require('./../../view/assets/likeIcon.png')}/>
             </TouchableOpacity>
