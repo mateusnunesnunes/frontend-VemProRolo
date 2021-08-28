@@ -60,10 +60,9 @@ export interface VehicleImage {
 
 export interface Vehicle {
     id?: number,
-    brand: string,
     year: number | undefined,
     color: string,
-    model: string,
+    model: Model,
     fuelType: string,
     transmissionType: string,
     category: string,
@@ -73,16 +72,31 @@ export interface Vehicle {
     doorsNumber: number | undefined;
 }
 
+export interface Brand {
+    id?: number,
+    name: string,
+}
+
+export interface Model {
+    id?: number,
+    name: string,
+    brand: Brand
+}
+
 class VehicleRegisterPage extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
   
         this.state = {
             vehicle: {
-                brand: '',
+                model:{
+                    name: '',
+                    brand: {
+                        name: ''
+                    }
+                },
                 year: undefined,
                 color: '',
-                model: '',
                 fuelType: '',
                 transmissionType: '',
                 category: '',
@@ -109,10 +123,6 @@ class VehicleRegisterPage extends React.Component<Props, State> {
         }
     }
 
-    onChangeBrand = (text: string) => {
-        this.setState({vehicle: { ...this.state.vehicle, brand: text }});
-    }
-
     onChangeYear = (text: string) => {
         if (text == ''){
             text = '0'
@@ -123,10 +133,6 @@ class VehicleRegisterPage extends React.Component<Props, State> {
 
     onChangeColor = (text: string) => {
         this.setState({vehicle: { ...this.state.vehicle, color: text }});
-    }
-
-    onChangeModel = (text: string) => {
-        this.setState({vehicle: { ...this.state.vehicle, model: text }});
     }
 
     onChangeFuelType = (text: string) => {
@@ -262,13 +268,13 @@ class VehicleRegisterPage extends React.Component<Props, State> {
                 </View>
                 <View style={{backgroundColor: colors.white}}>
                     <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
-                        <InputContainer
+                        {/* <InputContainer
                             title='Marca'
                             placeholder='Ex. Ford'
                             inputWidth={100}
                             onChange={this.onChangeBrand.bind(this)}
                             value={this.state.vehicle.brand}
-                        />
+                        /> */}
                         <InputContainer
                             title='Ano'
                             placeholder='Ex. 2010'
@@ -290,13 +296,13 @@ class VehicleRegisterPage extends React.Component<Props, State> {
                         />
                     </View>
                     <View>
-                        <InputContainer
+                        {/* <InputContainer
                             title='Modelo'
                             placeholder='Ex. Fiat Uno'
                             inputWidth={Dimensions.get('window').width - 20}
                             onChange={this.onChangeModel.bind(this)}
                             value={this.state.vehicle.model}
-                        />
+                        /> */}
                     </View>
                     <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
                         <InputContainer

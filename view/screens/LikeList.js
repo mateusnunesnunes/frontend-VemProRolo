@@ -56,15 +56,15 @@ export default class LikeList extends React.Component{
     if (this.state.vehicleList.length == 0) {
       return;
     }
-    console.log("Current index on sendLikeRequest: ", this.state.currentIndex)
+
     let id = this.state.vehicleList[this.state.currentIndex].id;
-    console.log("Current Vehicle id on sendLikeRequest: ", id)
     let like = {
       type: likeType,
       vehicle: {
         id: id
       }
     }
+
     api.post('/likes', like)
       .then(response => {
         if (response.data.matched === true) {
@@ -91,7 +91,7 @@ export default class LikeList extends React.Component{
   removeVehicle(index) {
     var array = [...this.state.vehicleList]; // make a separate copy of the array
     array.splice(index, 1);
-    this.setState({vehicleList: array}, console.log("Current length: " + this.state.vehicleList.length), () => {return});
+    this.setState({vehicleList: array}, () => {return});
   }
 
   likeEvent(){
