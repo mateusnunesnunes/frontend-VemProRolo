@@ -22,7 +22,7 @@ export default class Card extends React.Component {
                         <View style={{ flex: 1, position: 'absolute', bottom: 0, left: 0, right: 0 }}>  
                             <Faded color='#000000' direction="up" height={50}>
                                 <View style={{ padding: 10, flexDirection: 'row', justifyContent: 'space-between' }}>
-                                <Text style={{ color: 'white',fontSize:25,fontWeight:'bold'}}>{this.props.item.model}</Text>
+                                <Text style={{ color: 'white',fontSize:25,fontWeight:'bold'}}>{this.props.item.model.name}</Text>
                                 </View>
                             </Faded>    
                         </View>

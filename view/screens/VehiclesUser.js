@@ -32,7 +32,7 @@ export default class VehiclesUser extends React.Component{
     fetchVehicles = () => {
         api.get('/vehicles/current-user')
         .then(response => {
-            this.setState({vehicleList: response.data})
+            this.setState({vehicleList: response.data}, () => console.log(this.state.vehicleList))
         })
         .catch(error => Alert.alert(error));
     }
@@ -75,8 +75,8 @@ export default class VehiclesUser extends React.Component{
                                         
                                     </View>
                                     <View style={{...styles.viewColumn, alignItems:'flex-start', flex:2}}>
-                                        <Text  style={styles.name}>{item.model}</Text>
-                                        <Text  style={styles.description}>{item.brand}</Text>
+                                        <Text  style={styles.name}>{item.model?.name}</Text>
+                                        <Text  style={styles.description}>{item.brand?.name}</Text>
                                         <Text  style={styles.year} >{item.year}</Text>
                                     </View>
                                     <View style={{...styles.viewColumn, justifyContent: 'center', alignItems: 'flex-end', flex: 3}}>
