@@ -32,7 +32,7 @@ export default class VehiclesUser extends React.Component{
     fetchVehicles = () => {
         api.get('/vehicles/current-user')
         .then(response => {
-            this.setState({vehicleList: response.data}, () => console.log(this.state.vehicleList))
+            this.setState({vehicleList: response.data})
         })
         .catch(error => Alert.alert(error));
     }
