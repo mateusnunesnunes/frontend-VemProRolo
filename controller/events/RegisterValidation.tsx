@@ -2,12 +2,13 @@ import requests from '../requestController';
 
 class RegisterValidation{
 
-    btnValidation = async (name:any,email: any,password: any): Promise<boolean> =>{
+    btnValidation = async (name:any, email: any, phone: any,password: any): Promise<boolean> =>{
         console.log(name, email, password);
         if(name && email && password){
             let object = {
                 name: name,
                 email: email,
+                phone: phone,
                 password: password
             }
             let res;

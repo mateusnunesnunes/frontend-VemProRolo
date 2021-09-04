@@ -21,7 +21,7 @@ export default StyleSheet.create({
       },
       divMessage:{
         marginLeft:20,
-        marginBottom:50
+        marginBottom:30
       },
       loginMessage:{
         fontWeight:'bold',
