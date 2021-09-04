@@ -25,6 +25,7 @@ interface State {
     optionModels: any;
     selectedBrand: any;
     selectedModel: any;
+    isFirstTimeModel: boolean;
 }
 
 interface InputContainerProps {
@@ -81,12 +82,12 @@ export interface Vehicle {
 
 export interface Brand {
     id?: number,
-    name: string,
+    name?: string,
 }
 
 export interface Model {
     id?: number,
-    name: string,
+    name?: string,
     brand: Brand
 }
 
@@ -119,7 +120,8 @@ class VehicleRegisterPage extends React.Component<Props, State> {
             modelsEnabled: false,
             optionModels: [],
             selectedModel: 0,
-            selectedBrand: 0
+            selectedBrand: 0,
+            isFirstTimeModel: true
         }
     }
 
@@ -137,8 +139,14 @@ class VehicleRegisterPage extends React.Component<Props, State> {
                 this.setState({ optionsBrand: response.data }, () => {
                     this.state.optionsBrand.unshift({"id": 0, "name": "Selecione uma marca..."})
                     if (this.state.vehicle.id === undefined) {
-                        this.setState({selectedBrand:0});
+                        this.setState({selectedBrand:0}, () => this.getAllModels());
+                    } else {
+                        let index = this.state.optionsBrand
+                                .map((it: any) => it.id)
+                                .indexOf(this.state.vehicleToUpdate?.model.brand.id);
+                        this.setState({selectedBrand: index}, () => this.firstPopulateSavedModel());
                     }
+                    
                     
                 })
                 
@@ -146,7 +154,26 @@ class VehicleRegisterPage extends React.Component<Props, State> {
         .catch(error => console.log("Algo deu errado", "Erro Interno"));
     }
 
-    getAllModels = () =>{
+    firstPopulateSavedModel = () => {
+        this.setState({optionModels: []}, () => {
+            api.get('/models/allModelsByBrand/'+this.state.selectedBrand)
+            .then(response => {
+                this.setState({optionModels : response.data}, () => {
+                    this.state.optionModels.unshift({"id": 0, "name": "Selecione um modelo..."});
+                    let index = this.state.optionModels
+                                .map((it: any) => it.id)
+                                .indexOf(this.state.vehicleToUpdate?.model.id);
+                                console.log(index)
+                        this.setState({selectedModel: this.state.vehicleToUpdate?.model.id});
+                })
+            })
+            .catch(error => console.log("Algo deu errado", "Erro Interno"));
+        });
+        
+    }
+
+    getAllModels = () => {
+        console.log("getAllmodel")
         if(this.state.selectedBrand == 0) {
             api.get('/models/allModels')
             .then(response => {
@@ -183,12 +210,7 @@ class VehicleRegisterPage extends React.Component<Props, State> {
                     fileContentType: 'image/jpeg',
                     fileName: "",
                     isLast: true
-                }]}}, () => {
-                    let index = this.state.optionModels
-                    .findIndex((it: any) => it.id === this.state.vehicle.model.id);
-                    console.log("INDICE " +index)
-                    this.setState({selectedModel: index})
-                });
+                }]}});
         }
     }
 
@@ -242,7 +264,6 @@ class VehicleRegisterPage extends React.Component<Props, State> {
         let hasInvalidFields = false;
         let invalidFieldsString = "";
 
-        console.log(this.state.vehicle.model)
         if (this.state.vehicle.model.id === 0 ||  this.state.vehicle.model.id === undefined) {
             invalidFieldsString += "\nSelecione um modelo";
             hasInvalidFields = true;
@@ -253,13 +274,17 @@ class VehicleRegisterPage extends React.Component<Props, State> {
             hasInvalidFields = true;
         }
 
+        let images = this.state.vehicle.images.filter(it => !it.isLast);
+
         this.setState(
             prevState => ({
                 vehicle: {
                     ...prevState.vehicle,
-                    images: [...prevState.vehicle.images.filter(it => !it.isLast)]
+                    images: images
                 }
-            })
+            }), () => {
+                console.log(this.state.vehicle.images)
+            }
         )
 
         if (hasInvalidFields) {
@@ -397,15 +422,13 @@ class VehicleRegisterPage extends React.Component<Props, State> {
         })   
     }
 
-    onChangeSelectedModel(item: any, index: number) {
-        console.log(index);
-        this.setState({selectedModel: item}, () => {
-            console.log("Modelo INDICE: " + this.state.selectedModel)
-            let selectedModelObj = this.state.optionModels[index];
-            console.log(selectedModelObj)
-            if (selectedModelObj) {
-                this.setState({ vehicle: {...this.state.vehicle, model: {...selectedModelObj, brand :{}}, }})
-            }
+    onChangeSelectedModel(item: any) {
+        console.log("to aqui" + this.state.selectedModel + "   " + item)
+        this.setState({selectedModel: item }, () => {
+            console.log(this.state.optionModels[item]);
+            
+            this.setState({ vehicle: {...this.state.vehicle, model: {id: item, brand :{}}, }})
+            
         }); 
     }
 
@@ -448,7 +471,7 @@ class VehicleRegisterPage extends React.Component<Props, State> {
                             <View style={styles.picker}>
                                 <Picker prompt='Modelo'
                                     selectedValue={this.state.selectedModel}
-                                    onValueChange={(item, index) => this.onChangeSelectedModel(item, index)}
+                                    onValueChange={(item) => this.onChangeSelectedModel(item)}
                                     >
                                     {
                                     this.state.optionModels.map((item: any) => {
