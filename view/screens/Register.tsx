@@ -20,6 +20,8 @@ interface State {
   nameError?: string;
   email?: string;
   emailError?: string;
+  phone?: string;
+  phoneError?: string;
   password?: string;
   passwordError?: string;
   repeatPassword?: string;
@@ -45,6 +47,7 @@ export class Register extends React.Component<Props, State>  {
     this.state = {
       name: '',
       email: '',
+      phone: '',
       password: '',
       repeatPassword:''
     }
@@ -80,6 +83,19 @@ export class Register extends React.Component<Props, State>  {
       this.setState({ emailError: undefined});
   }
     this.setState({ email });
+  };
+
+  private onPhoneChange = (phone?: string): void => {
+    if (phone == null || phone.length === 0) {
+      this.setState(
+          {
+            phoneError: 'Preencha o telefone'
+          }
+      );
+  } else {
+      this.setState({ phoneError: undefined});
+  }
+    this.setState({ phone });
   };
 
   private onPasswordChange = (password?: string): void => {
@@ -122,8 +138,8 @@ export class Register extends React.Component<Props, State>  {
   };
 
   private async submitRegister(){
-    const {name, email, password, repeatPassword} = this.state;
-    let response = await registerValidation.btnValidation(name,email,password)
+    const {name, email, phone, password, repeatPassword} = this.state;
+    let response = await registerValidation.btnValidation(name,email, phone,password)
     if(response){
       this.redirectToVerifyEmailCodePage();
     }
@@ -189,7 +205,6 @@ export class Register extends React.Component<Props, State>  {
               <Text style={styles.descriptonMessage}>Se cadastrar no sistema</Text>
           </View>
           <View style={styles.containerInputLogin}>
-              
   
               <InputForm
                 placeholder="Nome"
@@ -201,6 +216,7 @@ export class Register extends React.Component<Props, State>  {
                 error={this.state.nameError}
                 hasVisibility={true}
               />
+
               <InputForm
                 placeholder="E-mail"
                 autoCorrect={false}
@@ -214,6 +230,18 @@ export class Register extends React.Component<Props, State>  {
                 error={this.state.emailError}
                 hasVisibility={true}
               />
+
+              <InputForm
+                placeholder="Telefone"
+                autoCorrect={false}
+                onChange={this.onPhoneChange.bind(this)}
+                style={styles.inputLogin}
+                autoCapitalize='none'
+                value={this.state.phone}
+                error={this.state.phoneError}
+                hasVisibility={true}
+              />
+
               <InputForm
                 placeholder="Senha"
                 hasVisibility={false}

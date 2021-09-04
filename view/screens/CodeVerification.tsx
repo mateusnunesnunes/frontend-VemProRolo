@@ -51,9 +51,9 @@ export default class CodeVerification extends React.Component<Props, State> {
             Alert.alert("Código inválido", "Preencha todos os 6 dígitos para continuar");
         } else {
             await requests.post("auth/verify-email", { email, code })
-            .then(async response => {
+            .then(response => {
                 if (password != undefined && password != '') {
-                    await requests.post("auth/login", { email, password })
+                    requests.post("auth/login", { email, password })
                     .then(responseLogin => {
                         if (responseLogin.data?.accessToken?.jwtToken) {
                             setApiToken(responseLogin.data.accessToken.jwtToken);
