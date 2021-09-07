@@ -110,14 +110,37 @@ export default class LikeList extends React.Component{
   }
 
   returnFunction(brandId,modelId) {
-    if(brandId == 0) {
-      brandId = null
+    var brandStr = 'brandId='+brandId
+    var modelStr = 'modelId='+modelId
+    var separator = '&'
+    if(brandId == 0 && modelId == 0) {
+      this.fetchVehicles('')
     }
-    if(modelId == 0) {
-      modelId = null
+    else{
+      if(brandId == 0){
+        brandStr = ''
+        separator = ''
+      }
+      if(modelId == 0){
+        modelStr = ''
+        separator = ''
+      }
+      console.log(brandStr+separator+modelStr)
+      this.fetchVehicles(brandStr+separator+modelStr)
     }
-    console.log(brandId + " dps " + modelId)
+  }
 
+  fetchVehicles = (queryStr) =>{
+    api.get('/vehicles/to-like?'+queryStr)
+        .then(response => {
+          if (response.data.length === 0) {
+            this.setState({noVehiclesFound: true});
+          } else {
+            this.setState({noVehiclesFound: false});
+          }
+          this.setState({vehicleList: response.data});
+        })
+    .catch(error => console.log("Algo deu errado", "Erro Interno"));
   }
 
   filterEvent(){
@@ -142,24 +165,13 @@ export default class LikeList extends React.Component{
   }
 
   componentDidMount() {
-    this.fetchVehicles();
+    this.fetchVehicles('');
     this.props.navigation.addListener('focus', () => {
-      this.fetchVehicles();
+      this.fetchVehicles('');
     });
   }
 
-  fetchVehicles = () =>{
-    api.get('/vehicles/to-like')
-        .then(response => {
-          if (response.data.length === 0) {
-            this.setState({noVehiclesFound: true});
-          } else {
-            this.setState({noVehiclesFound: false});
-          }
-          this.setState({vehicleList: response.data});
-        })
-    .catch(error => console.log("Algo deu errado", "Erro Interno"));
-  }
+  
 
   render() {
 
@@ -184,10 +196,10 @@ export default class LikeList extends React.Component{
                     width:'100%',
                     flex:1
                   }}>
-                    <Card
+                    {/* <Card
                       item={item}
                     >
-                    </Card>
+                    </Card> */}
                   </View>
                 </TouchableWithoutFeedback>
               )}
