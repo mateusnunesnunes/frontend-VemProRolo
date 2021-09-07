@@ -12,12 +12,14 @@ import CommercialPage from '../view/screens/CommercialPage';
 import { Image, StyleSheet } from 'react-native';
 import images from '../view/themes/Images';
 import { colors } from '../view/styles/Colors';
-import { Header } from '../components/Header';
+import Header  from '../components/Header';
 import { Vehicle, VehicleRegisterPage } from '../view/screens/VehicleRegisterPage';
 import LikeList from '../view/screens/LikeList';
 import UserAccountPage from '../view/screens/UserAccountPage';
 import VehiclesUser from '../view/screens/VehiclesUser';
 import FilterScreen from '../view/screens/FilterScreen'
+import MatchScreen from '../view/screens/MatchScreen';
+import MatchModal from '../model/forms/MatchModal'
 
 export type ParamList = {
   Login: undefined,
@@ -43,6 +45,13 @@ export type ParamList = {
   VehiclesUser: undefined;
   FilterScreen: {
     onGoBack: (brandId: number, modelId: number) => void
+  };
+  MatchScreen: undefined;
+  MatchModal: {
+    item:any
+  };
+  Header: {
+    navigation: any
   };
   
 };
@@ -136,7 +145,16 @@ export default function App() {
 
 const LoginStack = (): JSX.Element => {
   return (
-    <Stack.Navigator initialRouteName="Login" screenOptions={{header: () => <Header />, headerShown: true }}>
+    <Stack.Navigator 
+      initialRouteName="Login" 
+      screenOptions={{header: ({ navigation }) => 
+      <Header
+        navigation={navigation}
+      >
+          
+      </Header>, 
+      headerShown: true 
+    }}>
       <Stack.Screen 
         name="Login" 
         component={Login}
@@ -165,7 +183,12 @@ const LoginStack = (): JSX.Element => {
 
 const MainStack = (): JSX.Element => {
   return (
-    <Stack.Navigator initialRouteName="TabMenu" screenOptions={{header: () => <Header />, headerShown: true }}>
+    <Stack.Navigator initialRouteName="TabMenu" screenOptions={{header: ({ navigation }) => 
+    <Header
+      navigation={navigation}
+    >
+        
+    </Header>, headerShown: true }}>
       <Stack.Screen
         name={'TabMenu'}
         component={TabMenu}
@@ -186,6 +209,14 @@ const MainStack = (): JSX.Element => {
       <Stack.Screen
         name={'FilterScreen'}
         component={FilterScreen}
+      />
+       <Stack.Screen
+        name={'MatchScreen'}
+        component={MatchScreen}
+      />
+      <Stack.Screen
+        name={'MatchModal'}
+        component={MatchModal}
       />
     </Stack.Navigator>
   )

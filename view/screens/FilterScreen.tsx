@@ -23,22 +23,19 @@ interface State {
     selectedModel: any;
 }
 
-
-
 export default class FilterScreen extends React.Component<Props, State> {
     
     constructor(props: Props) {
         super(props);
         
         this.state = {
+            optionModels: [],
             optionsBrand: [],
             selectedBrand: 0,
             selectedModel: 0,
-            modelsEnabled: false,
-            optionModels: [],
+            modelsEnabled: false
         }
-        
-      }
+    }
 
     getBrands = () =>{
         api.get('/brands/allBrands')
@@ -70,8 +67,7 @@ export default class FilterScreen extends React.Component<Props, State> {
                 this.setState({optionModels : response.data})
             })
             .catch(error => console.log("Algo deu errado", "Erro Interno"));
-        }
-        
+        }      
     }
 
     componentDidMount() {
@@ -108,10 +104,11 @@ export default class FilterScreen extends React.Component<Props, State> {
                             
                         >
                         {
-                            
+                           this.state.optionsBrand != undefined ?
                            this.state.optionsBrand.map((item: any) => {
                             return (<Picker.Item label={item.name} value={item.id} key={item.id}/>) 
                            })
+                           : console.log("nada")
                         }
                         </Picker>
                     </View>
