@@ -12,7 +12,7 @@ const CardItem = ({
   const fullWidth = Dimensions.get('window').width;
   const imageStyle = [
     {
-      borderRadius: 8,
+      borderRadius: 2,
       width: fullWidth - 20 ,
       height: 200,
       margin: 20,
@@ -22,11 +22,11 @@ const CardItem = ({
 
   const nameStyle = [
     {
-      paddingTop: 15,
-      paddingBottom: 10,
+	  
+	 marginHorizontal:7,
       color: '#363636',
       fontSize: 25,
-      
+		
     }
   ];
   const descriptionStyle = [
@@ -34,7 +34,7 @@ const CardItem = ({
       paddingTop: 15,
       paddingBottom: 10,
       color: '#363636',
-      fontSize: 20,
+      fontSize: 15,
       padding: 10,
     }
   ];

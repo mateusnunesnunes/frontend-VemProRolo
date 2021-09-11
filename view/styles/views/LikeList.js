@@ -8,7 +8,7 @@ export default StyleSheet.create({
   },
   containerButton: {
     backgroundColor:'transparent',
-    marginTop:2,
+    marginTop:15,
     marginHorizontal:20,
     flexDirection: "row",
     justifyContent: 'center',
@@ -28,8 +28,8 @@ export default StyleSheet.create({
     width:70
   },
   imageDislike:{
-    height:70,
-    width:70
+    height:65,
+    width:65
   },
   imageFilter:{
     height:50,

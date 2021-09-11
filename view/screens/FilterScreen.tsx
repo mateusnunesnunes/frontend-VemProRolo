@@ -64,7 +64,11 @@ export default class FilterScreen extends React.Component<Props, State> {
             this.setState({optionModels: []})
             api.get('/models/allModelsByBrand/'+this.state.selectedBrand)
             .then(response => {
-                this.setState({optionModels : response.data})
+                
+                this.setState({optionModels : response.data}, () => {
+                    this.state.optionModels.unshift({"id": 0, "name": "Todas"})
+                    this.setState({selectedModel:0});
+                })
             })
             .catch(error => console.log("Algo deu errado", "Erro Interno"));
         }      

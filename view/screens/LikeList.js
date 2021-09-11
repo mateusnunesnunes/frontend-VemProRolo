@@ -110,6 +110,7 @@ export default class LikeList extends React.Component{
   }
 
   returnFunction(brandId,modelId) {
+    this.setState({vehicleList: []});
     var brandStr = 'brandId='+brandId
     var modelStr = 'modelId='+modelId
     var separator = '&'
@@ -125,12 +126,14 @@ export default class LikeList extends React.Component{
         modelStr = ''
         separator = ''
       }
+      console.log("end")
       console.log(brandStr+separator+modelStr)
       this.fetchVehicles(brandStr+separator+modelStr)
     }
   }
 
   fetchVehicles = (queryStr) =>{
+    console.log("fetchVehicles")
     api.get('/vehicles/to-like?'+queryStr)
         .then(response => {
           if (response.data.length === 0) {
@@ -165,10 +168,8 @@ export default class LikeList extends React.Component{
   }
 
   componentDidMount() {
+    console.log("componentDidMount")
     this.fetchVehicles('');
-    this.props.navigation.addListener('focus', () => {
-      this.fetchVehicles('');
-    });
   }
 
   
@@ -196,10 +197,10 @@ export default class LikeList extends React.Component{
                     width:'100%',
                     flex:1
                   }}>
-                    {/* <Card
+                    <Card
                       item={item}
                     >
-                    </Card> */}
+                    </Card>
                   </View>
                 </TouchableWithoutFeedback>
               )}

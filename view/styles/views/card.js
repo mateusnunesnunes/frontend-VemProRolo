@@ -22,7 +22,7 @@ export default StyleSheet.create({
     shadowRadius: 4.65,
     backgroundColor:colors.white,
     elevation: 6,
-    borderRadius:10,
+    borderRadius:20,
   },
   logo: {
     resizeMode: "cover",
