@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Image,Text, View, StyleSheet } from 'react-native';
 import styles from '../../view/styles/views/card';
 import Faded from './Faded';
+import images from "../../view/themes/Images";
 import IconDescription from './IconDescription';
 
 export default class Card extends React.Component {
@@ -17,7 +18,11 @@ export default class Card extends React.Component {
                         <Image
                         resizeMode="cover"
                         style={styles.logo}
-                        source={{uri : 'data:image/png;base64, ' + this.props.item.images[0].file}}
+                        source={ this.props.item.images?.find(it => it != undefined)?.file == null ? (
+                            <Image source={images.carSilhouet} />
+                        ) : (
+                            <Image source={{uri: "data:image/jpeg;base64," + this.props.item.images[0].file}}  />
+                        )}
                         ></Image>
                         <View style={{ flex: 1, position: 'absolute', bottom: 0, left: 0, right: 0 }}>  
                             <Faded color='#000000' direction="up" height={50}>
@@ -58,5 +63,4 @@ export default class Card extends React.Component {
     }
     
 };
-
 

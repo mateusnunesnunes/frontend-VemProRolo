@@ -9,6 +9,10 @@ export default StyleSheet.create({
     marginTop:40
     
   },
+  imageCar:{
+    height:80,
+    width:80
+  },
   card: {
       
     height:'80%',
