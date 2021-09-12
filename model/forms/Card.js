@@ -15,15 +15,11 @@ export default class Card extends React.Component {
             <View style={styles.container}>
                 <View style={styles.card}>
                     <View>
-                        <Image
-                        resizeMode="cover"
-                        style={styles.logo}
-                        source={ this.props.item.images?.find(it => it != undefined)?.file == null ? (
-                            <Image source={images.carSilhouet} />
+                        {this.props.item.images[0].file == undefined ? (
+                            <Image source={images.carSilhouet} style={styles.logo} resizeMode="cover" />
                         ) : (
-                            <Image source={{uri: "data:image/jpeg;base64," + this.props.item.images[0].file}}  />
+                            <Image source={{uri: "data:image/jpeg;base64," + this.props.item.images[0].file}}  style={styles.logo} resizeMode="cover" />
                         )}
-                        ></Image>
                         <View style={{ flex: 1, position: 'absolute', bottom: 0, left: 0, right: 0 }}>  
                             <Faded color='#000000' direction="up" height={50}>
                                 <View style={{ padding: 10, flexDirection: 'row', justifyContent: 'space-between' }}>
