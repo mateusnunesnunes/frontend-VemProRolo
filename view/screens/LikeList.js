@@ -84,7 +84,10 @@ export default class LikeList extends React.Component{
                 onPress: () => this.scrollToItem(),
                 style: "cancel"
               },
-              { text: "Ver match", onPress: () => {this.scrollToItem()}
+              { text: "Ver match", onPress: () => {
+                this.scrollToItem();
+                this.redirectToMatchPage()
+              }
               }
             ]);
         } else {
@@ -94,6 +97,10 @@ export default class LikeList extends React.Component{
       .catch(error => Alert.alert("Algo deu errado no LIKE ", "Erro Interno: " + error));
 
   }
+
+  redirectToMatchPage() {
+    this.props.navigation.navigate("MatchScreen")
+}
 
   removeVehicle(index) {
     var array = [...this.state.vehicleList]; // make a separate copy of the array
@@ -214,7 +221,7 @@ export default class LikeList extends React.Component{
                 <Image style={styles.imageLike} source={require('./../../view/assets/likeIcon.png')}/>
             </TouchableOpacity>
             <TouchableOpacity style={styles.likeButton} onPress={this.dislikeEvent.bind(this)}>
-                <Image style={styles.imageDislike} source={require('./../../view/assets/deslikeIcon.png')}/>
+                <Image style={styles.imageDislike} source={require('./../../view/assets/nextCarIcon.png')}/>
             </TouchableOpacity>
          </View>
         </SafeAreaView>
