@@ -2,7 +2,7 @@ import { RouteProp } from "@react-navigation/core";
 import { StackNavigationProp } from "@react-navigation/stack";
 import React, { useState } from "react";
 import { Alert, Image, KeyboardTypeOptions, StyleSheet, Text, View } from "react-native";
-import { ScrollView, TextInput, TouchableOpacity } from "react-native-gesture-handler";
+import { ScrollView, Switch, TextInput, TouchableOpacity } from "react-native-gesture-handler";
 import { ParamList } from "../../controller/routes";
 import { colors } from "../styles/Colors";
 import { Dimensions, FlatList } from "react-native";
@@ -11,6 +11,7 @@ import { InputForm } from "../../model/forms/InputForm";
 import ImagePicker from "react-native-image-crop-picker";
 import { api } from "../../controller";
 import {Picker} from '@react-native-community/picker';
+import CurrencyInput from 'react-native-currency-input';
 
 interface Props {
     navigation: StackNavigationProp<ParamList, 'VehicleRegisterPage'>,
@@ -78,6 +79,9 @@ export interface Vehicle {
     images: VehicleImage[]
     kilometers: number | undefined;
     doorsNumber: number | undefined;
+    price: number | null;
+    isToLike: boolean;
+    isForSale: boolean;
 }
 
 export interface Brand {
@@ -113,7 +117,10 @@ class VehicleRegisterPage extends React.Component<Props, State> {
                 details: '',
                 kilometers: 0,
                 doorsNumber: undefined,
-                images: []
+                images: [],
+                price: 0.00,
+                isToLike: false,
+                isForSale: false
             },
             vehicleToUpdate: this.props.route.params.vehicleToUpdate,
             optionsBrand: [],
@@ -244,6 +251,10 @@ class VehicleRegisterPage extends React.Component<Props, State> {
 
     onChangeCategory = (text: string) => {
         this.setState({vehicle: { ...this.state.vehicle, category: text }});
+    }
+
+    onChangePrice = (num: number) => {
+        this.setState({vehicle: { ...this.state.vehicle, price: num }});
     }
 
     onChangeDetails = (text: string) => {
@@ -551,6 +562,45 @@ class VehicleRegisterPage extends React.Component<Props, State> {
                             value={this.state.vehicle.category}
                         />
                     </View>
+
+                    <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
+                        <View style={{...styles.inputContainer, width: 170, justifyContent: 'space-around'}}>
+                            <View style={{flexDirection: 'row', justifyContent: 'space-between', marginTop: 10}}>
+                                <Text style={styles.title}>Anunciar venda</Text>
+                                <Switch 
+                                    trackColor={{ false: "#bababa", true: "#bd59cf" }}
+                                    thumbColor={this.state.vehicle.isForSale ? "#9000a8" : "#949494"}
+                                    style={{ transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }] }} 
+                                    value={this.state.vehicle.isForSale}
+                                    onValueChange={() => this.setState({vehicle: {...this.state.vehicle, isForSale: !this.state.vehicle.isForSale}})}
+                                />
+                            </View>
+                            <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                                <Text style={styles.title}>Fazer rolo</Text>
+                                <Switch 
+                                    trackColor={{ false: "#bababa", true: "#bd59cf" }}
+                                    thumbColor={this.state.vehicle.isToLike ? "#9000a8" : "#949494"}
+                                    style={{ transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }] }} 
+                                    value={this.state.vehicle.isToLike}
+                                    onValueChange={() => this.setState({vehicle: {...this.state.vehicle, isToLike: !this.state.vehicle.isToLike}})}
+                                />
+                            </View>
+                        </View>
+                        <View style={styles.inputContainer}>
+                            <Text style={this.state.vehicle.isForSale ? {...styles.title, width: 170, color: 'black'} : {...styles.title, width: 170, color: 'gray'}}>Preço</Text>
+                            <CurrencyInput 
+                                style={{...styles.input, width: 170}} 
+                                value={this.state.vehicle.price}
+                                onChangeValue={this.onChangePrice.bind(this)}
+                                prefix="R$"
+                                delimiter="."
+                                separator=","
+                                precision={2}
+                                editable={this.state.vehicle.isForSale}
+                            />
+                        </View>
+                    </View>
+
                     <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
                         <InputContainer
                             title='Detalhes'
