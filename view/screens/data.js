@@ -1,44 +1,67 @@
-export default
-
-{
-    "feed":[
-       {
-          "id":1,
-          "image":"./../../model/imgs/palio.jpeg",
-          "name":"Palios Fire 2010",
-          "description":"Flex, Final da placa 6,direção hidráulica, travas elétricas, ar-quente, trio eletrico, limp. traseiro, desemb. traseiro",
-          "year":"2009/2010",
-          "km":15.000,
-          "engine":"Manual",
-          "fuel":"Flex",
-          "category":"Hatch",
-          "doors":2
-       },
-       {
-         "id":3,
-         "image":"./../../model/imgs/palio.jpeg",
-         "name":"Fiat Uno 2010",
-         "description":"alio Fire 2010alio Fire 2010alio Fire 2010alio Fire 2010alio Fire 2010alio Fire 2010alio Fire 2010alio Fire 2010alio Fire 2010alio Fire 2010alio Fire 2010alio Fire 2010alio Fire 2010alio Fire 2010alio Fire 2010alio Fire 2010",
-         "year":2010,
-         "km":1.200,
-         "engine":"Manual",
-         "fuel":"Flex",
-         "category":"Hatch",
-         "doors":4
-      },
-      {
-         "id":2,
-         "image":"./../../model/imgs/palio.jpeg",
-         "name":"Santana 2004",
-         "description":"alio Fire 2010alio Fire 2010alio Fire 2010alio Fire 2010alio Fire 2010alio Fire 2010alio Fire 2010alio Fire 2010alio Fire 2010alio Fire 2010alio Fire 2010alio Fire 2010alio Fire 2010alio Fire 2010alio Fire 2010alio Fire 2010",
-         "year":2010,
-         "km":1.200,
-         "engine":"Manual",
-         "fuel":"Flex",
-         "category":"Hatch",
-         "doors":4
-      },
-       
-       
-    ]
- }
+export const productsJson = [
+   {
+     id: "1",
+     title: "Cicle Rockride 29'",
+     price: 300.0,
+     image: "./../../model/imgs/palio.jpeg",
+     data: "jun 7",
+     category: "Shoes"
+   },
+   {
+     id: "2",
+     title: "Black Shoe",
+     price: 100.0,
+     image: "http://lorempixel.com/408/408",
+     data: "mai 17",
+     category: "Shoes"
+   },
+   {
+     id: "3",
+     title: "Skate La Casa de Papel",
+     price: 20.0,
+     image: "http://lorempixel.com/602/600",
+     data: "jun 2",
+     category: "Shoes"
+   },
+   {
+     id: "4",
+     title: "Black Shoe",
+     price: 100.0,
+     image: "http://lorempixel.com/300/300/",
+     data: "jun 7",
+     category: "Shoes"
+   },
+   {
+     id: "3",
+     title: "Black Shoe",
+     price: 90.0,
+     image: "http://lorempixel.com/402/402",
+     data: "jun 7",
+     category: "Shoes"
+   },
+   {
+     id: "4",
+     title: "Black Shoe",
+     price: 100.0,
+     image: "http://lorempixel.com/401/401/",
+     data: "jun 7",
+     category: "Shoes"
+   },
+   {
+     id: "3",
+     title: "Black Shoe",
+     price: 100.0,
+     image: "http://lorempixel.com/500/500/",
+     data: "jun 7",
+     category: "Shoes"
+   },
+   {
+     id: "4",
+     title: "Black Shoe",
+     price: 100.0,
+     image: "http://lorempixel.com/400/400/",
+     data: "jun 7",
+     category: "Shoes"
+   }
+ ];
+ 

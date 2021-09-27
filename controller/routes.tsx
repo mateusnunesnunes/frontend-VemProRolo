@@ -20,7 +20,8 @@ import VehiclesUser from '../view/screens/VehiclesUser';
 import FilterScreen from '../view/screens/FilterScreen'
 import MatchScreen from '../view/screens/MatchScreen';
 import MatchModal from '../model/forms/MatchModal'
-
+import VehicleSaleDatails from '../model/forms/VehicleSaleDatails'
+import FilterScreenAnnouncement from '../view/screens/FilterScreenAnnouncement'
 export type ParamList = {
   Login: undefined,
   Register: undefined,
@@ -50,8 +51,23 @@ export type ParamList = {
   MatchModal: {
     item:any
   };
+  VehicleSaleDatails: {
+    item:any
+  };
   Header: {
     navigation: any
+  };
+  FilterScreenAnnouncement:{
+    onGoBack: (
+      brandId: any,
+      modelId: any,
+      selectedDoors: any,
+      searchText: any,
+      selectedMinPrice: any,
+      selectedMaxPrice: any,
+      selectedMaxKm: any,
+      selectedMinKm:any
+      ) => void
   };
   
 };
@@ -210,6 +226,10 @@ const MainStack = (): JSX.Element => {
         name={'FilterScreen'}
         component={FilterScreen}
       />
+      <Stack.Screen
+      name={'FilterScreenAnnouncement'}
+      component={FilterScreenAnnouncement}
+    />
        <Stack.Screen
         name={'MatchScreen'}
         component={MatchScreen}
@@ -217,6 +237,10 @@ const MainStack = (): JSX.Element => {
       <Stack.Screen
         name={'MatchModal'}
         component={MatchModal}
+      />
+      <Stack.Screen
+        name={'VehicleSaleDatails'}
+        component={VehicleSaleDatails}
       />
     </Stack.Navigator>
   )
