@@ -69,7 +69,9 @@ export type ParamList = {
       selectedMinKm:any
       ) => void
   };
-  
+  ReportModal:{
+    vehicle: Vehicle
+  }
 };
 
 const Stack = createStackNavigator<ParamList>();

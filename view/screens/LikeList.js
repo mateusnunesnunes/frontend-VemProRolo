@@ -8,6 +8,7 @@ import  data from './data';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { Button } from 'react-native';
 import { api } from "../../controller";
+import ReportModal from '../../model/forms/ReportModal';
 
 export const emptyListCard = () => {
   return (
@@ -47,7 +48,8 @@ export default class LikeList extends React.Component{
         model: null,
         currentId: 0,
         vehicleList: [],
-        noVehiclesFound: false
+        noVehiclesFound: false,
+        reportVehicleModalVisible: false
     }
     this.returnFunction = this.returnFunction.bind(this);
   }
@@ -57,6 +59,10 @@ export default class LikeList extends React.Component{
   }
 
   pressElement(item,index){
+  }
+
+  setModalVisible = () => {
+    this.setState({reportVehicleModalVisible: !this.state.reportVehicleModalVisible});
   }
 
   sendLikeRequest(likeType) {
@@ -224,6 +230,9 @@ export default class LikeList extends React.Component{
                 <Image style={styles.imageDislike} source={require('./../../view/assets/nextCarIcon.png')}/>
             </TouchableOpacity>
          </View>
+         <ReportModal 
+          vehicle={this.state.vehicleList[this.state.currentIndex]}
+         />
         </SafeAreaView>
     );
   }
