@@ -22,6 +22,8 @@ import MatchScreen from '../view/screens/MatchScreen';
 import MatchModal from '../model/forms/MatchModal'
 import VehicleSaleDatails from '../model/forms/VehicleSaleDatails'
 import FilterScreenAnnouncement from '../view/screens/FilterScreenAnnouncement'
+import SignaturesScreen from '../view/screens/SignaturesScreen'
+
 export type ParamList = {
   Login: undefined,
   Register: undefined,
@@ -69,6 +71,7 @@ export type ParamList = {
       selectedMinKm:any
       ) => void
   };
+  SignaturesScreen: undefined;
   
 };
 
@@ -241,6 +244,10 @@ const MainStack = (): JSX.Element => {
       <Stack.Screen
         name={'VehicleSaleDatails'}
         component={VehicleSaleDatails}
+      />
+      <Stack.Screen
+        name={'SignaturesScreen'}
+        component={SignaturesScreen}
       />
     </Stack.Navigator>
   )

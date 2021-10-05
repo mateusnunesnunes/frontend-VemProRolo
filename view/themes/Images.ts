@@ -11,6 +11,7 @@ const images = {
     carSilhouet: require('./images/car-silhouet.jpg'),
     arowRight: require('./images/icons/arrow_right.png'),
     editIcon: require('./images/icons/edit.png'),
+    premiumIcon: require('./images/icons/premiumIcon.png'),
 };
 
 export default images;

@@ -62,6 +62,10 @@ export default class ProfilePage extends React.Component<Props, State> {
         this.props.navigation.navigate('Login');
     }
 
+    signatureScreen = () => {
+        this.props.navigation.navigate('SignaturesScreen');
+    }
+
     redirectToVehiclesUser = () => {
         this.props.navigation.navigate('VehiclesUser');
     }
@@ -106,7 +110,13 @@ export default class ProfilePage extends React.Component<Props, State> {
                                 <Image source={images.arowRight} style={{...styles.icon, marginRight: 15}} />
                             </View>
                         </TouchableOpacity>
-
+                        <TouchableOpacity style={styles.menuItemContainer} onPress={this.signatureScreen}>
+                            <Image source={images.premiumIcon} style={styles.icon} />
+                            <Text style={styles.menuItemText}>Planos</Text>
+                            <View style={styles.arrowIconView}>
+                                <Image source={images.arowRight} style={{...styles.icon, marginRight: 15}} />
+                            </View>
+                        </TouchableOpacity>
                         <TouchableOpacity style={styles.menuItemContainer} onPress={this.logout}>
                             <Image source={images.logoutIcon} style={styles.icon} />
                             <Text style={styles.menuItemText}>Sair</Text>
@@ -114,6 +124,8 @@ export default class ProfilePage extends React.Component<Props, State> {
                                 <Image source={images.arowRight} style={{...styles.icon, marginRight: 15}} />
                             </View>
                         </TouchableOpacity>
+
+                        
 
                     </View>
                 </View>
@@ -183,7 +195,8 @@ const styles = StyleSheet.create({
         height: 30,
         width: 30,
         marginLeft: 20,
-        tintColor: colors.darkGrey
+        tintColor: colors.darkGrey,
+        resizeMode: 'contain',
     },
     menuItemText: {
         marginLeft: 10,
@@ -196,5 +209,13 @@ const styles = StyleSheet.create({
         justifyContent: 'center', 
         alignItems: 'flex-end', 
         flex: 3
-    }
+    },
+    premiumicon: {
+        height: 20,
+        width: 20,
+        resizeMode: 'contain',
+        marginLeft: 20,
+        tintColor: colors.darkGrey
+    },
+    
 });
