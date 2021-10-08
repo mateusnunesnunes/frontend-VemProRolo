@@ -1,18 +1,100 @@
 import * as React from 'react';
-import { Image,Text, View, StyleSheet } from 'react-native';
+import { Image,Text, View, StyleSheet, Modal, Pressable, Dimensions, TouchableOpacity } from 'react-native';
 import styles from '../../view/styles/views/card';
 import Faded from './Faded';
 import images from "../../view/themes/Images";
 import IconDescription from './IconDescription';
+import { InputContainer } from '../../view/screens/VehicleRegisterPage';
+import { api } from '../../controller';
 
 export default class Card extends React.Component {
     constructor(props) {
         super(props);
+
+        this.state = {
+            reportModalVisible: false,
+            reportVehicleText: "",
+            reported: false
+        }
     }
+
+    setReportModalVisible = () => {
+        this.setState({reportModalVisible: !this.state.reportModalVisible}, () => {
+            if (!this.state.reportModalVisible) {
+                this.setState({reportVehicleText: "", reported: false});
+            }
+        });
+      }
+    
+      sendReport = () => {
+        api.post('/reports', {description: this.state.reportVehicleText, vehicle: {id: this.props.item.id}})
+        .then(() => this.setState({reported: true}))
+        .catch(error => Alert.alert("Algo deu errado", error));
+      }
+    
+      onChangeDetails = (text) => {
+        this.setState({reportVehicleText: text});
+      }
     
     render(){
         return (
             <View style={styles.container}>
+                <Modal
+                animationType="slide"
+                transparent={true}
+                visible={this.state.reportModalVisible}
+                onRequestClose={() => {}}>
+                    {this.state.reported 
+                    ?
+                    <View style={styles.centeredView}>
+                        <View style={styles.modalView}>
+                            <Text style={styles.modalTitle}>Denunciar veículo</Text>
+                            <View style={{flexDirection: 'row'}}>
+                                <Text style={styles.detailsName}>Veículo denunciado com sucesso!</Text>
+                            </View>
+                            <View style={styles.modalButtonsContainer}>
+                                <Pressable
+                                    style={[styles.button, styles.buttonReport]}
+                                    onPress={() => this.setReportModalVisible()}
+                                >
+                                    <Text style={styles.textStyle}>Fechar</Text>
+                                </Pressable>
+                            </View>
+                        </View>
+                    </View>
+                    :
+                    <View style={styles.centeredView}>
+                        <View style={styles.modalView}>
+                            <Text style={styles.modalTitle}>Denunciar veículo</Text>
+                            <View style={{flexDirection: 'row'}}>
+                                <InputContainer
+                                    title=''
+                                    placeholder='Porque deseja denunciar esse veículo?'
+                                    inputWidth={Dimensions.get('window').width - 100}
+                                    numberOfLines={5}
+                                    multiline={true}
+                                    onChange={this.onChangeDetails.bind(this)}
+                                    value={this.state.reportVehicleText}
+                                />
+                            </View>
+                            <View style={styles.modalButtonsContainer}>
+                                <Pressable
+                                    style={[styles.button, styles.buttonReport]}
+                                    onPress={() => this.sendReport()}
+                                >
+                                    <Text style={styles.textStyle}>Denunciar</Text>
+                                </Pressable>
+                                <Pressable
+                                    style={[styles.button, styles.buttonCancel]}
+                                    onPress={() => this.setReportModalVisible()}
+                                >
+                                    <Text style={styles.textStyle}>Cancelar</Text>
+                                </Pressable>
+                            </View>
+                        </View>
+                    </View>
+                    }
+                    </Modal>
                 <View style={styles.card}>
                     <View>
                         {this.props.item.images[0].file == undefined ? (
@@ -51,7 +133,12 @@ export default class Card extends React.Component {
                                     </View>
                                 </View>
                             </View>
-                            </View>
+                        </View>
+                        <View style={styles.containerDetailsIcons}>
+                            <TouchableOpacity onPress={() => this.setReportModalVisible()}>
+                                <Text style={styles.reportText}>Denunciar</Text>
+                            </TouchableOpacity>
+                        </View>
                     </View>
                 </View>
             </View>

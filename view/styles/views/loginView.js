@@ -23,12 +23,14 @@ export default StyleSheet.create({
   },
   divMessage:{
     marginLeft:20,
-    marginBottom:100
+    marginBottom:50,
+    marginTop:30
   },
   containerInputLogin:{
     alignItems:"center",
     justifyContent:"center",
-    marginBottom:10
+    marginBottom:10,
+    marginTop:50
   },
   inputLogin: {
     backgroundColor:colors.white,
@@ -102,6 +104,7 @@ export default StyleSheet.create({
     marginHorizontal:20
   },
   containerBtns:{
+    marginTop:70,
     alignItems:"center",
     justifyContent:"center",
   }

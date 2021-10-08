@@ -238,16 +238,6 @@ export class Login extends React.Component<Props, State>  {
             <TouchableOpacity onPress={this.submitCredentials.bind(this)} style={styles.btnLogin} >
               <Text style={styles.btnLoginText} >Entrar</Text>
             </TouchableOpacity>
-
-            <Text style={styles.lineSocialMedia}>_______________Ou_______________</Text>
-            <View style={styles.containerimgSocialMedias}>
-              <TouchableOpacity onPress={this.googleSignIn.bind(this)}>
-                  <Image style={styles.imgSocialMedias} source={require('../../model/imgs/google.png')}/>
-              </TouchableOpacity>
-                <TouchableOpacity onPress={this.facebookSignIn.bind(this)}>
-                  <Image style={styles.imgSocialMedias} source={require('../../model/imgs/facebook.png')}/>
-                </TouchableOpacity>
-            </View>
           </View>
         </SafeAreaView>
     );
