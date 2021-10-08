@@ -69,9 +69,8 @@ export type ParamList = {
       selectedMinKm:any
       ) => void
   };
-  ReportModal:{
-    vehicle: Vehicle
-  }
+  SignaturesScreen: undefined;
+
 };
 
 const Stack = createStackNavigator<ParamList>();
@@ -243,6 +242,10 @@ const MainStack = (): JSX.Element => {
       <Stack.Screen
         name={'VehicleSaleDatails'}
         component={VehicleSaleDatails}
+      />
+      <Stack.Screen
+        name={'SignaturesScreen'}
+        component={SignaturesScreen}
       />
     </Stack.Navigator>
   )
