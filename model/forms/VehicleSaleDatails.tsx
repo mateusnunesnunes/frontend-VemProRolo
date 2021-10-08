@@ -1,7 +1,7 @@
 import { RouteProp } from "@react-navigation/core";
 import { StackNavigationProp } from "@react-navigation/stack";
 import React from "react";
-import {Text, View, Dimensions, Linking, Modal, Pressable } from "react-native";
+import {Text, View, Dimensions, Linking, Modal, Pressable, Alert } from "react-native";
 import { ParamList } from "../../controller/routes";
 import { StyleSheet,TouchableOpacity } from "react-native";
 import { Image } from "react-native";
@@ -10,6 +10,7 @@ import IconDescription from './IconDescription';
 import ReportModal from "./ReportModal";
 import { colors } from "../../view/styles/Colors";
 import { InputContainer } from "../../view/screens/VehicleRegisterPage";
+import { api } from "../../controller";
 
 interface Props {
     navigation: StackNavigationProp<ParamList, 'VehicleSaleDatails'>,
@@ -19,7 +20,8 @@ interface Props {
 interface State {
     item: any,
     reportModalVisible: boolean,
-    reportVehicleText: string
+    reportVehicleText: string,
+    reported: boolean
 }
 
 const fullWidth = Dimensions.get('window').width;
@@ -33,20 +35,30 @@ export default class VehicleSaleDatails extends React.Component<Props, State> {
         
         this.state = {
             item: this.props.route.params.item,
-            reportModalVisible: true,
-            reportVehicleText: ""
+            reportModalVisible: false,
+            reportVehicleText: "",
+            reported: false
         }
         
       }
 
    setReportModalVisible = () => {
-       this.setState({reportModalVisible: !this.state.reportModalVisible}, () => console.log(this.state.reportModalVisible));
+       this.setState({reportModalVisible: !this.state.reportModalVisible}, () => {
+           if (!this.state.reportModalVisible) {
+               this.setState({reportVehicleText: "", reported: false});
+           }
+       });
    }
 
     onChangeDetails = (text: string) => {
         this.setState({reportVehicleText: text});
     }
-    
+
+    sendReport = () => {
+        api.post('/reports', {description: this.state.reportVehicleText, vehicle: {id: this.state.item.id}})
+        .then(() => this.setState({reported: true}))
+        .catch(error => Alert.alert("Algo deu errado", error));
+    }
 
     render() {
          return(
@@ -57,39 +69,58 @@ export default class VehicleSaleDatails extends React.Component<Props, State> {
                 transparent={true}
                 visible={this.state.reportModalVisible}
                 onRequestClose={() => {}}>
+                    {this.state.reported 
+                    ?
                     <View style={styles.centeredView}>
                         <View style={styles.modalView}>
-                            <Text style={styles.modalTitle}>Denunciar veículo</Text>
+                            <Text style={styles.modalTitle}>Denunciar anúncio</Text>
                             <View style={{flexDirection: 'row'}}>
-                                <InputContainer
-                                    title=''
-                                    placeholder='Quero denunciar esse veículo porque...'
-                                    inputWidth={Dimensions.get('window').width - 100}
-                                    numberOfLines={5}
-                                    multiline={true}
-                                    onChange={this.onChangeDetails.bind(this)}
-                                    value={this.state.reportVehicleText}
-                                    style={styles.reportInput}
-                                />
+                                <Text style={styles.detailsName}>Anúncio denunciado com sucesso!</Text>
                             </View>
                             <View style={styles.modalButtonsContainer}>
                                 <Pressable
                                     style={[styles.button, styles.buttonReport]}
                                     onPress={() => this.setReportModalVisible()}
                                 >
-                                <Text style={styles.textStyle}>Denunciar</Text>
+                                    <Text style={styles.textStyle}>Fechar</Text>
+                                </Pressable>
+                            </View>
+                        </View>
+                    </View>
+                    :
+                    <View style={styles.centeredView}>
+                        <View style={styles.modalView}>
+                            <Text style={styles.modalTitle}>Denunciar anúncio</Text>
+                            <View style={{flexDirection: 'row'}}>
+                                <InputContainer
+                                    title=''
+                                    placeholder='Porque deseja denunciar esse anúncio?'
+                                    inputWidth={Dimensions.get('window').width - 100}
+                                    numberOfLines={5}
+                                    multiline={true}
+                                    onChange={this.onChangeDetails.bind(this)}
+                                    value={this.state.reportVehicleText}
+                                />
+                            </View>
+                            <View style={styles.modalButtonsContainer}>
+                                <Pressable
+                                    style={[styles.button, styles.buttonReport]}
+                                    onPress={() => this.sendReport()}
+                                >
+                                    <Text style={styles.textStyle}>Denunciar</Text>
                                 </Pressable>
                                 <Pressable
                                     style={[styles.button, styles.buttonCancel]}
                                     onPress={() => this.setReportModalVisible()}
                                 >
-                                <Text style={styles.textStyle}>Cancelar</Text>
+                                    <Text style={styles.textStyle}>Cancelar</Text>
                                 </Pressable>
                             </View>
                         </View>
                     </View>
-                </Modal>
-            </View>
+                    }
+                    </Modal>
+                </View>
                 <ScrollView>
                     <View style={styles.containerFlatlist}>
                         <FlatList
@@ -228,16 +259,8 @@ const styles = StyleSheet.create({
         width: fullWidth,
         alignContent: "center",
         alignItems: "center",
-        marginTop: -10
-    },
-
-    reportInput: {
-        borderColor: colors.black,
-        borderStyle: 'solid', 
-        borderWidth: 2, 
-        borderRadius: 10,
-        fontSize: 16,
-        padding: 5
+        marginTop: -10,
+        marginBottom: 10
     },
     centeredView: {
         flex: 1,
@@ -262,9 +285,9 @@ const styles = StyleSheet.create({
       },
       button: {
         borderRadius: 20,
-        padding: 15,
+        padding: 10,
         elevation: 2,
-        width: 110
+        width: 100
       },
       buttonReport: {
         backgroundColor: colors.lightBlue,

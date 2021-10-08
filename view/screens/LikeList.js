@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View,TextInput, KeyboardAvoidingView, TouchableOpacity, Image, FlatList, Alert, Dimensions  } from 'react-native';
+import { Text, View,TextInput, KeyboardAvoidingView, TouchableOpacity, Image, FlatList, Alert, Dimensions, Modal, Pressable  } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context'; 
 import styles from '../styles/views/LikeList';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -9,6 +9,7 @@ import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { Button } from 'react-native';
 import { api } from "../../controller";
 import ReportModal from '../../model/forms/ReportModal';
+import { InputContainer } from './VehicleRegisterPage';
 
 export const emptyListCard = () => {
   return (
@@ -49,13 +50,15 @@ export default class LikeList extends React.Component{
         currentId: 0,
         vehicleList: [],
         noVehiclesFound: false,
-        reportVehicleModalVisible: false
+        reportModalVisible: false,
+        reportVehicleText: "",
+        reported: false
     }
     this.returnFunction = this.returnFunction.bind(this);
   }
 
   filterCallback = (params) => {
-      console.log("filterCallback")
+      we.log("filterCallback")
   }
 
   pressElement(item,index){
@@ -185,8 +188,6 @@ export default class LikeList extends React.Component{
     this.fetchVehicles('');
   }
 
-  
-
   render() {
 
     return (
@@ -230,9 +231,6 @@ export default class LikeList extends React.Component{
                 <Image style={styles.imageDislike} source={require('./../../view/assets/nextCarIcon.png')}/>
             </TouchableOpacity>
          </View>
-         <ReportModal 
-          vehicle={this.state.vehicleList[this.state.currentIndex]}
-         />
         </SafeAreaView>
     );
   }

@@ -44,12 +44,14 @@ interface InputContainerProps {
 const InputContainer = (props: InputContainerProps): JSX.Element => {
 
     const { placeholder, title, inputWidth, numberOfLines, multiline, keyboardType, onChange, value, style } = props;
+    
     return (
+        
         <View style={styles.inputContainer}>
             <Text style={styles.title}>{title}</Text>
             <InputForm 
                 placeholder={placeholder}
-                style={style ? {style, width: inputWidth} : {...styles.input, width: inputWidth}} 
+                style={style ? style : {...styles.input, width: inputWidth}} 
                 hasVisibility={true}
                 numerOfLines={numberOfLines}
                 multiline={multiline}
