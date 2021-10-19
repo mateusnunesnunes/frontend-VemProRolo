@@ -173,7 +173,6 @@ class VehicleRegisterPage extends React.Component<Props, State> {
                     let index = this.state.optionModels
                                 .map((it: any) => it.id)
                                 .indexOf(this.state.vehicleToUpdate?.model.id);
-                                console.log(index)
                         this.setState({selectedModel: this.state.vehicleToUpdate?.model.id});
                 })
             })
@@ -183,7 +182,6 @@ class VehicleRegisterPage extends React.Component<Props, State> {
     }
 
     getAllModels = () => {
-        console.log("getAllmodel")
         if(this.state.selectedBrand == 0) {
             api.get('/models/allModels')
             .then(response => {
@@ -296,9 +294,7 @@ class VehicleRegisterPage extends React.Component<Props, State> {
                     ...prevState.vehicle,
                     images: images
                 }
-            }), () => {
-                console.log(this.state.vehicle.images)
-            }
+            })
         )
 
         if (hasInvalidFields) {
@@ -437,12 +433,8 @@ class VehicleRegisterPage extends React.Component<Props, State> {
     }
 
     onChangeSelectedModel(item: any) {
-        console.log("to aqui" + this.state.selectedModel + "   " + item)
         this.setState({selectedModel: item }, () => {
-            console.log(this.state.optionModels[item]);
-            
             this.setState({ vehicle: {...this.state.vehicle, model: {id: item, brand :{}}, }})
-            
         }); 
     }
 
