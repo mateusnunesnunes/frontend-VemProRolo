@@ -81,7 +81,7 @@ export default class VehiclesUser extends React.Component{
                                     </View>
                                     <View style={{...styles.viewColumn, justifyContent: 'center', alignItems: 'flex-end', flex: 3}}>
                                         <TouchableOpacity onPress={() => this.deleteVehicle(item)}>
-                                            <Image source={require('../assets/deslikeIcon.png')} style={{height: 40, width: 40}} />
+                                            <Image source={require('../assets/closeIconCar.png')} style={{height: 30, width: 30}} />
                                         </TouchableOpacity>
                                     </View>
                                 </View>

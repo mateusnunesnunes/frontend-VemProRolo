@@ -13,6 +13,7 @@ interface Props {
 }
 
 interface State {
+    selectedPlan: any
 }
 
 const fullWidth = Dimensions.get('window').width;
@@ -24,14 +25,26 @@ export default class SignaturesScreen extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
         
-        this.state = {}
+        this.state = {
+            selectedPlan: 'Padrão'
+        }
         
       }
 
-      componentDidMount() {
-          console.log(signaturesData)
-      }
+    componentDidMount() {
+        console.log(signaturesData)
+    }
     
+    selectPlan = (id: number) => {
+        let plan = ''
+        if (id == 0) {
+            plan = 'Padrão'
+        }
+        if (id == 1) {
+            plan = 'Premium'
+        }
+        this.setState({selectedPlan:plan})
+    }
 
     render() {
          return(
@@ -60,10 +73,10 @@ export default class SignaturesScreen extends React.Component<Props, State> {
                                 />
                         </View>
                         <View style={styles.currentPlan}>
-                            <Text style={styles.currentPlanDetail}>VemProRolo grátis</Text>
+                            <Text style={styles.currentPlanDetail}>Plano {this.state.selectedPlan}</Text>
                             <Text style={styles.currentTitle}>PLANO ATUAL</Text>
                         </View>
-                        <View style={[styles.signature, styles.greenColor]}>
+                        {/* <View style={[styles.signature, styles.greenColor]}>
                             <Text style={styles.headerCard}>What is Lorem Ipsum?</Text>
                             <Text style={styles.descriptionCard}>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting</Text>
                         </View>
@@ -72,17 +85,22 @@ export default class SignaturesScreen extends React.Component<Props, State> {
                             <Text style={styles.descriptionCard}>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting</Text>
                         </View>
                         <View style={[styles.signature, styles.lightBlueColor]}>
-                            <Text style={styles.headerCard}>What is Lorem Ipsum?</Text>
+                            <Text style={styles.headerCard}>What is Lorem Ipsum?s</Text>
                             <Text style={styles.descriptionCard}>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting</Text>
-                        </View>
-                        <View style={[styles.signature, styles.blueColor]}>
-                            <Text style={styles.headerCard}>What is Lorem Ipsum?</Text>
-                            <Text style={styles.descriptionCard}>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting</Text>
-                        </View>
-                        <View style={[styles.signature, styles.purpleColor]}>
-                            <Text style={styles.headerCard}>What is Lorem Ipsum?</Text>
-                            <Text style={styles.descriptionCard}>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting</Text>
-                        </View>
+                        </View> */}
+                        <TouchableOpacity onPress={() => this.selectPlan(0)}>
+                            <View style={[styles.signature, styles.greenColor]}>
+                                <Text style={styles.headerCard}>Plano Padrão</Text>
+                                <Text style={styles.descriptionCard}>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting</Text>
+                            </View>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={() => this.selectPlan(1)}>
+                            <View style={[styles.signature, styles.purpleColor]}>
+                                <Text style={styles.headerCard}>Plano Plus</Text>
+                                <Text style={styles.descriptionCard}>Cadastro ilimitado de carros</Text>
+                            </View>
+                        </TouchableOpacity>
+                        
                  </View>
                  
                  

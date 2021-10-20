@@ -60,7 +60,10 @@ export default class CommercialPage extends React.Component<Props, State> {
         let maxPriceStr = ''
         let maxKmStr = ''
         let minKmStr = '&minKilometers='+minKm.toString()
-        let doorsStr = "&doorsNumber="+doors.toString()
+        let doorsStr = ''
+        if (doors != 0) {
+            doorsStr = "&doorsNumber="+doors.toString()
+        }
         if (brandId != 0) {
             brandStr = "&brandId="+brandId.toString()
         }
@@ -80,7 +83,8 @@ export default class CommercialPage extends React.Component<Props, State> {
             maxKmStr = "&maxKilometers="+maxKm
         }
         filterStr = brandStr + modelStr + searchStr + minPriceStr + maxPriceStr + maxKmStr + minKmStr + doorsStr 
-        
+        console.log("TESTER")
+        console.log(filterStr)
         this.getVehiclesForSale(filterStr.toString())
     }
 
@@ -111,6 +115,11 @@ export default class CommercialPage extends React.Component<Props, State> {
                             Anúncios
                         </Text>
                     </View>
+                    <TouchableOpacity onPress={() => this.getVehiclesForSale('')}>
+                        <Text style={styles.resetFilter}>
+                            Limpar filtro
+                        </Text>
+                    </TouchableOpacity>
                     <View style={styles.column}>
                         <TouchableOpacity onPress={() => this.filterOpen()}>
                             <Image style={styles.imageFilter} source={require("../assets/filterIcon.png")}></Image>
@@ -178,5 +187,8 @@ const styles = StyleSheet.create({
         borderTopRightRadius: 12,
         borderTopLeftRadius: 12,
       },
+      resetFilter: {
+          marginHorizontal: 10
+      }
     
 });

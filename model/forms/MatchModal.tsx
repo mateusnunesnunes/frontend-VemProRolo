@@ -3,8 +3,9 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import React from "react";
 import {Text, View, Dimensions, Linking } from "react-native";
 import { ParamList } from "../../controller/routes";
-import { StyleSheet,TouchableOpacity } from "react-native";
+import { StyleSheet,TouchableOpacity,Alert } from "react-native";
 import { Image } from "react-native";
+import { api } from "../../controller";
 
 interface Props {
     navigation: StackNavigationProp<ParamList, 'MatchModal'>,
@@ -33,6 +34,16 @@ export default class MatchModal extends React.Component<Props, State> {
 
     componentDidMount() {
         //this.whatsAppRedirect(this.state.item)
+    }
+
+    deleteMatch = (id:number) =>{
+        console.log("Delete")
+        api.delete('/matches/' + id)
+        .then(() => {
+            this.props.route.params.onGoBack();
+            this.props.navigation.goBack();
+        })
+        .catch(error => Alert.alert(error));
     }
 
     whatsAppRedirect() {
@@ -73,6 +84,9 @@ export default class MatchModal extends React.Component<Props, State> {
                             <Text style={styles.descriptionText}>É um Match!</Text>
                             <TouchableOpacity style={styles.messageButton}>
                                 <Text style={styles.messageButtonText} onPress={() => this.whatsAppRedirect()}>Enviar uma mensagem</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.deleteButton}>
+                                <Text style={styles.messageButtonText} onPress={() => this.deleteMatch(this.state.item.match_id)}>Deletar match</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -137,6 +151,7 @@ const styles = StyleSheet.create({
         elevation: 5,
     },
     description: {
+        marginTop: 40,
         flex: 0.3,
         alignContent:'center',
         justifyContent: 'center',
@@ -161,6 +176,20 @@ const styles = StyleSheet.create({
         shadowRadius: 1 ,
         shadowOffset : { width: 2, height: 2},
     
+    },
+    deleteButton:{
+        padding: 10,
+        marginTop: 80,
+        backgroundColor: '#B02019',
+        paddingVertical:5,
+        alignItems:"center",
+        justifyContent:"center",
+        borderRadius:5,
+        shadowColor: 'rgba(0.5, 0.5, 0.5, 0.5)',
+        shadowOpacity: 1,
+        elevation: 2,
+        shadowRadius: 1 ,
+        shadowOffset : { width: 2, height: 2},
     },
     messageButtonText: {
         color: 'white',

@@ -7,6 +7,7 @@ import { Picker } from "@react-native-community/picker";
 import { TextInput } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { api } from "../../controller";
+import CurrencyInput from 'react-native-currency-input';
 
 interface Props {
     navigation: StackNavigationProp<ParamList, 'FilterScreenAnnouncement'>,
@@ -20,8 +21,8 @@ interface State {
     selectedModel: any;
     selectedDoors: any;
     searchText: any;
-    selectedMinPrice: any;
-    selectedMaxPrice: any;
+    selectedMinPrice: number | null;
+    selectedMaxPrice: number | null;
     selectedMaxKm: any;
     selectedMinKm: any;
 }
@@ -35,13 +36,20 @@ export default class FilterScreenAnnouncement extends React.Component<Props, Sta
             optionsBrand: [],
             selectedBrand: 0,
             selectedModel: 0,
-            selectedDoors: 2,
+            selectedDoors: 0,
             searchText: '',
-            selectedMinPrice: 0,
+            selectedMinPrice: 0.00,
             selectedMaxPrice: 0,
             selectedMaxKm: 0,
             selectedMinKm: 0
         }
+    }
+    onChangeMinPrice= (num: number) => {
+        this.setState({selectedMinPrice:num});
+    }
+
+    onChangeMaxPrice= (num: number) => {
+        this.setState({selectedMaxPrice:num});
     }
 
     getBrands = () =>{
@@ -149,20 +157,45 @@ export default class FilterScreenAnnouncement extends React.Component<Props, Sta
             <Text style={styles.header}>Preço (R$)</Text>
             <View style={styles.row}>
                 <View style={styles.column}>
-                    <TextInput
+                    {/* <TextInput
                     style={styles.input}
                     placeholder="Valor Mínimo"
                     keyboardType="numeric"
                     onChangeText={item => this.setState({selectedMinPrice: item})}
-                    />
+                    /> */}
+                    <View style={styles.inputContainer}>
+                        <CurrencyInput 
+                            style={styles.inputCurrency} 
+                            value={this.state.selectedMinPrice}
+                            prefix="R$"
+                            delimiter="."
+                            separator=","
+                            precision={2}
+                            placeholder="Valor Mínimo"
+                            onChangeValue={this.onChangeMinPrice.bind(this)}
+                        />
+                    </View>
+
                 </View>
                 <View style={styles.column}>
-                    <TextInput
+                    {/* <TextInput
                     style={styles.input}
                     placeholder="Valor Máximo"
                     keyboardType="numeric"
                     onChangeText={item => this.setState({selectedMaxPrice: item})}
-                    />
+                    /> */}
+                    <View style={styles.inputContainer}>
+                        <CurrencyInput    
+                            style={styles.inputCurrency} 
+                            value={this.state.selectedMaxPrice}
+                            prefix="R$"
+                            delimiter="."
+                            separator=","
+                            precision={2}
+                            placeholder="Valor Maxímo"
+                            onChangeValue={this.onChangeMaxPrice.bind(this)}
+                        />
+                    </View>
                 </View>
             </View>
             <Text style={styles.header}>Km</Text>
@@ -189,7 +222,7 @@ export default class FilterScreenAnnouncement extends React.Component<Props, Sta
                 <Picker
                 selectedValue={this.state.selectedDoors}
                 onValueChange={item => this.setState({selectedDoors: item})}>
-
+                    <Picker.Item label="Qualquer" value="0" />
                     <Picker.Item label="2" value="2" />
                     <Picker.Item label="4" value="4" />
 
@@ -231,6 +264,13 @@ const styles = StyleSheet.create({
         borderColor: '#D4D4D4',
         borderWidth: 1
     },
+    inputCurrency: {
+        backgroundColor: 'white',
+        width: 200,
+        borderColor: '#D4D4D4',
+        borderWidth: 1,
+        padding: 10
+    },
     inputSearch: {
         backgroundColor: 'white',
         width: '100%',
@@ -257,5 +297,8 @@ const styles = StyleSheet.create({
         color:'white',
         fontSize: 20,
         marginLeft: 150
-    }
+    },
+    inputContainer: {
+        margin: 0
+    },
 });

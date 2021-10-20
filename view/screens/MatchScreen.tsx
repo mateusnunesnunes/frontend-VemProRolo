@@ -42,9 +42,12 @@ export default class MatchScreen extends React.Component<Props, State> {
         .catch(error => console.log("Algo deu errado", "Erro Interno"));
     }
 
+    returnFunction = () => {
+        this.getMatches()
+    }
+
     openDetailMatch(item: any) {
-        //this.props.navigation.navigate('MatchModal',{item: item});
-        this.props.navigation.navigate('MatchModal',{item: item});
+        this.props.navigation.navigate('MatchModal',{item: item, onGoBack: this.returnFunction});
     }
 
     componentDidMount() {

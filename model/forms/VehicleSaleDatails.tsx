@@ -50,6 +50,24 @@ export default class VehicleSaleDatails extends React.Component<Props, State> {
        });
    }
 
+   whatsAppRedirect() {
+        let s = " "
+        let urlApi = `https://api.whatsapp.com/send?text=Olá,${this.state.item.user.name}&phone=${this.state.item.user.phone}`
+        let urlApp = `whatsapp://send?phone=${this.state.item.user.phone}&text=Olá`
+        console.log(urlApi)
+        console.log(urlApp)
+        Linking.canOpenURL("whatsapp://send?text=oi").then(supported => {
+            if (supported) {
+                return Linking.openURL(urlApi);
+            } else {
+                return Linking.openURL(urlApi);
+            }
+        })
+    }
+
+   componentDidMount() {
+       console.log(this.state.item.user.phone)
+   }
     onChangeDetails = (text: string) => {
         this.setState({reportVehicleText: text});
     }
@@ -172,6 +190,17 @@ export default class VehicleSaleDatails extends React.Component<Props, State> {
                                     <IconDescription title={"Portas"} value={this.state.item.doorsNumber} icon={require("./../../view/assets/doorIcon.png")}></IconDescription>
                                 </View>
                             </View>
+                            <View style={styles.separator}></View>
+                            <TouchableOpacity onPress={() => this.whatsAppRedirect()}>
+                                <Text style={styles.header}>
+                                    Contato
+                                </Text>
+                                <View style={styles.viewRow}>
+                                    <Image style={styles.logoWhats} source={require("../../view/assets/logoWhats.png")} />
+                                    <Text>{ this.state.item.user.phone}</Text>
+                                </View>
+                            </TouchableOpacity>
+                            
                             <View style={styles.separator}></View>
                             <View style={styles.reportContainer}>
                                 <Text style={styles.reportName}>
@@ -312,4 +341,8 @@ const styles = StyleSheet.create({
         width: Dimensions.get('window').width - 100,
         marginTop: 15
     },
+    logoWhats: {
+        height: 25,
+        width: 25
+    }
 });
