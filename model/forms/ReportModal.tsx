@@ -5,7 +5,7 @@ import {Text, View, Dimensions, Linking, Modal } from "react-native";
 import { ParamList } from "../../controller/routes";
 import { StyleSheet,TouchableOpacity } from "react-native";
 import { Image } from "react-native";
-import { Vehicle } from "../../view/screens/VehicleRegisterPage";
+import { Vehicle } from "../Vehicle";
 
 interface Props {
     vehicle: Vehicle,

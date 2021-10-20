@@ -13,7 +13,7 @@ import { Image, StyleSheet } from 'react-native';
 import images from '../view/themes/Images';
 import { colors } from '../view/styles/Colors';
 import Header  from '../components/Header';
-import { Vehicle, VehicleRegisterPage } from '../view/screens/VehicleRegisterPage';
+import { VehicleRegisterPage } from '../view/screens/VehicleRegisterPage';
 import LikeList from '../view/screens/LikeList';
 import UserAccountPage from '../view/screens/UserAccountPage';
 import VehiclesUser from '../view/screens/VehiclesUser';
@@ -23,6 +23,7 @@ import MatchModal from '../model/forms/MatchModal'
 import VehicleSaleDatails from '../model/forms/VehicleSaleDatails'
 import FilterScreenAnnouncement from '../view/screens/FilterScreenAnnouncement'
 import SignaturesScreen from '../view/screens/SignaturesScreen';
+import { Vehicle } from '../model/Vehicle';
 export type ParamList = {
   Login: undefined,
   Register: undefined,

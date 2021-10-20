@@ -12,6 +12,8 @@ import ImagePicker from "react-native-image-crop-picker";
 import { api } from "../../controller";
 import {Picker} from '@react-native-community/picker';
 import CurrencyInput from 'react-native-currency-input';
+import { Vehicle } from "../../model/Vehicle";
+import { VehicleImage } from "../../model/VehicleImage";
 
 interface Props {
     navigation: StackNavigationProp<ParamList, 'VehicleRegisterPage'>,
@@ -61,41 +63,6 @@ const InputContainer = (props: InputContainerProps): JSX.Element => {
             />
         </View>
     )
-}
-
-export interface VehicleImage {
-    fileName?: string | null;
-    fileContentType?: string | null;
-    file?: string | null;
-    isLast: boolean;
-}
-
-export interface Vehicle {
-    id?: number,
-    year: number | undefined,
-    color: string,
-    model: Model,
-    fuelType: string,
-    transmissionType: string,
-    category: string,
-    details: string,
-    images: VehicleImage[]
-    kilometers: number | undefined;
-    doorsNumber: number | undefined;
-    price: number | null;
-    isToLike: boolean;
-    isForSale: boolean;
-}
-
-export interface Brand {
-    id?: number,
-    name?: string,
-}
-
-export interface Model {
-    id?: number,
-    name?: string,
-    brand: Brand
 }
 
 class VehicleRegisterPage extends React.Component<Props, State> {
