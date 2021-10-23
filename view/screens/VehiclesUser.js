@@ -8,6 +8,7 @@ import { ParamList } from "../../controller/routes";
 import { colors } from "../styles/Colors";
 import images from "../themes/Images";
 import {CardMyVehicle} from "./../../model/forms/CardMyVehicle";
+import subscriptionApi from "../../controller/subscriptionApi";
 
 export default class VehiclesUser extends React.Component{
 
@@ -26,9 +27,41 @@ export default class VehiclesUser extends React.Component{
         });
     }
 
+    handleUserSubscription = () => {
+        return subscriptionApi.getCurrentUserSubscription().then(response => {
+            if (response.data && response.data.active) {
+                this.redirectToRegisterPage();
+            } else {
+                if (this.state.vehicleList.length < 1) {
+                    this.redirectToRegisterPage();
+                } else {
+                    Alert.alert(
+                        "Número máximo de veículos", 
+                        "Assine nosso plano Premium para cadastrar quantos veículos quiser e muito mais!",
+                        [
+                            { 
+                                text: "Ver planos", onPress: () => {
+                                    this.redirectToSubscriptionsPage()
+                                }
+                            },
+                            {
+                              text: "Cancelar",
+                              style: "cancel"
+                            },
+                        ]);
+                }
+            }
+        });
+    }
+
     redirectToRegisterPage = () => {
         this.props.navigation.navigate('VehicleRegisterPage', {vehicleToUpdate: undefined} );
     }
+
+    redirectToSubscriptionsPage = () => {
+        this.props.navigation.navigate('SignaturesScreen');
+    }
+
     fetchVehicles = () => {
         api.get('/vehicles/current-user')
         .then(response => {
@@ -93,7 +126,7 @@ export default class VehiclesUser extends React.Component{
                 
                 
                 <View style={styles.containerButton}>
-                    <TouchableOpacity onPress={this.redirectToRegisterPage}>
+                    <TouchableOpacity onPress={() => this.handleUserSubscription()}>
                         <Image source={require('./../../view/assets/addCardIcon.png')}/>                  
                     </TouchableOpacity>
                 </View>

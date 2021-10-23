@@ -12,6 +12,8 @@ import ImagePicker from "react-native-image-crop-picker";
 import { api } from "../../controller";
 import {Picker} from '@react-native-community/picker';
 import CurrencyInput from 'react-native-currency-input';
+import { Vehicle } from "../../model/Vehicle";
+import { VehicleImage } from "../../model/VehicleImage";
 
 interface Props {
     navigation: StackNavigationProp<ParamList, 'VehicleRegisterPage'>,
@@ -61,41 +63,6 @@ const InputContainer = (props: InputContainerProps): JSX.Element => {
             />
         </View>
     )
-}
-
-export interface VehicleImage {
-    fileName?: string | null;
-    fileContentType?: string | null;
-    file?: string | null;
-    isLast: boolean;
-}
-
-export interface Vehicle {
-    id?: number,
-    year: number | undefined,
-    color: string,
-    model: Model,
-    fuelType: string,
-    transmissionType: string,
-    category: string,
-    details: string,
-    images: VehicleImage[]
-    kilometers: number | undefined;
-    doorsNumber: number | undefined;
-    price: number | null;
-    isToLike: boolean;
-    isForSale: boolean;
-}
-
-export interface Brand {
-    id?: number,
-    name?: string,
-}
-
-export interface Model {
-    id?: number,
-    name?: string,
-    brand: Brand
 }
 
 class VehicleRegisterPage extends React.Component<Props, State> {
@@ -173,7 +140,6 @@ class VehicleRegisterPage extends React.Component<Props, State> {
                     let index = this.state.optionModels
                                 .map((it: any) => it.id)
                                 .indexOf(this.state.vehicleToUpdate?.model.id);
-                                console.log(index)
                         this.setState({selectedModel: this.state.vehicleToUpdate?.model.id});
                 })
             })
@@ -183,7 +149,6 @@ class VehicleRegisterPage extends React.Component<Props, State> {
     }
 
     getAllModels = () => {
-        console.log("getAllmodel")
         if(this.state.selectedBrand == 0) {
             api.get('/models/allModels')
             .then(response => {
@@ -215,12 +180,21 @@ class VehicleRegisterPage extends React.Component<Props, State> {
         
         if (this.state.vehicleToUpdate !== undefined && this.state.vehicleToUpdate !== null) {
             this.setState({vehicle: {...this.state.vehicleToUpdate,
-                images: [...this.state.vehicleToUpdate.images.filter(it => !it.isLast), {
-                    file: "",
-                    fileContentType: 'image/jpeg',
-                    fileName: "",
-                    isLast: true
-                }]}});
+                images: 
+                    [...this.state.vehicleToUpdate.images.filter(it => !it.isLast)]
+                }}, () => {
+                    if (this.state.vehicle.images.length < 5) {
+                        this.setState({vehicle: {...this.state.vehicle, 
+                            images: 
+                            [...this.state.vehicle.images.filter(it => !it.isLast), 
+                                {
+                                    file: "",
+                                    fileContentType: 'image/jpeg',
+                                    fileName: "",
+                                    isLast: true
+                                }]}})
+                    }
+                });
         }
     }
 
@@ -296,9 +270,7 @@ class VehicleRegisterPage extends React.Component<Props, State> {
                     ...prevState.vehicle,
                     images: images
                 }
-            }), () => {
-                console.log(this.state.vehicle.images)
-            }
+            })
         )
 
         if (hasInvalidFields) {
@@ -327,8 +299,20 @@ class VehicleRegisterPage extends React.Component<Props, State> {
 
     handleDeleteImage = (index: number) => {
         var array = [...this.state.vehicle.images];
+        let isLast = false;
+        if (array.length == 5 && !array.some(it => it.isLast)) {
+            isLast = true;
+        }
         if (index !== -1) {
             array.splice(index, 1);
+            if (isLast) {
+                array.push({
+                    file: "",
+                    fileContentType: 'image/jpeg',
+                    fileName: "",
+                    isLast: true
+                });
+            }
             this.setState({vehicle: { ...this.state.vehicle,  images: array }});
         }
     }
@@ -355,7 +339,7 @@ class VehicleRegisterPage extends React.Component<Props, State> {
             waitAnimationEnd: false,
             includeExif: true,
             forceJpg: true,
-            compressImageQuality: 0.6,
+            compressImageQuality: 0.09,
             maxFiles: 10,
             mediaType: 'photo',
             includeBase64: true
@@ -437,12 +421,8 @@ class VehicleRegisterPage extends React.Component<Props, State> {
     }
 
     onChangeSelectedModel(item: any) {
-        console.log("to aqui" + this.state.selectedModel + "   " + item)
         this.setState({selectedModel: item }, () => {
-            console.log(this.state.optionModels[item]);
-            
             this.setState({ vehicle: {...this.state.vehicle, model: {id: item, brand :{}}, }})
-            
         }); 
     }
 

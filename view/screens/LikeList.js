@@ -10,6 +10,7 @@ import { Button } from 'react-native';
 import { api } from "../../controller";
 import ReportModal from '../../model/forms/ReportModal';
 import { InputContainer } from './VehicleRegisterPage';
+import likeApi from '../../controller/LikeApi';
 
 export const emptyListCard = () => {
   return (
@@ -68,6 +69,10 @@ export default class LikeList extends React.Component{
     this.setState({reportVehicleModalVisible: !this.state.reportVehicleModalVisible});
   }
 
+  redirectToSubscriptionsPage = () => {
+    this.props.navigation.navigate('SignaturesScreen');
+  }
+
   sendLikeRequest(likeType) {
     if (this.state.vehicleList.length == 0) {
       return;
@@ -81,9 +86,23 @@ export default class LikeList extends React.Component{
       }
     }
 
-    api.post('/likes', like)
-      .then(response => {
-        if (response.data.matched === true) {
+    likeApi.createLike(like).then(response => {
+      if(response.status === 403) {
+        Alert.alert(
+          "Número máximo de likes", 
+          "Assine nosso plano Premium para poder dar quantos likes quiser e muito mais!",
+          [
+              { 
+                  text: "Ver planos", onPress: () => {
+                      this.redirectToSubscriptionsPage()
+                  }
+              },
+              {
+                text: "Cancelar",
+                style: "cancel"
+              },
+          ]);
+      } else if (response.data.matched === true) {
           Alert.alert(
             "Match",
             "O dono do veículo que você gostou também gostou de um veículo seu!",
