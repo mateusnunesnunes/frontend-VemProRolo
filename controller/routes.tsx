@@ -51,7 +51,8 @@ export type ParamList = {
   };
   MatchScreen: undefined;
   MatchModal: {
-    item:any
+    item:any,
+    onGoBack: () => void
   };
   VehicleSaleDatails: {
     item:any
