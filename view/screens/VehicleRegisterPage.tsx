@@ -180,12 +180,21 @@ class VehicleRegisterPage extends React.Component<Props, State> {
         
         if (this.state.vehicleToUpdate !== undefined && this.state.vehicleToUpdate !== null) {
             this.setState({vehicle: {...this.state.vehicleToUpdate,
-                images: [...this.state.vehicleToUpdate.images.filter(it => !it.isLast), {
-                    file: "",
-                    fileContentType: 'image/jpeg',
-                    fileName: "",
-                    isLast: true
-                }]}});
+                images: 
+                    [...this.state.vehicleToUpdate.images.filter(it => !it.isLast)]
+                }}, () => {
+                    if (this.state.vehicle.images.length < 5) {
+                        this.setState({vehicle: {...this.state.vehicle, 
+                            images: 
+                            [...this.state.vehicle.images.filter(it => !it.isLast), 
+                                {
+                                    file: "",
+                                    fileContentType: 'image/jpeg',
+                                    fileName: "",
+                                    isLast: true
+                                }]}})
+                    }
+                });
         }
     }
 
@@ -290,8 +299,20 @@ class VehicleRegisterPage extends React.Component<Props, State> {
 
     handleDeleteImage = (index: number) => {
         var array = [...this.state.vehicle.images];
+        let isLast = false;
+        if (array.length == 5 && !array.some(it => it.isLast)) {
+            isLast = true;
+        }
         if (index !== -1) {
             array.splice(index, 1);
+            if (isLast) {
+                array.push({
+                    file: "",
+                    fileContentType: 'image/jpeg',
+                    fileName: "",
+                    isLast: true
+                });
+            }
             this.setState({vehicle: { ...this.state.vehicle,  images: array }});
         }
     }
@@ -318,7 +339,7 @@ class VehicleRegisterPage extends React.Component<Props, State> {
             waitAnimationEnd: false,
             includeExif: true,
             forceJpg: true,
-            compressImageQuality: 0.6,
+            compressImageQuality: 0.09,
             maxFiles: 10,
             mediaType: 'photo',
             includeBase64: true
