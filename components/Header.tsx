@@ -39,7 +39,7 @@ export default class Header extends React.Component<Props> {
                 >
                     <View>
                         <Image
-                            source={images.chatIcon} 
+                            source={require('../view/assets/matchIcon.png')} 
                             resizeMode='contain' 
                             style={{
                             ...styles.imageIcon,

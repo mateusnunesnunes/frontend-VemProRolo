@@ -108,9 +108,11 @@ export default class VehiclesUser extends React.Component{
                                         
                                     </View>
                                     <View style={{...styles.viewColumn, alignItems:'flex-start', flex:2}}>
-                                        <Text  style={styles.name}>{item.model?.name}</Text>
-                                        <Text  style={styles.description}>{item.brand?.name}</Text>
-                                        <Text  style={styles.year} >{item.year}</Text>
+                                        <View style={styles.viewRow}>
+                                            <Text  style={styles.name}>{item.model.brand?.name}</Text>
+                                            <Text  style={styles.name}> {item.model?.name}</Text>
+                                        </View>
+                                        <Text  numberOfLines={2} style={styles.description} >{item.details}</Text>
                                     </View>
                                     <View style={{...styles.viewColumn, justifyContent: 'center', alignItems: 'flex-end', flex: 3}}>
                                         <TouchableOpacity onPress={() => this.deleteVehicle(item)}>
@@ -178,6 +180,8 @@ const styles = StyleSheet.create({
     description:{
         fontSize:15,
         color: colors.grey,
+        width: 180,
+        marginVertical: 10
     },
     year:{  
         fontSize:15,

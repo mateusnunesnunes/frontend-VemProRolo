@@ -69,10 +69,12 @@ export default class MatchModal extends React.Component<Props, State> {
                         <View style={styles.containerMatch}>
                             <View style={styles.row}>
                                 <View style={styles.column}>
-                                <Image source={{uri : 'data:image/png;base64, ' + this.state.item.firstLike.vehicle.images[0].file}} style={styles.imageStyle} />
+                                    <Image source={{uri : 'data:image/png;base64, ' + this.state.item.firstLike.vehicle.images[0].file}} style={styles.imageStyle} />
                                 </View>
                                 <View style={styles.column}></View>
                             </View>
+                            <View style={styles.row}></View>
+                            <View style={styles.row}></View>
                             <View style={styles.row}>
                                 <View style={styles.column}></View>
                                 <View style={styles.column}>
@@ -82,6 +84,7 @@ export default class MatchModal extends React.Component<Props, State> {
                         </View>
                         <View  style={styles.description}>
                             <Text style={styles.descriptionText}>É um Match!</Text>
+                            <Text style={styles.descriptionUsersText}>Você e {this.state.item.firstLike.user.name} gostaram dos carros um do outro</Text>
                             <TouchableOpacity style={styles.messageButton}>
                                 <Text style={styles.messageButtonText} onPress={() => this.whatsAppRedirect()}>Enviar uma mensagem</Text>
                             </TouchableOpacity>
@@ -106,7 +109,7 @@ const styles = StyleSheet.create({
     },
     card_template:{
         width: '90%',
-        height: '75%',
+        height: '80%',
         shadowColor: "#000",
         shadowOffset: {
             width: 0,
@@ -120,26 +123,23 @@ const styles = StyleSheet.create({
     },
     containerMatch: {
         flex: 0.5,
-        alignContent:'center',
     },
     row:{
         flexDirection: 'row',
-        height: '15%',
+        height: '17%',
         width: '90%',
-        
     },
     column:{
         flexDirection: 'column',
-        width: '40%',
+        width: '28%',
         margin: 20
-
     },
     imageStyle: {
-      borderRadius: 8,
-      width: (fullWidth / 2.5) - 20 ,
-      height: 200,
+      width: 170 ,
+      height: 120,
       margin: 10,
-      resizeMode: 'contain',
+      borderWidth: 4,
+      resizeMode: 'stretch',
       shadowColor: "#000",
         shadowOffset: {
             width: 0,
@@ -147,11 +147,10 @@ const styles = StyleSheet.create({
         },
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
-
         elevation: 5,
     },
     description: {
-        marginTop: 40,
+        marginTop: 100,
         flex: 0.3,
         alignContent:'center',
         justifyContent: 'center',
@@ -159,8 +158,15 @@ const styles = StyleSheet.create({
     },
     descriptionText: { 
         paddingBottom: 10, 
-        fontSize: 22, 
-        color: "#363636" 
+        color: '#4A4A4A',
+        fontSize: 22,
+        fontWeight: 'bold'
+    },
+    descriptionUsersText: {
+        width: '80%',
+        color: '#4A4A4A',
+        fontSize: 16,
+        textAlign: 'center'
     },
     messageButton: {
 
@@ -175,11 +181,11 @@ const styles = StyleSheet.create({
         elevation: 2,
         shadowRadius: 1 ,
         shadowOffset : { width: 2, height: 2},
-    
+        marginTop: 30
     },
     deleteButton:{
         padding: 10,
-        marginTop: 80,
+        marginTop: 20,
         backgroundColor: '#B02019',
         paddingVertical:5,
         alignItems:"center",
