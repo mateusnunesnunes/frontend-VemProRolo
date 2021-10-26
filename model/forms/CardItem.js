@@ -6,48 +6,54 @@ import Icon from './Icon';
 const CardItem = ({
   name,
   image,
-  description
+  description,
+  date
 }) => {
   // Custom styling
   const fullWidth = Dimensions.get('window').width;
   const imageStyle = [
     {
-      borderRadius: 2,
-      width: fullWidth - 20 ,
-      height: 200,
-      margin: 20,
+      borderRadius: 5,
+      width: 100 ,
+      height: 120,
       resizeMode: 'contain'
     }
   ];
 
   const nameStyle = [
     {
-	  
-	 marginHorizontal:7,
-      color: '#363636',
-      fontSize: 25,
+	    marginTop: 16,
+		marginHorizontal:7,
+		color: '#4A4A4A',
+		fontSize: 17,
+		fontWeight: 'bold',
 		
     }
   ];
   const descriptionStyle = [
     {
-      paddingTop: 15,
-      paddingBottom: 10,
-      color: '#363636',
-      fontSize: 15,
-      padding: 10,
+	  color: '#4A4A4A',
+      fontSize: 16,
+	  margin:5,
+
     }
+	
   ];
+  const dateSrc = (((date.split("T"))[0]).split("-"))
+  const datePos = dateSrc[2] +"/"+ dateSrc[1] +"/"+ dateSrc[0]
 
   return (
     <View style={styles.containerCardItem}>
       <View style={styles.row}>
-        <Image source={{uri : 'data:image/png;base64, ' + image}} style={imageStyle} />
+		<View style={styles.viewImage}>
+			<Image source={{uri : 'data:image/png;base64, ' + image}} style={imageStyle} />
+		</View>
+		<View style={styles.viewTexts}>
+			<Text style={nameStyle}>Match com {name}</Text>
+			<Text style={descriptionStyle}>{description}</Text>
+			<Text style={styles.date}>{datePos}</Text>
+		</View>
       </View>
-      
-      <Text style={nameStyle}>{name}</Text>
-      <Text style={descriptionStyle}>{description}</Text>
-
     </View>
   );
 };
@@ -62,106 +68,34 @@ const DIMENSION_WIDTH = Dimensions.get("window").width;
 const DIMENSION_HEIGHT = Dimensions.get("window").height;
 
 const styles = StyleSheet.create({
-  containerCardItem: {
+	date: {
+		color: '#999999',
+		marginHorizontal:7,
+	},
+	viewImage:{
+		width: '30%',
+		height: '90%',
+		alignItems: 'center'
+	},
+	viewTexts: {
+		width: '70%',
+		height: '90%',
+	},
+  	containerCardItem: {
 		backgroundColor: '#FFFFFF',
 		borderRadius: 8,
 		alignItems: "center",
-		margin: 10,
-		shadowOpacity: 0.05,
-		shadowRadius: 10,
-		shadowColor: "#000000",
-		shadowOffset: { height: 0, width: 0 }
+        shadowColor: "#0000",
+        shadowOffset: {
+            width: 0,
+            height: 3,
+        },
+        shadowOpacity: 0.27,
+        shadowRadius: 4.65,
+        elevation: 6,
 	},
   row:{
     flexDirection: 'row',
   },
-  matchesCardItem: {
-		marginTop: -35,
-		backgroundColor: "#7444C0",
-		paddingVertical: 7,
-		paddingHorizontal: 20,
-		borderRadius: 20
-	},
-  matchesTextCardItem: {
-		fontFamily: "tinderclone",
-		color: "#FFFFFF",
-	},
-  descriptionCardItem: {
-		color: "#757E90",
-		textAlign: "center",
-    marginVertical: 20
-	},
-  status: {
-		paddingBottom: 10,
-		flexDirection: "row",
-		alignItems: "center"
-	},
-  online: {
-		width: 6,
-		height: 6,
-		backgroundColor: "#46A575",
-		borderRadius: 3,
-		marginRight: 4
-	},
-	offline: {
-		width: 6,
-		height: 6,
-		backgroundColor: "#D04949",
-		borderRadius: 3,
-		marginRight: 4
-	},
-  statusText: {
-		color: "#757E90",
-		fontSize: 12
-	},
-  actionsCardItem: {
-		flexDirection: "row",
-		alignItems: "center",
-		paddingVertical: 30
-	},
-  miniButton: {
-		width: 40,
-		height: 40,
-		borderRadius: 30,
-		backgroundColor: "#FFFFFF",
-		marginHorizontal: 7,
-		alignItems: "center",
-		justifyContent: "center",
-		shadowOpacity: 0.15,
-		shadowRadius: 20,
-		shadowColor: "#363636",
-		shadowOffset: { height: 10, width: 0 }
-	},
-  star: {
-		fontFamily: "tinderclone",
-		color: "#FFA200"
-	},
-  button: {
-		width: 60,
-		height: 60,
-		borderRadius: 30,
-		backgroundColor: WHITE,
-		marginHorizontal: 7,
-		alignItems: "center",
-		justifyContent: "center",
-		shadowOpacity: 0.15,
-		shadowRadius: 20,
-		shadowColor: DARK_GRAY,
-		shadowOffset: { height: 10, width: 0 }
-	},
-  like: {
-		fontSize: 25,
-		fontFamily: ICON_FONT,
-		color: LIKE_ACTIONS
-	},
-  dislike: {
-		fontSize: 25,
-		fontFamily: ICON_FONT,
-		color: DISLIKE_ACTIONS
-	},
-	flash: {
-		fontFamily: ICON_FONT,
-		color: FLASH_ACTIONS
-	}
 });
 export default CardItem;

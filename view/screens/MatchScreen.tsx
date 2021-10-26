@@ -75,8 +75,9 @@ export default class MatchScreen extends React.Component<Props, State> {
                         <CardItem
                         // imageOwner={item}
                         // imageMatch={item}
+                        date={item.createdDate}
                         image={item.secondLike.vehicle.images[0].file != undefined ? item.secondLike.vehicle.images[0].file : require("../themes/images/car-silhouet.jpg")}
-                        name={"Match com o carro de "+item.secondLike.user.name}
+                        name={item.firstLike.user.name}
                         description={item.secondLike.vehicle.details}
                         />
                     </TouchableOpacity>
@@ -106,13 +107,19 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10
     },
     top: {
-        paddingTop: 50,
+        paddingTop: 20,
         marginHorizontal: 10,
+        marginVertical:10,
         flexDirection: "row",
         justifyContent: "space-between",
         alignItems: "center"
     },
-    title: { paddingBottom: 10, fontSize: 22, color: "#363636", textAlign: 'center' },
+    title: { 
+        fontSize: 22, 
+        color: "#555", 
+        textAlign: 'center' ,
+        fontWeight: 'bold'
+    },
     icon: {
         fontFamily: "tinderclone",
         fontSize: 20,

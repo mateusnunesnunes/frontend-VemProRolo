@@ -7,6 +7,10 @@ import { StyleSheet,TouchableOpacity } from "react-native";
 import { Image } from "react-native";
 import { FlatList, ScrollView } from "react-native-gesture-handler";
 import {signaturesData} from "../assets/signaturesData"
+import { api } from "../../controller";
+import subscriptionApi from "../../controller/subscriptionApi";
+import { Alert } from "react-native";
+
 interface Props {
     navigation: StackNavigationProp<ParamList, 'SignaturesScreen'>,
     route: RouteProp<ParamList, 'SignaturesScreen'>
@@ -14,6 +18,8 @@ interface Props {
 
 interface State {
     selectedPlan: any
+    selectedPlancolor: any
+    planID: any
 }
 
 const fullWidth = Dimensions.get('window').width;
@@ -26,27 +32,97 @@ export default class SignaturesScreen extends React.Component<Props, State> {
         super(props);
         
         this.state = {
-            selectedPlan: 'Padrão'
+            selectedPlan: '',
+            selectedPlancolor: '#333333',
+            planID: 0,
         }
         
       }
 
     componentDidMount() {
         console.log(signaturesData)
+        this.handleUserSubscription()
+    }
+
+    
+
+    handleUserSubscription = () => {
+        return subscriptionApi.getCurrentUserSubscription().then(response => {
+            if (response.data && response.data.active) {
+                this.setState({planID: response.data.id})
+                this.setState({selectedPlan: response.data.plan?.planType})
+            }
+        })
     }
     
-    selectPlan = (id: number) => {
+    alertModal = (id: number) => {
         let plan = ''
         if (id == 0) {
             plan = 'Padrão'
         }
-        if (id == 1) {
+        else{
             plan = 'Premium'
         }
-        this.setState({selectedPlan:plan})
+        Alert.alert(
+            "Você está escolhendo o plano "+plan, 
+            "Tem certeza que deseja assinar esse plano?",
+            [
+                { 
+                    text: "Confirmar", onPress: () => {
+                        this.selectPlan(id)
+                    }
+                },
+                {
+                  text: "Cancelar",
+                  style: "cancel"
+                },
+            ]);
+    }
+
+    selectPlan = (id: number) => {
+        
+        return subscriptionApi.getCurrentUserSubscription().then(response => {
+            if (response.data && response.data.active) {
+                this.setState({planID: response.data.id})
+            }
+            let plan = ''
+
+            if (id == 0) {
+                plan = 'Padrão'
+                this.setState({selectedPlancolor:"#64A374"})
+                this.setState({selectedPlan:plan})
+
+                api.delete('/subscriptions/' + this.state.planID)
+                .then(() => {
+                    console.log("subscriptionDeleted")
+                })
+                .catch(error => console.log(error));
+            }
+                
+            if (id == 1) {
+                plan = 'Premium'
+                this.setState({selectedPlancolor:"#763885"})
+                this.setState({selectedPlan:plan})
+
+                api.post("/subscriptions", {
+                    "plan":{
+                        "id":1
+                    }
+                }).then(response => {
+                    console.log(response)
+                })
+            }
+        })
+        
+        
     }
 
     render() {
+        const  color = {
+            backgroundColor: this.state.selectedPlancolor
+        }
+        const combineStyles = StyleSheet.flatten([styles.currentPlan, color]);    
+
          return(
              <ScrollView>
                  <View style={styles.container}>
@@ -72,32 +148,22 @@ export default class SignaturesScreen extends React.Component<Props, State> {
                                     )}
                                 />
                         </View>
-                        <View style={styles.currentPlan}>
+                        <View style={[styles.currentPlan, combineStyles]}>
                             <Text style={styles.currentPlanDetail}>Plano {this.state.selectedPlan}</Text>
                             <Text style={styles.currentTitle}>PLANO ATUAL</Text>
                         </View>
-                        {/* <View style={[styles.signature, styles.greenColor]}>
-                            <Text style={styles.headerCard}>What is Lorem Ipsum?</Text>
-                            <Text style={styles.descriptionCard}>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting</Text>
-                        </View>
-                        <View style={[styles.signature, styles.orangeColor]}>
-                            <Text style={styles.headerCard}>What is Lorem Ipsum?</Text>
-                            <Text style={styles.descriptionCard}>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting</Text>
-                        </View>
-                        <View style={[styles.signature, styles.lightBlueColor]}>
-                            <Text style={styles.headerCard}>What is Lorem Ipsum?s</Text>
-                            <Text style={styles.descriptionCard}>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting</Text>
-                        </View> */}
-                        <TouchableOpacity onPress={() => this.selectPlan(0)}>
+                        <TouchableOpacity onPress={() => this.alertModal(0)}>
                             <View style={[styles.signature, styles.greenColor]}>
                                 <Text style={styles.headerCard}>Plano Padrão</Text>
-                                <Text style={styles.descriptionCard}>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting</Text>
+                                <Text style={styles.descriptionCard}>{'\u2B24'} Há um limite de carros que podem ser cadastrados.</Text>
+                                <Text style={styles.descriptionCard}>{'\u2B24'} Há um limite de carros que você pode curtir </Text>
                             </View>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={() => this.selectPlan(1)}>
+                        <TouchableOpacity onPress={() => this.alertModal(1)}>
                             <View style={[styles.signature, styles.purpleColor]}>
                                 <Text style={styles.headerCard}>Plano Plus</Text>
-                                <Text style={styles.descriptionCard}>Cadastro ilimitado de carros</Text>
+                                <Text style={styles.descriptionCard}>{'\u2B24'} Adicione quantos carros desejar!</Text>
+                                <Text style={styles.descriptionCard}>{'\u2B24'} Curta quantos carros quiser!</Text>
                             </View>
                         </TouchableOpacity>
                         
@@ -181,12 +247,13 @@ const styles = StyleSheet.create({
         padding: 5
     },
     signature: {
-        width: '85%',
-        height: 450,
+        width: 340,
+        height: 300,
         borderRadius: 10,
         alignItems: "center",
         justifyContent: 'center',
-        margin: 20
+        margin: 20,
+        
     },
     headerCard: {
         fontWeight: "bold",
@@ -218,7 +285,6 @@ const styles = StyleSheet.create({
     currentPlan: {
         height: 100,
         width: '85%',
-        backgroundColor: "#333333",
         borderRadius: 10,
         flexDirection: 'row', 
         alignItems: "center",
@@ -242,7 +308,7 @@ const styles = StyleSheet.create({
         marginHorizontal: 25
     },
     currentTitle: {
-        color: '#ACACAC',
+        color: 'white',
         alignItems: "center",
         justifyContent: 'center',
     }
