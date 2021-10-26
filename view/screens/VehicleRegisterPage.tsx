@@ -28,6 +28,7 @@ interface State {
     optionModels: any;
     selectedBrand: any;
     selectedModel: any;
+    selectedDoorsNumber: any;
     isFirstTimeModel: boolean;
 }
 
@@ -98,6 +99,7 @@ class VehicleRegisterPage extends React.Component<Props, State> {
             optionModels: [],
             selectedModel: 0,
             selectedBrand: 0,
+            selectedDoorsNumber: 0,
             isFirstTimeModel: true
         }
     }
@@ -179,11 +181,17 @@ class VehicleRegisterPage extends React.Component<Props, State> {
         this.getBrands();
         
         if (this.state.vehicleToUpdate !== undefined && this.state.vehicleToUpdate !== null) {
-            this.setState({vehicle: {...this.state.vehicleToUpdate,
-                images: 
-                    [...this.state.vehicleToUpdate.images.filter(it => !it.isLast)]
-                }}, () => {
+            console.log(this.state.vehicleToUpdate.doorsNumber);
+            this.setState(
+                {
+                    vehicle: {
+                        ...this.state.vehicleToUpdate,
+                        images: [...this.state.vehicleToUpdate.images.filter(it => !it.isLast)]
+                    },
+                    selectedDoorsNumber: this.state.vehicleToUpdate.doorsNumber
+                }, () => {
                     if (this.state.vehicle.images.length < 5) {
+                        console.log("qw"+this.state.selectedDoorsNumber);
                         this.setState({vehicle: {...this.state.vehicle, 
                             images: 
                             [...this.state.vehicle.images.filter(it => !it.isLast), 
@@ -238,14 +246,6 @@ class VehicleRegisterPage extends React.Component<Props, State> {
         this.setState({vehicle: { ...this.state.vehicle, details: text }});
     }
 
-    onChangeDoorsNumber = (text: string) => {
-        if (text == '') {
-            text = '0'
-        }
-        var number = parseInt(text , 10 );
-        this.setState({vehicle: { ...this.state.vehicle, doorsNumber: number }});
-    }
-
     onPressSaveButton = () => {
         const { vehicle } = this.state;
 
@@ -262,6 +262,11 @@ class VehicleRegisterPage extends React.Component<Props, State> {
             hasInvalidFields = true;
         }
 
+        if (this.state.vehicle.doorsNumber === 0 || this.state.vehicle.doorsNumber === undefined) {
+            invalidFieldsString += "\nSelecione o número de portas do seu veículo";
+            hasInvalidFields = true;
+        }
+
         let images = this.state.vehicle.images.filter(it => !it.isLast);
 
         this.setState(
@@ -274,7 +279,7 @@ class VehicleRegisterPage extends React.Component<Props, State> {
         )
 
         if (hasInvalidFields) {
-            Alert.alert("Ops, corrija alguns campos para continuar", invalidFieldsString);
+            Alert.alert("Oops... corrija os campos abaixo para continuar", invalidFieldsString);
         } else {
             if (this.state.vehicle.id) {
                 api.put('/vehicles', vehicle)
@@ -426,6 +431,13 @@ class VehicleRegisterPage extends React.Component<Props, State> {
         }); 
     }
 
+    onChangeDoorsNumber(item: any) {
+        console.log("cheguei aqui depois")
+        this.setState({selectedDoorsNumber: item }, () => {
+            this.setState({ vehicle: {...this.state.vehicle, doorsNumber: item }})
+        }); 
+    }
+
     render() {
         const { vehicle } = this.state;
         const image = vehicle?.images?.find(it => it != undefined)?.file
@@ -479,7 +491,7 @@ class VehicleRegisterPage extends React.Component<Props, State> {
                         <InputContainer
                             title='Ano'
                             placeholder='Ex. 2010'
-                            inputWidth={100}
+                            inputWidth={70}
                             keyboardType={'numeric'}
                             onChange={this.onChangeYear.bind(this)}
                             value={
@@ -495,18 +507,22 @@ class VehicleRegisterPage extends React.Component<Props, State> {
                             onChange={this.onChangeColor.bind(this)}
                             value={this.state.vehicle.color}
                         />
-                        <InputContainer
-                            title='Portas'
-                            placeholder='Ex. 4'
-                            inputWidth={100}
-                            keyboardType={'numeric'}
-                            onChange={this.onChangeDoorsNumber.bind(this)}
-                            value={
-                                this.state.vehicle.doorsNumber == null || this.state.vehicle.doorsNumber == undefined || this.state.vehicle.doorsNumber == 0
-                                ? '0' 
-                                : ''+this.state.vehicle.doorsNumber
-                            }
-                        />
+                        <View style={{...styles.inputContainer, width: 135}}>
+                        <Text style={styles.title}>Portas</Text>
+                        <View style={styles.picker}>
+                            <Picker
+                                selectedValue={this.state.selectedDoorsNumber}
+                                onValueChange={(item) => this.onChangeDoorsNumber(item)}
+                                >
+                                <Picker.Item label="Selecione" value={0} />
+                                <Picker.Item label="2" value={2} />
+                                <Picker.Item label="4" value={4} />
+
+                            </Picker>
+                        </View>
+                    </View>
+                        
+                        
                     </View>
                     <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
                         <InputContainer
