@@ -11,6 +11,7 @@ import ReportModal from "./ReportModal";
 import { colors } from "../../view/styles/Colors";
 import { InputContainer } from "../../view/screens/VehicleRegisterPage";
 import { api } from "../../controller";
+import {formatCurrency} from '../../utils/currencyUtils';
 
 interface Props {
     navigation: StackNavigationProp<ParamList, 'VehicleSaleDatails'>,
@@ -156,7 +157,7 @@ export default class VehicleSaleDatails extends React.Component<Props, State> {
                                 {this.state.item.model.brand.name} {this.state.item.model.name}
                             </Text>
                             <Text style={styles.price}>
-                                R$ {this.state.item.price}
+                                R$ {formatCurrency(this.state.item.price)}
                             </Text>
                             <Text style={styles.date}>
                                 Publicado em {((this.state.item.createdDate.split('T')[0]).split('-')[2])}/{(this.state.item.createdDate.split('T')[0]).split('-')[1]}

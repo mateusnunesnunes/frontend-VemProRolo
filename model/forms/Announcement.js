@@ -1,5 +1,6 @@
 import { TextInput, StyleSheet, View, ImagePropTypes, KeyboardTypeOptions, Text, Image } from 'react-native';
 import React from 'react';
+import {formatCurrency} from '../../utils/currencyUtils'
 
 const Announcement = ({
     image,
@@ -15,7 +16,7 @@ const Announcement = ({
 
             <View style={styles.containerContent}>
                 <Text style={styles.title}>{title}</Text> 
-                <Text style={styles.price}>R${price}</Text>
+                <Text style={styles.price}>R$ {formatCurrency(price)}</Text>
                 <Text numberOfLines={2} ellipsizeMode='tail' 
                 style={styles.details}>{details}</Text>
             </View>
