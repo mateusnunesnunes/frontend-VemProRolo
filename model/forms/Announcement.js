@@ -1,6 +1,6 @@
 import { TextInput, StyleSheet, View, ImagePropTypes, KeyboardTypeOptions, Text, Image } from 'react-native';
 import React from 'react';
-import {formatCurrency} from '../../utils/currencyUtils'
+import {formatCurrency} from '../../utils/currencyUtils';
 
 const Announcement = ({
     image,
