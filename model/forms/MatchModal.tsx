@@ -14,8 +14,19 @@ interface Props {
 }
 
 interface State {
-
+    user: User | undefined,
     item: any,
+}
+
+export interface User {
+    
+    id?: number;
+
+    name: string;
+    
+    email: string;
+    
+    phone: string;
 }
 
 const fullWidth = Dimensions.get('window').width;
@@ -28,13 +39,14 @@ export default class MatchModal extends React.Component<Props, State> {
         super(props);
         
         this.state = {
-            item: this.props.route.params.item
+            item: this.props.route.params.item,
+            user: undefined
         }
         
       }
 
     componentDidMount() {
-        //this.whatsAppRedirect(this.state.item)
+        this.fetchUser();
     }
 
     deleteMatch = (id:number) =>{
@@ -47,10 +59,27 @@ export default class MatchModal extends React.Component<Props, State> {
         .catch(error => Alert.alert(error));
     }
 
+    fetchUser = () => {
+        api.get('/users/current')
+        .then(response => {
+            this.setState({user: response.data as User})
+        })
+        .catch(error => Alert.alert("Algo deu errado", "Erro Interno"));
+    }
+
     whatsAppRedirect() {
+        let phone;
+        let name;
+        if (this.state.item.secondLike?.user?.id != this.state.user?.id) {
+            phone = this.state.item.secondLike?.user?.phone;
+            name = this.state.item.secondLike?.user?.name;
+        } else {
+            phone = this.state.item.firstLike?.user?.phone;
+            name = this.state.item.firstLike?.user?.name;
+        }
         let s = " "
-        let urlApi = `https://api.whatsapp.com/send?text=Olá,${this.state.item.secondLike.user.name}&phone=${this.state.item.secondLike.user.phone}`
-        let urlApp = `whatsapp://send?phone=${this.state.item.secondLike.user.phone}&text=Olá`
+        let urlApi = `https://api.whatsapp.com/send?text=Olá,${name}&phone=${phone}`
+        let urlApp = `whatsapp://send?phone=${phone}&text=Olá`
         console.log(urlApi)
         console.log(urlApp)
         Linking.canOpenURL("whatsapp://send?text=oi").then(supported => {
