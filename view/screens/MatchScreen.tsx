@@ -9,7 +9,8 @@ import {
     Text,
     TouchableOpacity,
     ImageBackground,
-    FlatList
+    FlatList,
+    Alert
   } from 'react-native';
 
 import CardItem from '../../model/forms/CardItem';
@@ -20,7 +21,19 @@ interface Props {
 }
 
 interface State {
-    matches: any
+    matches: any,
+    user: User | undefined
+}
+
+export interface User {
+    
+    id?: number;
+
+    name: string;
+    
+    email: string;
+    
+    phone: string;
 }
 
 
@@ -30,7 +43,8 @@ export default class MatchScreen extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
         this.state = {
-            matches: []
+            matches: [],
+            user: undefined
         }
     }
 
@@ -50,7 +64,26 @@ export default class MatchScreen extends React.Component<Props, State> {
         this.props.navigation.navigate('MatchModal',{item: item, onGoBack: this.returnFunction});
     }
 
+    fetchUser = () => {
+        api.get('/users/current')
+        .then(response => {
+            this.setState({user: response.data as User})
+        })
+        .catch(error => Alert.alert("Algo deu errado", "Erro Interno"));
+    }
+
+    handleLikeImage = (item: any) => {
+        let image;
+        if (item.secondLike?.user?.id == this.state.user?.id) {
+            image = item.secondLike?.vehicle?.images[0]?.file;
+        } else {
+            image = item.firstLike?.vehicle?.images[0]?.file;
+        }
+        return image != undefined ? {uri : 'data:image/png;base64, ' + image} : images.carSilhouet
+    }
+
     componentDidMount() {
+        this.fetchUser();
         this.getMatches()
     }
     render() {
@@ -67,16 +100,13 @@ export default class MatchScreen extends React.Component<Props, State> {
 
                 <FlatList
                     numColumns={1}
-                    //data={Demo}
                     data={this.state.matches}
                     keyExtractor={(item, index) => index.toString()}
                     renderItem={({ item }) => (
                     <TouchableOpacity onPress={() => this.openDetailMatch(item)}>
                         <CardItem
-                        // imageOwner={item}
-                        // imageMatch={item}
                         date={item.createdDate}
-                        image={item.secondLike.vehicle.images[0].file != undefined ? item.secondLike.vehicle.images[0].file : require("../themes/images/car-silhouet.jpg")}
+                        image={this.handleLikeImage(item)}
                         name={item.firstLike.user.name}
                         description={item.secondLike.vehicle.details}
                         />
@@ -91,6 +121,8 @@ export default class MatchScreen extends React.Component<Props, State> {
 
 }
 import { StyleSheet, Dimensions } from "react-native";
+import UserAccountPage from "./UserAccountPage";
+import images from "../themes/Images";
 
 const DIMENSION_WIDTH = Dimensions.get("window").width;
 const DIMENSION_HEIGHT = Dimensions.get("window").height;
