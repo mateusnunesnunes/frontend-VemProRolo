@@ -1,6 +1,7 @@
 import { TextInput, StyleSheet, View, ImagePropTypes, KeyboardTypeOptions, Text, Image } from 'react-native';
 import React from 'react';
 import {formatCurrency} from '../../utils/currencyUtils';
+import images from "../../view/themes/Images";
 
 const Announcement = ({
     image,
@@ -12,7 +13,11 @@ const Announcement = ({
     return (
         <View style={styles.container}>
             
-            <Image style={styles.productImage} source={{uri: "data:image/jpeg;base64," + image}}></Image>
+            {image == undefined ? (
+                <Image style={styles.productImage} source={images.carSilhouet}></Image>
+            ) : (
+                <Image style={styles.productImage} source={{uri: "data:image/jpeg;base64," + image}}></Image>
+            )}
 
             <View style={styles.containerContent}>
                 <Text style={styles.title}>{title}</Text> 

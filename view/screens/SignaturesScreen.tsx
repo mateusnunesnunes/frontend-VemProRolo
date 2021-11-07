@@ -44,28 +44,41 @@ export default class SignaturesScreen extends React.Component<Props, State> {
         this.handleUserSubscription()
     }
 
-    
-
     handleUserSubscription = () => {
         return subscriptionApi.getCurrentUserSubscription().then(response => {
             if (response.data && response.data.active) {
-                this.setState({planID: response.data.id})
-                this.setState({selectedPlan: response.data.plan?.planType})
+                this.setState({planID: 1})
+                this.setState({selectedPlan: this.toCamelCase(response.data.plan?.planType)})
+                this.setState({selectedPlancolor:"#763885"})
+            } else {
+                this.setState({planID: 0})
+                this.setState({selectedPlan: 'Padrão'})
+                this.setState({selectedPlancolor:"#64A374"})
             }
         })
+    }
+
+    toCamelCase(str: any) {
+        return "" + str?.charAt(0).toUpperCase() + str?.slice(1).toLowerCase();
     }
     
     alertModal = (id: number) => {
         let plan = ''
+        let action = ''
+
+        if (id === this.state.planID) return;
+
         if (id == 0) {
             plan = 'Padrão'
+            action = 'cancelar seu'
         }
         else{
             plan = 'Premium'
+            action = 'assinar esse'
         }
         Alert.alert(
             "Você está escolhendo o plano "+plan, 
-            "Tem certeza que deseja assinar esse plano?",
+            "Tem certeza que deseja " + action + " plano?",
             [
                 { 
                     text: "Confirmar", onPress: () => {
@@ -94,6 +107,7 @@ export default class SignaturesScreen extends React.Component<Props, State> {
 
                 api.delete('/subscriptions/' + this.state.planID)
                 .then(() => {
+                    this.setState({planID: 0})
                     console.log("subscriptionDeleted")
                 })
                 .catch(error => console.log(error));
@@ -109,6 +123,7 @@ export default class SignaturesScreen extends React.Component<Props, State> {
                         "id":1
                     }
                 }).then(response => {
+                    this.setState({planID: 1})
                     console.log(response)
                 })
             }
@@ -161,7 +176,7 @@ export default class SignaturesScreen extends React.Component<Props, State> {
                         </TouchableOpacity>
                         <TouchableOpacity onPress={() => this.alertModal(1)}>
                             <View style={[styles.signature, styles.purpleColor]}>
-                                <Text style={styles.headerCard}>Plano Plus</Text>
+                                <Text style={styles.headerCard}>Plano Premium</Text>
                                 <Text style={styles.descriptionCard}>{'\u2B24'} Adicione quantos carros desejar!</Text>
                                 <Text style={styles.descriptionCard}>{'\u2B24'} Curta quantos carros quiser!</Text>
                             </View>
@@ -216,7 +231,7 @@ const styles = StyleSheet.create({
     freeSign: {
         height: '100%',
         width: '50%',
-        backgroundColor: "#333333",
+        backgroundColor: "#64A374",
         borderTopLeftRadius: 10,
         borderBottomLeftRadius: 10,
         alignItems: "center",
@@ -225,7 +240,7 @@ const styles = StyleSheet.create({
     premiumSign: {
         height: '100%',
         width: '50%',
-        backgroundColor: "#64A374",
+        backgroundColor: "#763885",
         borderTopRightRadius: 10,
         borderBottomRightRadius: 10,
         alignItems: "center",

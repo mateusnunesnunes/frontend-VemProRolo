@@ -98,7 +98,7 @@ export default class VehiclesUser extends React.Component{
                         >
                             <View style={styles.card}>
                                 <View style={styles.viewRow}>
-                                    <View style={{...styles.viewColumn, flex: 2}}>
+                                    <View style={{...styles.viewColumn, flex:3}}>
                                     { item.images?.find(it => it != undefined)?.file == null ? (
                                         <Image source={images.carSilhouet} style={styles.imageCar} />
                                         
@@ -107,14 +107,16 @@ export default class VehiclesUser extends React.Component{
                                     )}
                                         
                                     </View>
-                                    <View style={{...styles.viewColumn, alignItems:'flex-start', flex:2}}>
+                                    <View style={{...styles.viewColumn, alignItems:'flex-start', flex:3}}>
                                         <View style={styles.viewRow}>
-                                            <Text  style={styles.name}>{item.model.brand?.name}</Text>
-                                            <Text  style={styles.name}> {item.model?.name}</Text>
+                                            <Text  style={styles.brand}>{item.model.brand?.name}</Text>
                                         </View>
-                                        <Text  numberOfLines={2} style={styles.description} >{item.details}</Text>
+                                        <View style={styles.viewRow}>
+                                            <Text  style={styles.name}>{item.model?.name}</Text>
+                                        </View>
+                                        <Text  numberOfLines={2} style={styles.description} >{item.year}</Text>
                                     </View>
-                                    <View style={{...styles.viewColumn, justifyContent: 'center', alignItems: 'flex-end', flex: 3}}>
+                                    <View style={{...styles.viewColumn, justifyContent: 'center', alignItems: 'flex-end', flex: 1}}>
                                         <TouchableOpacity onPress={() => this.deleteVehicle(item)}>
                                             <Image source={require('../assets/closeIconCar.png')} style={{height: 30, width: 30}} />
                                         </TouchableOpacity>
@@ -154,7 +156,7 @@ const styles = StyleSheet.create({
         height: '85%'
     },
     card:{
-        padding:10,
+        padding:5,
         width:'90%',
         shadowColor: "#000",
         shadowOffset: {
@@ -169,13 +171,19 @@ const styles = StyleSheet.create({
         margin:10
     },
         imageCar:{
-        height:80,
-        width:80
+        height:100,
+        marginLeft: -10,
+        width: '100%'
     },
     name:{
         fontSize:20,
         fontWeight:'bold',
         color: colors.grey,
+    },
+    brand:{
+        fontSize:20,
+        fontWeight:'bold',
+        color: colors.black,
     },
     description:{
         fontSize:15,

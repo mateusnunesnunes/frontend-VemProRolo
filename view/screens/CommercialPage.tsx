@@ -138,7 +138,7 @@ export default class CommercialPage extends React.Component<Props, State> {
                     renderItem={({ item }) => ( 
                         <TouchableOpacity onPress={() => this.openDetailVehicle(item)}>
                             <Announcement 
-                                image={item.images[0].file}
+                                image={item?.images[0]?.file}
                                 title={item.model.name}
                                 price={item.price}
                                 details={item.details}
