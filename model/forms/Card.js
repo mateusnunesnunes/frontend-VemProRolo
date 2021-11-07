@@ -97,7 +97,7 @@ export default class Card extends React.Component {
                     </Modal>
                 <View style={styles.card}>
                     <View>
-                        {this.props.item.images[0].file == undefined ? (
+                        {this.props.item?.images[0]?.file == undefined ? (
                             <Image source={images.carSilhouet} style={styles.logo} resizeMode="cover" />
                         ) : (
                             <Image source={{uri: "data:image/jpeg;base64," + this.props.item.images[0].file}}  style={styles.logo} resizeMode="cover" />
