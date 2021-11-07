@@ -6,6 +6,7 @@ import { ParamList } from "../../controller/routes";
 import { StyleSheet,TouchableOpacity,Alert } from "react-native";
 import { Image } from "react-native";
 import { api } from "../../controller";
+import images from "../../view/themes/Images";
 
 interface Props {
     navigation: StackNavigationProp<ParamList, 'MatchModal'>,
@@ -69,7 +70,7 @@ export default class MatchModal extends React.Component<Props, State> {
                         <View style={styles.containerMatch}>
                             <View style={styles.row}>
                                 <View style={styles.column}>
-                                    <Image source={{uri : 'data:image/png;base64, ' + this.state.item.firstLike.vehicle.images[0].file}} style={styles.imageStyle} />
+                                    <Image source={this.state.item.firstLike.vehicle?.images[0]?.file != undefined ? {uri : 'data:image/png;base64, ' + this.state.item.firstLike.vehicle?.images[0]?.file} : images.carSilhouet} style={styles.imageStyle} />
                                 </View>
                                 <View style={styles.column}></View>
                             </View>
@@ -78,7 +79,7 @@ export default class MatchModal extends React.Component<Props, State> {
                             <View style={styles.row}>
                                 <View style={styles.column}></View>
                                 <View style={styles.column}>
-                                    <Image source={{uri : 'data:image/png;base64, ' + this.state.item.secondLike.vehicle.images[0].file}} style={styles.imageStyle} />        
+                                    <Image source={this.state.item.secondLike.vehicle?.images[0]?.file != undefined ? {uri : 'data:image/png;base64, ' + this.state.item.secondLike.vehicle?.images[0]?.file} : images.carSilhouet} style={styles.imageStyle} />        
                                 </View>
                             </View>
                         </View>

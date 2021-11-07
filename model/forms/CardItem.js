@@ -46,7 +46,7 @@ const CardItem = ({
     <View style={styles.containerCardItem}>
       <View style={styles.row}>
 		<View style={styles.viewImage}>
-			<Image source={{uri : 'data:image/png;base64, ' + image}} style={imageStyle} />
+			<Image source={image} style={imageStyle} />
 		</View>
 		<View style={styles.viewTexts}>
 			<Text style={nameStyle}>Match com {name}</Text>
