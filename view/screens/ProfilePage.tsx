@@ -81,7 +81,7 @@ export default class ProfilePage extends React.Component<Props, State> {
                     <View style={styles.menuItemContainer}>
                         <Image source={images.myInfoIcon} style={styles.mainIcon} />
 
-                        <View style={{width: 220, justifyContent: 'center', marginLeft: 30}}>
+                        <View style={{width: 230, justifyContent: 'center', marginLeft: 30}}>
                             <Text style={{fontSize: 20, fontWeight: 'bold'}}>{this.state.user?.name}</Text>
                             <Text>{this.state.user?.email}</Text>
                         </View>

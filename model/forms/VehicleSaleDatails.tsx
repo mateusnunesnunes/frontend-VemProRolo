@@ -12,7 +12,7 @@ import { colors } from "../../view/styles/Colors";
 import { InputContainer } from "../../view/screens/VehicleRegisterPage";
 import { api } from "../../controller";
 import {formatCurrency} from '../../utils/currencyUtils';
-
+import images from "../../view/themes/Images";
 interface Props {
     navigation: StackNavigationProp<ParamList, 'VehicleSaleDatails'>,
     route: RouteProp<ParamList, 'VehicleSaleDatails'>
@@ -142,15 +142,19 @@ export default class VehicleSaleDatails extends React.Component<Props, State> {
                 </View>
                 <ScrollView>
                     <View style={styles.containerFlatlist}>
-                        <FlatList
-                            horizontal
-                            showsHorizontalScrollIndicator={false}
-                            data={this.state.item.images}
-                            keyExtractor={item => item.id}
-                            renderItem={({ item }) => ( 
-                                <Image source={{uri : 'data:image/png;base64, ' + item.file}} style={styles.imageStyle} />
-                            )}
-                        />
+                        {this.state.item?.images[0]?.file == undefined ? (
+                            <Image source={images.carSilhouet} style={styles.imageStyle} resizeMode="cover" />
+                        ) : (
+                            <FlatList
+                                horizontal
+                                showsHorizontalScrollIndicator={false}
+                                data={this.state.item.images}
+                                keyExtractor={item => item.id}
+                                renderItem={({ item }) => ( 
+                                    <Image source={{uri : 'data:image/png;base64, ' + item.file}} style={styles.imageStyle} />
+                                )}
+                            />
+                        )}
                     </View>
                     <View style={styles.containerContent}>
                             <Text style={styles.title}>
